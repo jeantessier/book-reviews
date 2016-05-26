@@ -116,20 +116,18 @@ values
     );
 
 insert into
-    title(id, book_id, title, link)
+    title(book_id, title, link)
 values
     (
-        1,
         1,
         'Mortality',
         'http://amzn.com/1455502758'
     );
 
 insert into
-    review(id, book_id, reviewer_id, body, start, stop)
+    review(book_id, reviewer_id, body, start, stop)
 values
     (
-        1,
         1,
         1,
         '<p>Hitchens told his editor he would write about anything except sports.  So when he was diagnosed with cancer, he wrote about it.  And as he approached his own end, he kept on writing.  He takes us on an intimate ride along as he explores his attitude towards death.</p><p>Early on, when death is but a shadow on the distant horizon, Hitchens is more outward-facing.  He deals with religion and people wishing him well (and sometimes not).  As the book and his cancer progress, he sheds externalities and slowly gets more personal.</p><p>Breakdown by chapter:</p><ol><li>Diagnosis, dealing with the news, side effects of therapy.</li><li>People express their religious sentiments.  He''ll have none of it.</li><li>The medical establishment tries everything to fight the disease.  More false hopes.</li><li>People''s euphemisms to avoid talking about death.</li><li>Losing his voice strikes <i>really</i> close to home.  Voice and expression are at the core of existence.</li><li>How people choose to die.  How what almost kills him is <b>not</b> making him stronger.  Starts to yearn for the end.</li><li>Personal observations on pain and fear, in the face of torture ... or medical procedures.</li><li>Unfinished thoughts.  Fitting that at the end, even his mind comes apart.</li></ol><p>Hitchens mentions journalist John Diamond who also wrote a regular column about his experience with cancer, up to his death.  He mentions how his story "lacked compactness toward the end..."  He didn''t fall into the same trap.  The book is concise and to the point, a quick read that goes straight to the point.</p><p>On 2014-01-26, I came upon this New York Times article where Dr. Paul Kalanithi recounts <a target="_blank" href="http://nyti.ms/1eXxdlj">when he was diagnosed with lung cancer</a>.  He talks about the patient-doctor relationship and how focusing too much on survival rates can make you miss the important things in life.  I can''t help but wonder at the timing coincidence of seeing this article just as I finished reading Mortality.  Is it that lots of people are currently contemplating their own mortality these days?  Or is it me who is more sensitized to it because I just read this book?</p><p>On 2015-02-19, I came upon another New York Times article where <a target="_blank" href="http://nyti.ms/17u5LNP">Dr. Oliver Sacks talks about his cancer diagnosis</a>.  I find it interesting that at this point, he is looking back upon his life.  Hitchens was more focused on the present and the future, the pains and the moments to come.</p>',
@@ -173,50 +171,45 @@ values
     );
 
 insert into
-    title(id, book_id, title, link)
+    title(book_id, title, link)
 values
     (
-        2,
         2,
         'Discours sur les sciences et les arts',
         'http://athena.unige.ch/athena/rousseau/rousseau_discours_sciences_arts.html'
     );
 
 insert into
-    title(id, book_id, title, link)
+    title(book_id, title, link)
 values
     (
-        3,
         2,
         'Discours sur l''origine et les fondements de l''in&eacute;galit&eacute; parmis les hommes',
         'http://athena.unige.ch/athena/rousseau/rousseau_discours_inegalite.html'
     );
 
 insert into
-    title(id, book_id, title, link)
+    title(book_id, title, link)
 values
     (
-        4,
         2,
         '<i>Discourse on the Arts and Sciences</i>',
         'https://en.wikipedia.org/wiki/Discourse_on_the_Arts_and_Sciences'
     );
 
 insert into
-    title(id, book_id, title, link)
+    title(book_id, title, link)
 values
     (
-        5,
         2,
         '<i>Discourse on the Origin and Basis of Inequality Among Men</i>',
         'http://www.constitution.org/jjr/ineq.htm'
     );
 
 insert into
-    review(id, book_id, reviewer_id, body, start)
+    review(book_id, reviewer_id, body, start)
 values
     (
-        2,
         2,
         1,
         '<p>I read this back in high school.  Giving it a refresher.</p><p><i>More to come.</i></p>',
