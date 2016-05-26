@@ -138,7 +138,7 @@ The `data/` folder has scripts to seed the data storage with initial entities.
 
 This command will create a new database named `book_reviews` and populate it with tables defined in `data/book_reviews.sql`.
 
-    $ mysql -D book_reviews data/book_reviews.sql
+    $ mysql -u root < data/book_reviews.sql
 
 ### MongoDB
 
