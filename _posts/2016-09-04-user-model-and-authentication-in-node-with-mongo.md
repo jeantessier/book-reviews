@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "User Model in Node with MongoDB"
-date:   2016-09-03 16:05:00 -0700
+date:   2016-09-04 16:05:00 -0700
 categories: node mongodb mongoose jwt
 ---
 Added Passport and JWT plugins to the basic Node app.  Again, I mostly copied
