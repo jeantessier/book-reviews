@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var dbURI = "mongodb://localhost/node_mongo_book_reviews";
+var dbURI = process.env.MONGODB_URI;
 mongoose.connect(dbURI);
 
 mongoose.connection.on("connected", function() {
