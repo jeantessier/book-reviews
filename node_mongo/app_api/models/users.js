@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
@@ -13,7 +14,8 @@ var userSchema = new mongoose.Schema({
         required: true
     },
     hash: String,
-    salt: String
+    salt: String,
+    reviews: [ObjectId]
 });
 
 userSchema.methods.setPassword = function(password) {
