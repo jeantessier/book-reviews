@@ -14,6 +14,8 @@ class Book {
 
     static embedded = [ "titles" ]
 
+    static hasMany = [ Review ]
+
     static constraints = {
         name unique: true
     }
