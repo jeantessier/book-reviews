@@ -1,6 +1,10 @@
 package grails_mongo
 
+import org.bson.types.ObjectId
+
 class Book {
+
+    ObjectId id
 
     String name
     List titles

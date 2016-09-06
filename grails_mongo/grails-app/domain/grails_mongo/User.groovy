@@ -1,6 +1,10 @@
 package grails_mongo
 
+import org.bson.types.ObjectId
+
 class User {
+
+    ObjectId id
 
     String name
     String email
