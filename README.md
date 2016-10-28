@@ -7,7 +7,7 @@ I am exploring various technology stacks for web-based apps for my own personal 
 Various storage options:
 
 * Relational database (MySQL)
-* NoSQL (MongoDB)
+* NoSQL (MongoDB, Redis)
 
 Various stacks for middleware, returning both HTML and JSON:
 
