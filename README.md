@@ -6,10 +6,10 @@ I am exploring various technology stacks for web-based apps for my own personal 
 
 Various storage options:
 
-* Relational database (most likely MySQL)
-* NoSQL (most likely MongoDB)
+* Relational database (MySQL)
+* NoSQL (MongoDB, Redis)
 
-Various stacks for middleware, both returning HTML and JSON:
+Various stacks for middleware, returning both HTML and JSON:
 
 * NodeJS
 * Grails
@@ -92,7 +92,7 @@ The `User` entity is used to authenticate the app's user and to make sure they c
 * `name`
 * `email` (unique)
 * `password` (encrypted)
-* `salt` (for the encryption)
+* `salt` (for password encryption)
 
 Users have a one-to-many relationship to reviews.
 
@@ -106,7 +106,7 @@ Example:
         "password": "0123456789abcdef9842ed9614143f40ca11e5c24da1d1a115087efc6dc2205ce46ee788737dfe06d02ad5d2c5ba67b1ef571dd00bd50136ba2ed5e9f6301e0f",
         "salt": "0123456789abcdef0123456789abcdef"
     }
-    
+
 ### Review
 
 * `body` (HTML markup)
@@ -132,16 +132,4 @@ Sample where the reviewer is still in the middle of reading the book:
 
 ## Data
 
-The `data/` folder has scripts to seed the data storage with initial entities.
-
-### MySQL
-
-This command will create a new database named `book_reviews` and populate it with tables defined in `data/book_reviews.sql`.
-
-    $ mysql -u root < data/book_reviews.sql
-
-### MongoDB
-
-This command will create a new database named `book_reviews` and populate it with collections defined in `data/book_reviews.js`.
-
-    $ mongo book_reviews data/book_reviews.js
+See the [data/](data) folder for sample data.
