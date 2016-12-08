@@ -10,6 +10,7 @@ This command will create a new database named `book_reviews` and populate it wit
 
 ## MongoDB
 
-This command will create a new database named `book_reviews` and populate it with collections defined in `data/book_reviews.js`.
+This command will create a new database named `book_reviews` and populate it with collections derived from `Books_????-??-??.txt`.
 
+    $ ./Books_mongo.pl > book_reviews.js
     $ mongo book_reviews book_reviews.js
