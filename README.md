@@ -7,14 +7,14 @@ I am exploring various technology stacks for web-based apps for my own personal 
 Various storage options:
 
 * Relational database (MySQL)
-* NoSQL (MongoDB)
+* NoSQL (MongoDB, Redis)
 
 Various stacks for middleware, returning both HTML and JSON:
 
 * NodeJS
 * Grails
 * Ruby on Rails
-* Spring Boot
+* Spring Boot and/or Ratpack
 
 Various frontend stacks:
 
@@ -132,16 +132,4 @@ Sample where the reviewer is still in the middle of reading the book:
 
 ## Data
 
-The `data/` folder has scripts to seed the data storage with initial entities.
-
-### MySQL
-
-This command will create a new database named `book_reviews` and populate it with tables defined in `data/book_reviews.sql`.
-
-    $ mysql -u root < data/book_reviews.sql
-
-### MongoDB
-
-This command will create a new database named `book_reviews` and populate it with collections defined in `data/book_reviews.js`.
-
-    $ mongo book_reviews data/book_reviews.js
+See the [data/](data) folder for sample data.
