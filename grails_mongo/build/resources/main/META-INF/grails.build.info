@@ -1,6 +1,0 @@
-#Thu, 26 Jan 2017 22:54:12 -0800
-
-grails.env=production
-info.app.version=0.1
-info.app.grailsVersion=3.2.4
-info.app.name=grails_mongo
