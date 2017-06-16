@@ -6,8 +6,7 @@ The `data/` folder has scripts to seed the data storage with initial entities.
 
 This command will create a new database named `grails_mysql_book_reviews` and populate it with collections derived from `Books_????-??-??.txt`.
 
-    $ Books_grails_mysql.pl > book_reviews.sql
-    $ mysql -u root < book_reviews.sql
+    $ Books_grails_mysql.pl | mysql -u root
 
 ## MongoDB
 
