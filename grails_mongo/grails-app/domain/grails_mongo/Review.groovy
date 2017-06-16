@@ -13,6 +13,7 @@ class Review {
     Date stop
 
     static constraints = {
+        start nullable: true
         stop nullable: true
     }
 
