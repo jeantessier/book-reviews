@@ -14,10 +14,7 @@ var reviewSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    start: {
-        type: Date,
-        required: true
-    },
+    start: Date,
     stop: Date
 });
 
