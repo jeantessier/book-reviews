@@ -106,11 +106,11 @@ Example:
         "password": "0123456789abcdef9842ed9614143f40ca11e5c24da1d1a115087efc6dc2205ce46ee788737dfe06d02ad5d2c5ba67b1ef571dd00bd50136ba2ed5e9f6301e0f",
         "salt": "0123456789abcdef0123456789abcdef"
     }
-    
+
 ### Review
 
 * `body` (HTML markup)
-* `start` (a date for when the reviewer started reading the book)
+* `start` (an optional date for when the reviewer started reading the book)
 * `stop` (an optional date for when the reviewer finished reading the book)
 
 Each review also has a relationship with a book and a user who is the reviewer.
@@ -128,6 +128,12 @@ Sample where the reviewer is still in the middle of reading the book:
     {
         "body": "<p>I read this back in high school.  Giving it a refresher.</p><p><i>More to come.</i></p>",
         "start": "2016-05-24"
+    }
+
+Sample where the reviewer hasn't even read the book:
+
+    {
+        "body": "<p>I haven't read it, but I still have an opinion.</p>"
     }
 
 ## Data
