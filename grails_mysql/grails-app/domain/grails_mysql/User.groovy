@@ -4,7 +4,7 @@ class User {
 
     String name
     String email
-    String hash
+    String password
     String salt
 
     static hasMany = [ Review ]
