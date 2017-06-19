@@ -33,12 +33,18 @@ create table book_years (
 create table title (
     id bigint(20) not null auto_increment,
     version bigint(20) not null default 0,
-    book_id bigint(20) not null,
     title varchar(1024) not null,
     link varchar(1024),
-    primary key (id),
-    key idx_book_id (book_id),
-    constraint fk_title_book foreign key (book_id) references book(id)
+    primary key (id)
+);
+
+create table book_title (
+    book_titles_id bigint(20) not null,
+    title_id bigint(20) not null,
+    key idx_book_id (book_titles_id),
+    constraint fk_book_title_book foreign key (book_titles_id) references book(id),
+    key idx_title_id (title_id),
+    constraint fk_book_title_title foreign key (title_id) references title(id)
 );
 
 create table user (

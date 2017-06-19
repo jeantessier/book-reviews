@@ -12,6 +12,7 @@ if ($0 =~ /(\w+)_grails_mysql\./) {
 
 $USER_ID = 1;
 $BOOK_ID = 1;
+$TITLE_ID = 1;
 
 print &DocumentAsMysql($DOCUMENT);
 
@@ -75,7 +76,7 @@ sub DocumentPartAsMysql {
         }
     } until ($line =~ /^\s*$/);
 
-    local $title = $titles[0];
+    local ($title) = $titles[0];
     if ($title =~ /\[\[([^\]]*)\]\[_(.*)_\]\]/) {
         $title = $2;
     } elsif ($title =~ /\[\[([^\]]*)\]\[(.*)\]\]/) {
@@ -93,12 +94,16 @@ sub DocumentPartAsMysql {
     } @years;
 
     local (@title_stmts) = map {
+        local ($title_id) = $TITLE_ID++;
         if (/\[\[([^\]]*)\]\[_(.*)_\]\]/) {
-            "insert into\n    title(book_id, title, link)\nvalues\n    (" . $book_id . ", " . &SqlText($2) . ", " . &SqlText($1) . ");"
+            "insert into\n    title(id, title, link)\nvalues\n    (" . $title_id . ", " . &SqlText($2) . ", " . &SqlText($1) . ");\n" .
+            "insert into\n    book_title(book_titles_id, title_id)\nvalues\n    (" . $book_id . ", " . $title_id . ");";
         } elsif (/\[\[([^\]]*)\]\[(.*)\]\]/) {
-            "insert into\n    title(book_id, title, link)\nvalues\n    (" . $book_id . ", " . &SqlText($2) . ", " . &SqlText($1) . ");"
+            "insert into\n    title(id, title, link)\nvalues\n    (" . $title_id . ", " . &SqlText($2) . ", " . &SqlText($1) . ");\n" .
+            "insert into\n    book_title(book_titles_id, title_id)\nvalues\n    (" . $book_id . ", " . $title_id . ");";
         } else {
-            "insert into\n    title(book_id, title)\nvalues\n    (" . $book_id . ", " . &SqlText($_) . ");"
+            "insert into\n    title(id, title)\nvalues\n    (" . $title_id . ", " . &SqlText($_) . ");\n" .
+            "insert into\n    book_title(book_titles_id, title_id)\nvalues\n    (" . $book_id . ", " . $title_id . ");";
         }
     } @titles;
 
