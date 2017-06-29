@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Upgrade Grails version on both Grails-based applications to 3.2.10"
+title:  "Upgrade Grails version on both Grails-based applications to 3.2.11"
 date:   2017-06-28 22:35:00 -0700
 categories: grails
 ---
