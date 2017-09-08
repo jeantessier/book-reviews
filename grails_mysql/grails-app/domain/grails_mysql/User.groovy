@@ -7,10 +7,10 @@ class User {
     String password
     String salt
 
-    static hasMany = [ Review ]
+    static hasMany = [ reviews: Review ]
 
     static constraints = {
-        email unique: true
+        email unique: true, email: true
     }
 
 }
