@@ -9,6 +9,7 @@ class Book {
         titles: Title,
         authors: String,
         years: String,
+        reviews: Review,
     ]
 
     static constraints = {
