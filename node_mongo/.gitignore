@@ -1,6 +1,7 @@
 # Dependency directory
 node_modules/
 npm-debug.log
+yarn.lock
 
 # Environment variables
 .env
