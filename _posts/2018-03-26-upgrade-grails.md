@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Upgrade Grails version on both Grails-based applications to 3.3.3"
-date:   2017-11-24 15:40:00 -0800
+date:   2018-03-26 21:30:00 -0800
 categories: grails
 ---
 Upgraded both Grails-based applications from `3.3.2` to `3.3.3`.  I generated
