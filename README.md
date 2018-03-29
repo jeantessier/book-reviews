@@ -11,10 +11,11 @@ technology stack.
 
 ## Requirements
 
+1. Anonymous user can view a book and its reviews.
+1. Anonymous user can search books and reviews by keyword.
 1. User can login.
 1. User can write a review of a book.
 1. User can edit their own reviews.
-1. User can search books and reviews by keyword.
 1. Admin user can edit anyone's reviews.
 1. Admin user can enter a new book description.
 1. Admin user can edit a book description.
