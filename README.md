@@ -1,6 +1,23 @@
 # book-reviews
 
-I am exploring various technology stacks for web-based apps for my own personal education.
+I am exploring various technology stacks for web-based apps for my own personal
+education.
+
+## Context
+
+I am building an app to collect reviews of books.  The app will be multi-user
+so I can experiment with authentication and authorization frameworks in each
+technology stack.
+
+## Requirements
+
+1. User can login.
+1. User can write a review of a book.
+1. User can edit their own reviews.
+1. User can search books and reviews by keyword.
+1. Admin user can edit anyone's reviews.
+1. Admin user can enter a new book description.
+1. Admin user can edit a book description.
 
 ## Variations
 
