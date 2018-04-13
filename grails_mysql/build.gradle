@@ -60,6 +60,8 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
 
     runtime "mysql:mysql-connector-java"
+    compile "org.grails.plugins:spring-security-core:3.2.1"
+    compile "org.grails.plugins:spring-security-ui:3.0.2"
 }
 
 bootRun {

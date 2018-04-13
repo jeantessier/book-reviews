@@ -1,16 +1,34 @@
 package grails_mysql
 
-class User {
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+import grails.compiler.GrailsCompileStatic
 
-    String name
-    String email
+@GrailsCompileStatic
+@EqualsAndHashCode(includes='username')
+@ToString(includes='username', includeNames=true, includePackage=false)
+class User implements Serializable {
+
+    private static final long serialVersionUID = 1
+
+    String username
     String password
-    String salt
+    boolean enabled = true
+    boolean accountExpired
+    boolean accountLocked
+    boolean passwordExpired
 
-    static hasMany = [ reviews: Review ]
+    Set<Role> getAuthorities() {
+        (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+    }
 
     static constraints = {
-        email unique: true, email: true
+        password nullable: false, blank: false, password: true
+        username nullable: false, blank: false, unique: true
+    }
+
+    static mapping = {
+	    password column: '`password`'
     }
 
 }
