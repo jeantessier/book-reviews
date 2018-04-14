@@ -28,36 +28,6 @@ endpoints:
 
 ---
 grails:
-    plugin:
-        springsecurity:
-            userLookup:
-                userDomainClassName: grails_mysql.User
-                authorityJoinClassName: grails_mysql.UserRole
-            authority:
-                className: grails_mysql.Role
-            controllerAnnotations:
-                staticRules:
-                    - {pattern: "/", access: [permitAll]}
-                    - {pattern: "/error", access: [permitAll]}
-                    - {pattern: "/index", access: [permitAll]}
-                    - {pattern: "/index.gsp", access: [permitAll]}
-                    - {pattern: "/shutdown", access: [permitAll]}
-                    - {pattern: "/assets/**", access: [permitAll]}
-                    - {pattern: "/**/js/**", access: [permitAll]}
-                    - {pattern: "/**/css/**", access: [permitAll]}
-                    - {pattern: "/**/images/**", access: [permitAll]}
-                    - {pattern: "/**/favicon.ico", access: [permitAll]}
-            filterChain:
-                chainMap:
-                    - {pattern: "/assets/**", filters: [none]}
-                    - {pattern: "/**/js/**", filters: [none]}
-                    - {pattern: "/**/css/**", filters: [none]}
-                    - {pattern: "/**/images/**", filters: [none]}
-                    - {pattern: "/**/favicon.ico", filters: [none]}
-                    - {pattern: "/**", filters: [JOINED_FILTERS]}
-
----
-grails:
     mime:
         disable:
             accept:
