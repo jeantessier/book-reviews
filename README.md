@@ -13,6 +13,7 @@ technology stack.
 
 1. Anonymous user can view a book and its reviews.
 1. Anonymous user can search books and reviews by keyword.
+1. User can register.
 1. User can login.
 1. User can write a review of a book.
 1. User can edit their own reviews.
