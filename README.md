@@ -33,6 +33,7 @@ Various stacks for middleware, returning both HTML and JSON:
 * Grails
 * Micronaut
 * Ruby on Rails
+* Django
 * Spring Boot and/or Ratpack and/or JHipster
 
 Various frontend stacks:
