@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Upgrade Grails version on both Grails-based applications to 3.3.8"
+title: "Upgrade Grails version on both Grails-based applications to 3.3.9"
 date: 2018-12-04 15:45:00 -0800
 categories: grails
 ---
