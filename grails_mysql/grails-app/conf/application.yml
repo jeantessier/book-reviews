@@ -98,7 +98,7 @@ dataSource:
 environments:
     development:
         dataSource:
-            dbCreate: update
+            dbCreate: none
             driverClassName: com.mysql.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
             url: jdbc:mysql://localhost/grails_mysql_book_reviews?useUnicode=true&character_set_server=utf8mb4
