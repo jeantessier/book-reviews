@@ -6,6 +6,9 @@ class Review {
     Date start
     Date stop
 
+    Date dateCreated
+    Date lastUpdated
+
     static belongsTo = [
         reviewer: User,
         book: Book,

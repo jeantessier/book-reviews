@@ -6,25 +6,30 @@ import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
 @EqualsAndHashCode(includes='username')
-@ToString(includes='username', includeNames=true, includePackage=false)
+@ToString(includes='name,username', includeNames=true, includePackage=false)
 class User implements Serializable {
 
     private static final long serialVersionUID = 1
 
+    String name
     String username
     String password
     boolean enabled = true
-    boolean accountExpired
-    boolean accountLocked
-    boolean passwordExpired
+    boolean accountExpired = false
+    boolean accountLocked = false
+    boolean passwordExpired = false
+
+    Date dateCreated
+    Date lastUpdated
 
     Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
     }
 
     static constraints = {
-        password nullable: false, blank: false, password: true
-        username nullable: false, blank: false, unique: true
+        name blank: false
+        username blank: false, unique: true
+        password blank: false, password: true
     }
 
     static mapping = {
