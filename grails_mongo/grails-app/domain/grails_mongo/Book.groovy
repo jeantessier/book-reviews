@@ -12,6 +12,9 @@ class Book {
     String publisher
     List<String> years
 
+    Date dateCreated
+    Date lastUpdated
+
     static embedded = [ "titles" ]
 
     static hasMany = [ Review ]

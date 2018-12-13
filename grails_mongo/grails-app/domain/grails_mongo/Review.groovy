@@ -12,9 +12,16 @@ class Review {
     Date start
     Date stop
 
+    Date dateCreated
+    Date lastUpdated
+
     static constraints = {
         start nullable: true
         stop nullable: true
+    }
+
+    static mapping = {
+	    body type: "text"
     }
 
 }
