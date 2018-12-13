@@ -7,7 +7,7 @@ class Title {
 
     static belongsTo = [ book: Book ]
 
-    static contraints = {
+    static constraints = {
         link nullable: true
     }
 
