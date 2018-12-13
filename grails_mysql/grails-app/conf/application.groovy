@@ -23,6 +23,9 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/css/**',      filters: 'none'],
 	[pattern: '/**/images/**',   filters: 'none'],
 	[pattern: '/**/favicon.ico', filters: 'none'],
+	[pattern: '/book/**',        filters: 'none'],
+	[pattern: '/review/**',      filters: 'none'],
+	[pattern: '/title/**',       filters: 'none'],
+	[pattern: '/user/**',        filters: 'none'],
 	[pattern: '/**',             filters: 'JOINED_FILTERS']
 ]
-
