@@ -19,4 +19,8 @@ class Review {
         stop nullable: true
     }
 
+    static mapping = {
+	    body type: "text"
+    }
+
 }
