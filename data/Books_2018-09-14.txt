@@ -9,17 +9,25 @@ acquired: 2017-05-10
 start: 2018-09-14
 stop: 2018-11-13
 
-A friend of mine recommended I read this book when it came out.  I'm not sure if
-there is a hidden message behind this recommendation.
+A friend of mine recommended I read this book when it came out.  I'm not sure
+there wasn't a hidden message behind this recommendation.
 
 At first, I thought the premise was to have the courage to give criticism, as
 long as it's about things that you care about.  This seemed interesting enough.
-But it turns out the actual premise is all about _people_, whom you should care
-about personally and whom you should challenge directly to help them maximize
+But it turns out the actual premise is all about _people_: you should care about
+them personally and you should challenge them directly so they can maximize
 their potential.  It is about you as a _boss_ having empathy for your direct
 reports and not shying away from the tough discussions.  It's like being a
-coach; you have to understand where your players are in their head and steer
-them towards a common objective, with means that befit each one.
+coach: you have to understand where your players are in their head and steer
+them towards a common objective, with motivators specific to each one.
+
+<blockquote>
+
+... Help people conduct their careers in the way _they_ desire, not in the way
+_you_ think they should want to.
+
+<footer>p.47</footer>
+</blockquote>
 
 It is a relatively quick read.  And I was right to think that it would be
 somewhat lightweight and anecdotal, much like
@@ -38,10 +46,11 @@ seen in my career.
 That's still anecdotal.  She is implying that her career has been long enough
 and varied enough that it is representative of all management in all companies
 in all countries.  Her career has not been long enough yet to be any of these
-things.  The plural of "anecdote" is *not* "data".  All of her stories suffer
-from a strong selection bias; she picked them because they confirm her theses.
+things.  The plural of _anecdote_ is *not* _data_.  All of her stories suffer
+from a strong selection bias; she picked them because they confirm her
+hypotheses.
 
-Contrast this with the following quote by Richard Carrier:
+Contrast these with the following quote by Richard Carrier:
 
 <blockquote>
 
@@ -52,10 +61,10 @@ scientific experiments to find out.
 <footer>[[https://youtu.be/kyrKMIDSVYE?t=18m14s][Skepticon One Redux]]</footer>
 </blockquote>
 
-Jason Fried, DHH, and now Kim Scott rely on personal anecdotes that are
+Jason Fried, DHH, and now Kim Scott, rely on personal anecdotes that are
 susceptible to all kinds of biases.  They talk from a position of privilege that
 may not be representative of their readers.  They were able to do things and
-take risks that are completely outside the reach of their general audience.
+take risks that may be completely outside the reach of their general audience.
 
 Authors like Allen Bluedorn, Robert Sutton, and Tom DeMarco take greater care to
 remove themselves from the equation.  Anecdotes still inform their premises, but
@@ -63,96 +72,87 @@ they go to great lengths to confirm them via rigorous studies that use the
 scientific method to be as objective as possible.
 _Need to verify this for DeMarco._
 
-Radical Candor got mentioned in passing on the
+Kim Scott's sloppiness shows up in small phrases like "I once read an article
+that claimed ..." or "... as we'll see in later sections".  It projects an air
+of authority without giving any foundation for it.  She doesn't do it all the
+time, sometimes she does give references.  But it weakens her case every time
+she does.  The stories about AdWords, and those about Steve Jobs, could easily
+have had references.  And while I can attest to some of the things she says
+about Google (I was never at Apple, so I cannot speak to that), some dates would
+have been helpful because I know things have changed over the years and it may
+not all be true anymore.
+
+Aside from that, she does make some good points.  Her approach is very humane.
+
+<blockquote>
+
+Sometimes two people just don't work that well together.
+
+<footer>p.62</footer>
+</blockquote>
+
+<blockquote>
+
+Everyone can be excellent at _something_.
+
+<footer>p.64</footer>
+</blockquote>
+
+<blockquote>
+
+Don't put people in boxes and leave them there.
+
+<footer>p.74</footer>
+</blockquote>
+
+The humanity comes through especially when she recommends caution before being
+too candid with your boss.  It is also there when discussing the need to fire
+people because of performance problems.  They may not be bad people; it's just
+that the job sucks for them.
+
+Kim Scott mentions giving feedback immediately, in those 2-3 minutes between
+meetings.  This is very much like when I give personal instruction during kendo
+practice.  The more immediate, the better.  But in the middle of practice, I
+have to be selective of the one actionable piece of advice I have time to give.
+
+She describes a tool for giving recognition, dubbed the "Killer Whale", that
+resembles what we did at ShopWell with the ShopWheel, or at Directly with
+flamingoes, but everyone proposes candidates and the previous winner chooses.
+But she also had "Woops the Monkey" where people self-submit for messing up and
+they get instant forgiveness.
+
+Kim Scott also briefly touches on gender bias and gender politics. She describes
+how having to choose between being likable and being successful hurts women.  I
+would like to suggest that it hurts plenty of men, too.  The fact that some men
+get away with it doesn't mean we all get a free pass.  I wonder if it could be
+about being perceived as strong vs. weak, instead of being about gender per se.
+
+I'll end with a few more quotable bits.
+
+<blockquote>
+
+... if Keynes's genius was locked inside his head, it may as well not have
+existed.
+
+<footer>p.92</footer>
+</blockquote>
+
+<blockquote>
+
+Is there anything I could do or stop doing that would make it easier to work
+with me?
+
+<footer>p.132</footer>
+</blockquote>
+
+<blockquote>
+
+Everyone is watching you, but that doesn't mean it's all about you.
+
+<footer>p.220</footer>
+</blockquote>
+
+<p><span class="newthought">Note:</span> Radical Candor got a passing mention in
+an episode of the
 [[http://www.greaterthancode.com/2018/09/12/097-the-job-of-a-manager-with-brandon-hays/][Greater Than Code]]
-podcast.
-
-_More to come._
-
-
-
-
----+++ NOTES:
-
-Boss: guidance, team building, get results. Care personally, challenge directly.
-
-Candor is context-specific (Israel compared to Japan).
-
-Magic quadrants: 3 negative names, 1 positive name. Baiting much?!? "I once read
-an article that claimed ..." (p.25) Without a reference, this is sloppy and
-possibly misleading. "... as we'll see in later sections" (p.25, all over,
-really) Chances are, I won't notice if she never gets back to this. But it
-projects an air of authority. She could have put in a one-sentence summary
-instead of leaving us hanging.
-
-"... Help people conduct their careers in the way _they_ desire, not in the way
-_you_ think they should want to." (p. 47)
-
-We all have periods where we want growth and periods where we want stability. As
-boss needs to figure out w where their people are at that point in time.
-"Everyone can be excellent at _something_."(p.64) "sometimes two people just
-don't work that well together." (p.62)
-
-Letting go of people. Sometimes, it's just a bad fit, cultural or otherwise.
-"Don't put people in boxes and leave them there." (p.74)
-
-Can't tell people what to do. I agree with the Google stories; but sure about
-Apple stories. But, can you really focus on collaboration when you fear for your
-job? "But, if they don't, you may have to change jobs." (p.82). It takes a lot
-of courage and not be driven by fear, or complacency, for that matter.
-
-Needs reference for AdWords story on p.78 and Steve Jobs story on p.80.
-
-"Attempting to behave in ways that feel deeply unnatural can make your team feel
-less comfortable with you rather than more so. Instead, try to strengthen your
-awareness of how your style makes your colleagues feel and work on improving
-that dynamic."(p.85) "... if Keynes's genius was locked inside his head, it may
-as well not have existed." (p.92)
-
-Inconsistent when giving sources of citations.
-
-"Free at work." Not just you, but your reports too. No chaos, no dictators, no
-warlords. Description of Google management is dated: was somewhat true when I
-joined, was on its way out by the time I left. Dark corners were growing. Nice
-tips on respecting boundaries and acknowledging emotions without letting them
-derail everything. I cringe at Radical Candor(tm), would prefer radical candor.
-
-All anecdotes come from leaders in tech: Google, Twitter, Apple, Bill Campbell.
-Her sample is highly biased. All these people have to be "disruptors" or else
-they won't get any funding. I should re-read "Good Boss, Bad Boss" and compare
-their approach.
-
-Ask for criticism, and be prepared to receive it. It is not natural to criticize
-your boss. "Is there anything I could do or stop doing that would make it easier
-to work with me?" (p.132). Situation, behavior, impact. Ontological humility.
-
-Give feedback immediately, in 2-3 minutes between meetings. Kinda like giving
-personal instruction during kendo practice.
-
-Be helpful, be humble, do it immediately and in person, praise in public,
-criticize in private, and don't personalize. Especially with your own boss, be
-very careful. "Listen, challenge, commit." (p.153)
-
-Gender bias and gender politics. She described how having to choose between
-being likeable and being successful hurts women. I would suggest that it hurts
-plenty of men too. The fact that some men get away with it doesn't mean we all
-get a free pass. I wonder if it's more about (perceived) strong vs. weak than
-gender per se.
-
-Performance reviews: write things down, separate fudge from compensation
-discussions. "Killer Whale" is like ShopWheel or flamingoes, but everyone
-purposes candidates and previous winner chooses. Also "Woops the Monkey" where
-people self-submit when they screw up and get instant forgiveness. Don't allow
-backstabbing, but be supportive of solutions.
-
-Skip-level meetings, for your direct reports who are themselves managers.
-
-Career conversation: what are people's motivations and where do they want to go?
-Growth management: grade people's performance (fairly).
-
-Hiring (no assholes rule), firing (the job sucks for them), and promoting.
-
-Very pragmatic advice for running 1:1s, staff meetings, and reserving think
-time. Your mileage may vary.
-
-"Everyone is watching you, but that doesn't mean it's all about you." (p.220)
+podcast.</p>
