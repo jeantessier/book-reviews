@@ -21,7 +21,7 @@ values
 -- Jean
 
 insert into
-    user(id, name, username, password, date_created, last_updated)
+    user(id, name, email, password, date_created, last_updated)
 values
     (
         1,

@@ -2,6 +2,7 @@
 
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'grails_mysql.User'
+grails.plugin.springsecurity.userLookup.usernamePropertyName = 'email'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'grails_mysql.UserRole'
 grails.plugin.springsecurity.authority.className = 'grails_mysql.Role'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [

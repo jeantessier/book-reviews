@@ -46,7 +46,7 @@ create table user (
     id bigint(20) not null auto_increment,
     version bigint(20) not null default 0,
     name varchar(128) not null,
-    username varchar(128) not null,
+    email varchar(128) not null,
     password varchar(128) not null,
     enabled bit(1) not null default 1,
     account_expired bit(1) not null default 0,
@@ -55,7 +55,7 @@ create table user (
     date_created datetime not null,
     last_updated datetime not null,
     primary key (id),
-    unique key (username)
+    unique key (email)
 );
 
 create table role (
