@@ -1,6 +1,25 @@
 # book-reviews
 
-I am exploring various technology stacks for web-based apps for my own personal education.
+I am exploring various technology stacks for web-based apps for my own personal
+education.
+
+## Context
+
+I am building an app to collect reviews of books.  The app will be multi-user
+so I can experiment with authentication and authorization frameworks in each
+technology stack.
+
+## Requirements
+
+1. Anonymous user can view a book and its reviews.
+1. Anonymous user can search books and reviews by keyword.
+1. User can register.
+1. User can login.
+1. User can write a review of a book.
+1. User can edit their own reviews.
+1. Admin user can edit anyone's reviews.
+1. Admin user can enter a new book.
+1. Admin user can edit a book's data.
 
 ## Variations
 
@@ -13,8 +32,10 @@ Various stacks for middleware, returning both HTML and JSON:
 
 * NodeJS
 * Grails
+* Micronaut
 * Ruby on Rails
-* Spring Boot
+* Django
+* Spring Boot and/or Ratpack and/or JHipster
 
 Various frontend stacks:
 
@@ -27,14 +48,14 @@ Various frontend stacks:
 ### Book
 
 * `name` (unique string, no spaces, underscores separate words)
-* `titles` (a list of links)
+* `titles` (a list of links with HTML markup)
 * `authors` (a list of names with HTML markup)
 * `publisher` (a string)
-* `years` (a list of numbers with HTML markup)
+* `years` (a list of year designations with HTML markup)
 
 Books have a one-to-many relationship to reviews.
 
-Simple example:
+A simple example:
 
     {
         "name": "Mortality",
@@ -53,7 +74,7 @@ Simple example:
         ]
     }
 
-More complex sample:
+A more complex sample:
 
     {
         "name": "Discours_sur_les_sciences_et_les_arts",
@@ -98,7 +119,7 @@ Users have a one-to-many relationship to reviews.
 
 The `salt` is used in the encryption of the `password`, combined with an application-wide secret.
 
-Example:
+An example:
 
     {
         "name": "Jean Tessier",
@@ -115,7 +136,7 @@ Example:
 
 Each review also has a relationship with a book and a user who is the reviewer.
 
-Example with embedded markup for paragraphs and lists:
+An example with embedded markup for paragraphs and lists:
 
     {
         "body": "<p>Hitchens told his editor he would write about anything except sports.  So when he was diagnosed with cancer, he wrote about it.  And as he approached his own end, he kept on writing.  He takes us on an intimate ride along as he explores his attitude towards death.</p><p>Early on, when death is but a shadow on the distant horizon, Hitchens is more outward-facing.  He deals with religion and people wishing him well (and sometimes not).  As the book and his cancer progress, he sheds externalities and slowly gets more personal.</p><p>Breakdown by chapter:</p><ol><li>Diagnosis, dealing with the news, side effects of therapy.</li><li>People express their religious sentiments.  He'll have none of it.</li><li>The medical establishment tries everything to fight the disease.  More false hopes.</li><li>People's euphemisms to avoid talking about death.</li><li>Losing his voice strikes <i>really</i> close to home.  Voice and expression are at the core of existence.</li><li>How people choose to die.  How what almost kills him is <b>not</b> making him stronger.  Starts to yearn for the end.</li><li>Personal observations on pain and fear, in the face of torture ... or medical procedures.</li><li>Unfinished thoughts.  Fitting that at the end, even his mind comes apart.</li></ol><p>Hitchens mentions journalist John Diamond who also wrote a regular column about his experience with cancer, up to his death.  He mentions how his story \"lacked compactness toward the end...\"  He didn't fall into the same trap.  The book is concise and to the point, a quick read that goes straight to the point.</p><p>On 2014-01-26, I came upon this New York Times article where Dr. Paul Kalanithi recounts <a target=\"_blank\" href=\"http://nyti.ms/1eXxdlj\">when he was diagnosed with lung cancer</a>.  He talks about the patient-doctor relationship and how focusing too much on survival rates can make you miss the important things in life.  I can't help but wonder at the timing coincidence of seeing this article just as I finished reading Mortality.  Is it that lots of people are currently contemplating their own mortality these days?  Or is it me who is more sensitized to it because I just read this book?</p><p>On 2015-02-19, I came upon another New York Times article where <a target=\"_blank\" href=\"http://nyti.ms/17u5LNP\">Dr. Oliver Sacks talks about his cancer diagnosis</a>.  I find it interesting that at this point, he is looking back upon his life.  Hitchens was more focused on the present and the future, the pains and the moments to come.</p>",
@@ -123,7 +144,7 @@ Example with embedded markup for paragraphs and lists:
         "stop": "2014-01-16"
     }
 
-Sample where the reviewer is still in the middle of reading the book:
+An example where the reviewer is still in the middle of reading the book:
 
     {
         "body": "<p>I read this back in high school.  Giving it a refresher.</p><p><i>More to come.</i></p>",
