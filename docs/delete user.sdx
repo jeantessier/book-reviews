@@ -12,16 +12,16 @@ browser:user.delete
     user:user.DELETE FROM user
     user[1]:rabbitmq.publish(USER_DELETED)
 
-rabbitmq[0,1]:review.notify(USER_DELETED)
+rabbitmq:>review.notify(USER_DELETED)
     [c:each review by deleted user]
         review:review.DELETE from review
         review[1]:rabbitmq.publish(REVIEW_DELETED)
     [/c]
 
-rabbitmq[0,1]:search.notify(USER_DELETED)
+rabbitmq[0,1]:>search.notify(USER_DELETED)
     search:index.remove user
 
-rabbitmq[0,2]:search.notify(REVIEW_DELETED)
+rabbitmq[0,1]:>search.notify(REVIEW_DELETED)
     search:index.remove review
 ]]></source>
 <configuration>
