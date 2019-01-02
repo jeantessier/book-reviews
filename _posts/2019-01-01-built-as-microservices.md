@@ -27,12 +27,14 @@ I started drafting a simple architecture diagram:
 
 And some sequence diagram that show the control flow for simple use cases:
 
-* User creates a reviews
+* User creates a review
+    ![User write a review]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-create-review.png)
 * User edits a reviews
+    ![User updates a review]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-update-review.png)
 * User deletes a reviews
+    ![User deletes a review]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-delete-review.png)
 * User requests to be forgotten
-
-![User requests to be forgotten]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-delete-user.png)
+    ![User requests to be forgotten]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-delete-user.png)
 
 I'm using [sdedit](http://sdedit.sourceforge.net/) for the sequence diagrams,
 but it is having trouble generating the graphic outputs.  I suspect it's a
