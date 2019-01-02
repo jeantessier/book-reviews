@@ -21,13 +21,18 @@ For instance, the `reviews` microservice listens for `USER_DELETED` and
 A `search` microservice could maintain its own index of searchable content by
 listening to all the events and updating the index appropriately.
 
-I started drafting a simple architecture diagram and some sequence diagram that
-show the control flow for simple use cases:
+I started drafting a simple architecture diagram
+
+![microservice architecture overview](/assets/images/2019-01-01-microservices-overview.png)
+
+And some sequence diagram that show the control flow for simple use cases:
 
 * User creates a reviews
 * User edits a reviews
 * User deletes a reviews
 * User requests to be forgotten
+
+![User requests to be forgotten](/assets/images/2019-01-01-sequence-diagram-delete-user.png)
 
 I'm using [sdedit](http://sdedit.sourceforge.net/) for the sequence diagrams,
 but it is having trouble generating the graphic outputs.  I suspect it's a
@@ -35,5 +40,3 @@ problem with the Java version I'm using.
 
 I did the architecture overview in Google Docs.  It works, but I am still
 getting used to it.
-
-I'll figure out how to include the diagrams in GitHub Pages later.
