@@ -23,7 +23,7 @@ listening to all the events and updating the index appropriately.
 
 I started drafting a simple architecture diagram:
 
-![microservice architecture overview](/assets/images/2019-01-01-microservices-overview.png)
+![microservice architecture overview]({{ site.baseurl }}/assets/images/2019-01-01-microservices-overview.png)
 
 And some sequence diagram that show the control flow for simple use cases:
 
@@ -32,7 +32,7 @@ And some sequence diagram that show the control flow for simple use cases:
 * User deletes a reviews
 * User requests to be forgotten
 
-![User requests to be forgotten](/assets/images/2019-01-01-sequence-diagram-delete-user.png)
+![User requests to be forgotten]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-delete-user.png)
 
 I'm using [sdedit](http://sdedit.sourceforge.net/) for the sequence diagrams,
 but it is having trouble generating the graphic outputs.  I suspect it's a

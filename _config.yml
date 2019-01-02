@@ -10,7 +10,7 @@ title: book-reviews
 email: jean@jeantessier.com
 description: > # this means to ignore newlines until "baseurl:"
   A group of apps that serve book reviews using all kinds of technologies.
-baseurl: "book-reviews" # the subpath of your site, e.g. /blog
+baseurl: "/book-reviews" # the subpath of your site, e.g. /blog
 url: "{{ site.github.url }}" # the base hostname & protocol for your site
 twitter_username: jeantessier
 github_username:  jeantessier
