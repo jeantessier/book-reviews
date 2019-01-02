@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram>
 <source><![CDATA[browser:Actor
-user:Service "user"
-review:Service "review"
-book:Service "book"
+users:Service "users"
+reviews:Service "reviews"
+books:Service "books"
 search:Service "search"
 index:Cache "search index"
 rabbitmq:RabbitMQ[av]
 
-browser:review.post
-    review:review.INSERT INTO review
-    review[1]:rabbitmq.publish(REVIEW_CREATED)
+browser:reviews.POST /
+    reviews:reviews.INSERT INTO review
+    reviews[1]:rabbitmq.publish(REVIEW_CREATED)
+    reviews:stop
 
 rabbitmq[0,1]:search.notify(REVIEW_CREATED)
     search:index.add review

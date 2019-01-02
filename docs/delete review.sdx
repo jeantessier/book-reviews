@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram>
 <source><![CDATA[browser:Actor
-user:Service "user"
-review:Service "review"
-book:Service "book"
+users:Service "users"
+reviews:Service "reviews"
+books:Service "books"
 search:Service "search"
 index:Cache "search index"
 rabbitmq:RabbitMQ[av]
 
-browser:review.delete
-    review:review.DELETE FROM review
-    review[1]:rabbitmq.publish(REVIEW_DELETED)
+browser:reviews.DELETE /{id}
+    reviews:reviews.DELETE FROM review
+    reviews[1]:rabbitmq.publish(REVIEW_DELETED)
+    reviews:stop
 
 rabbitmq[0,1]:search.notify(REVIEW_DELETED)
     search:index.remove review
