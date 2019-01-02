@@ -36,9 +36,6 @@ And some sequence diagram that show the control flow for simple use cases:
 * User requests to be forgotten
     ![User requests to be forgotten]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-delete-user.png)
 
-I'm using [sdedit](http://sdedit.sourceforge.net/) for the sequence diagrams,
-but it is having trouble generating the graphic outputs.  I suspect it's a
-problem with the Java version I'm using.
-
 I did the architecture overview in Google Docs.  It works, but I am still
-getting used to it.
+getting used to it.  I'm using [sdedit](http://sdedit.sourceforge.net/) for the
+sequence diagrams.
