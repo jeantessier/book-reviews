@@ -21,7 +21,7 @@ For instance, the `reviews` microservice listens for `USER_DELETED` and
 A `search` microservice could maintain its own index of searchable content by
 listening to all the events and updating the index appropriately.
 
-I started drafting a simple architecture diagram
+I started drafting a simple architecture diagram:
 
 ![microservice architecture overview]({{ site.url }}/assets/images/2019-01-01-microservices-overview.png)
 
