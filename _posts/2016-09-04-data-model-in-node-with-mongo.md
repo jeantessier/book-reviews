@@ -40,4 +40,4 @@ With the data in place, I can merge books and their reviews with a query like:
 I will need to update this query to look up reviewers from the `users`
 collection and account for one book having multiple reviews.  And I will also
 want an similar query that works from the user's perspective.  I need to be able
-to look up one book and its reviews, or one reviewers and their reviews.
+to look up one book and its reviews, or one reviewer and their reviews.
