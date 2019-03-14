@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var ObjectId = mongoose.Schema.Types.ObjectId;
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
-var titleSchema = new mongoose.Schema({
+const titleSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -9,7 +9,7 @@ var titleSchema = new mongoose.Schema({
     link: String
 });
 
-var bookSchema = new mongoose.Schema({
+const bookSchema = new mongoose.Schema({
     name: {
         type: String,
         unique: true,
