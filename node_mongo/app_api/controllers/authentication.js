@@ -69,10 +69,13 @@ module.exports.resetPassword = (req, res) => {
     }
 
     User.findOne({ email: req.body.email }, (err, user) => {
-        if (err || !user) {
+        if (!user) {
             sendJSONresponse(res, 404, {
                 "message": `No user for email "${req.body.email}".`
             });
+            return;
+        } else if (err) {
+            sendJSONresponse(res, 404, err);
             return;
         }
 
@@ -84,7 +87,6 @@ module.exports.resetPassword = (req, res) => {
                 return;
             }
 
-            const token = user.generateJwt();
             sendJSONresponse(res, 200, {
                 "message": `Reset password of user with email "${req.body.email}".`
             });
