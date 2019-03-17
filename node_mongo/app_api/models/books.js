@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var timestamps = require('mongoose-timestamp');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const titleSchema = new mongoose.Schema({
@@ -21,5 +22,6 @@ const bookSchema = new mongoose.Schema({
     years: [String],
     reviews: [ObjectId]
 });
+bookSchema.plugin(timestamps);
 
 mongoose.model('Book', bookSchema);

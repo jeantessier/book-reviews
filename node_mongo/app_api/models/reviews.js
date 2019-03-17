@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var timestamps = require('mongoose-timestamp');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const reviewSchema = new mongoose.Schema({
@@ -17,5 +18,6 @@ const reviewSchema = new mongoose.Schema({
     start: Date,
     stop: Date
 });
+reviewSchema.plugin(timestamps);
 
 mongoose.model('Review', reviewSchema);

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var timestamps = require('mongoose-timestamp');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -18,6 +19,7 @@ const userSchema = new mongoose.Schema({
     roles: [String],
     reviews: [ObjectId]
 });
+userSchema.plugin(timestamps);
 
 userSchema.methods.setPassword = function(password) {
     this.salt = crypto.randomBytes(16).toString('hex');
