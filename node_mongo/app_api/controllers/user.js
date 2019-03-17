@@ -6,18 +6,16 @@ const sendJSONresponse = (res, status, content) => {
     res.json(content);
 };
 
-module.exports.list = (req, res) => {
-    User.find((err, users) => {
-        if (err) {
-            sendJSONresponse(res, 400, err);
-            return;
-        }
-
+module.exports.list = async (req, res) => {
+    try {
+        const users = await User.find();
         sendJSONresponse(res, 200, users);
-    });
+    } catch(err) {
+        sendJSONresponse(res, 400, err);
+    }
 };
 
-module.exports.create = (req, res) => {
+module.exports.create = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
@@ -25,91 +23,47 @@ module.exports.create = (req, res) => {
         return;
     }
 
-    if (!req.body.name || !req.body.email || !req.body.password) {
+    const { name, email, password, roles } = req.body;
+
+    if (!name || !email || !password) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
         });
         return;
     }
 
-    const user = new User();
+    const user = new User({
+        name,
+        email,
+        roles: roles ? roles : ["ROLE_USER"],
+    });
 
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.roles = req.body.roles ? req.body.roles : ["ROLE_USER"];
+    user.setPassword(password);
 
-    user.setPassword(req.body.password);
-
-    user.save(err => {
-        if (err) {
-            sendJSONresponse(res, 400, err);
-            return;
-        }
-
+    try {
+        await user.save();
         sendJSONresponse(res, 201, user);
-    });
-};
-
-module.exports.readOne = (req, res) => {
-    User.findOne({ _id: req.params.id }, (err, user) => {
-        if (!user) {
-            sendJSONresponse(res, 404, {
-                "message": `No user with ID ${req.params.id}`
-            });
-            return;
-        } else if (err) {
-            sendJSONresponse(res, 404, err);
-            return;
-        }
-
-        sendJSONresponse(res, 200, user);
-    });
-};
-
-module.exports.updateOne = (req, res) => {
-    if (!req.currentUser.admin) {
-        sendJSONresponse(res, 403, {
-            "message": "You need admin privileges for this operation"
-        });
-        return;
+    } catch(err) {
+        sendJSONresponse(res, 400, err);
     }
+};
 
-    User.findOne({ _id: req.params.id }, (err, user) => {
-        if (!user) {
-            sendJSONresponse(res, 404, {
-                "message": `No user with ID ${req.params.id}`
-            });
-            return;
-        } else if (err) {
-            sendJSONresponse(res, 404, err);
-            return;
-        }
-
-        if (req.body.name) {
-            user.name = req.body.name;
-        }
-        if (req.body.email) {
-            user.email = req.body.email;
-        }
-        if (req.body.roles) {
-            user.roles = req.body.roles;
-        }
-        if (req.body.password) {
-            user.setPassword(req.body.password);
-        }
-
-        user.save(err => {
-            if (err) {
-                sendJSONresponse(res, 400, err);
-                return;
-            }
-
+module.exports.readOne = async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id });
+        if (user) {
             sendJSONresponse(res, 200, user);
-        });
-    });
+        } else {
+            sendJSONresponse(res, 404, {
+                "message": `No user with ID ${req.params.id}`
+            });
+        }
+    } catch(err) {
+        sendJSONresponse(res, 404, err);
+    }
 };
 
-module.exports.replaceOne = (req, res) => {
+module.exports.updateOne = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
@@ -117,42 +71,77 @@ module.exports.replaceOne = (req, res) => {
         return;
     }
 
-    if (!req.body.name || !req.body.email || !req.body.password) {
+    try {
+        const user = await User.findOne({ _id: req.params.id })
+        if (!user) {
+            sendJSONresponse(res, 404, {
+                "message": `No user with ID ${req.params.id}`
+            });
+            return;
+        }
+
+        const { name, email, password, roles } = req.body;
+
+        if (name) {
+            user.name = name;
+        }
+        if (email) {
+            user.email = email;
+        }
+        if (roles) {
+            user.roles = roles;
+        }
+        if (password) {
+            user.setPassword(password);
+        }
+
+        await user.save()
+        sendJSONresponse(res, 200, user);
+    } catch(err) {
+        sendJSONresponse(res, 400, err);
+    }
+};
+
+module.exports.replaceOne = async (req, res) => {
+    if (!req.currentUser.admin) {
+        sendJSONresponse(res, 403, {
+            "message": "You need admin privileges for this operation"
+        });
+        return;
+    }
+
+    const { name, email, password, roles } = req.body;
+
+    if (!name || !email || !password) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
         });
         return;
     }
 
-    User.findOne({ _id: req.params.id }, (err, user) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id });
         if (!user) {
             sendJSONresponse(res, 404, {
                 "message": `No user with ID ${req.params.id}`
             });
             return;
-        } else if (err) {
-            sendJSONresponse(res, 404, err);
-            return;
         }
 
-        user.name = req.body.name;
-        user.email = req.body.email;
-        user.roles = req.body.roles ? req.body.roles : ["ROLE_USER"];
+        user.name = name;
+        user.email = email;
+        user.roles = roles ? roles : ["ROLE_USER"];
 
-        user.setPassword(req.body.password);
+        user.setPassword(password);
 
-        user.save(err => {
-            if (err) {
-                sendJSONresponse(res, 400, err);
-                return;
-            }
-
-            sendJSONresponse(res, 200, user);
-        });
-    });
+        await user.save();
+        sendJSONresponse(res, 200, user);
+    } catch(err) {
+        sendJSONresponse(res, 400, err);
+    }
 };
 
-module.exports.deleteOne = (req, res) => {
+module.exports.deleteOne = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
@@ -160,17 +149,16 @@ module.exports.deleteOne = (req, res) => {
         return;
     }
 
-    User.findOneAndDelete({ _id: req.params.id }, (err, user) => {
-        if (!user) {
+    try {
+        const user = await User.findOneAndDelete({ _id: req.params.id });
+        if (user) {
+            sendJSONresponse(res, 204, null);
+        } else {
             sendJSONresponse(res, 404, {
                 "message": `No user with ID ${req.params.id}`
             });
-            return;
-        } else if (err) {
-            sendJSONresponse(res, 404, err);
-            return;
         }
-
-        sendJSONresponse(res, 204, null);
-    });
+    } catch(err) {
+        sendJSONresponse(res, 404, err);
+    }
 };
