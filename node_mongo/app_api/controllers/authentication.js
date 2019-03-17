@@ -19,6 +19,7 @@ module.exports.register = (req, res) => {
 
     user.name = req.body.name;
     user.email = req.body.email;
+    user.roles = ["ROLE_USER"];
 
     user.setPassword(req.body.password);
 
@@ -58,38 +59,4 @@ module.exports.login = (req, res) => {
             sendJSONresponse(res, 401, info);
         }
     }) (req, res);
-};
-
-module.exports.resetPassword = (req, res) => {
-    if (!req.body.email || !req.body.password) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        });
-        return;
-    }
-
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (!user) {
-            sendJSONresponse(res, 404, {
-                "message": `No user for email "${req.body.email}".`
-            });
-            return;
-        } else if (err) {
-            sendJSONresponse(res, 404, err);
-            return;
-        }
-
-        user.setPassword(req.body.password);
-
-        user.save(err => {
-            if (err) {
-                sendJSONresponse(res, 404, err);
-                return;
-            }
-
-            sendJSONresponse(res, 200, {
-                "message": `Reset password of user with email "${req.body.email}".`
-            });
-        });
-    });
 };

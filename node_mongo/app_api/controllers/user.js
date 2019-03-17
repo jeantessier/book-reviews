@@ -18,6 +18,13 @@ module.exports.list = (req, res) => {
 };
 
 module.exports.create = (req, res) => {
+    if (!req.currentUser.admin) {
+        sendJSONresponse(res, 403, {
+            "message": "You need admin privileges for this operation"
+        });
+        return;
+    }
+
     if (!req.body.name || !req.body.email || !req.body.password) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
@@ -60,6 +67,13 @@ module.exports.readOne = (req, res) => {
 };
 
 module.exports.updateOne = (req, res) => {
+    if (!req.currentUser.admin) {
+        sendJSONresponse(res, 403, {
+            "message": "You need admin privileges for this operation"
+        });
+        return;
+    }
+
     User.findOne({ _id: req.params.id }, (err, user) => {
         if (!user) {
             sendJSONresponse(res, 404, {
@@ -96,6 +110,13 @@ module.exports.updateOne = (req, res) => {
 };
 
 module.exports.replaceOne = (req, res) => {
+    if (!req.currentUser.admin) {
+        sendJSONresponse(res, 403, {
+            "message": "You need admin privileges for this operation"
+        });
+        return;
+    }
+
     if (!req.body.name || !req.body.email || !req.body.password) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
@@ -132,6 +153,13 @@ module.exports.replaceOne = (req, res) => {
 };
 
 module.exports.deleteOne = (req, res) => {
+    if (!req.currentUser.admin) {
+        sendJSONresponse(res, 403, {
+            "message": "You need admin privileges for this operation"
+        });
+        return;
+    }
+
     User.findOneAndDelete({ _id: req.params.id }, (err, user) => {
         if (!user) {
             sendJSONresponse(res, 404, {
