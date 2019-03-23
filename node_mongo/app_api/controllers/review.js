@@ -73,7 +73,14 @@ module.exports.create = async (req, res) => {
             stop,
         });
 
-        await review.save();
+        actualReviewer.reviews.push(review._id);
+        actualBook.reviews.push(review._id);
+
+        await Promise.all([
+            review.save(),
+            actualReviewer.save(),
+            actualBook.save(),
+        ]);
         sendJSONresponse(res, 201, review);
     } catch(err) {
         sendJSONresponse(res, 400, err);
@@ -182,6 +189,19 @@ module.exports.deleteOne = async (req, res) => {
             });
             return;
         }
+
+        const [ actualReviewer, actualBook ] = await Promise.all([
+            User.findOne({ _id: review.reviewer }),
+            Book.findOne({ _id: review.book }),
+        ]);
+
+        actualReviewer.reviews = actualReviewer.reviews.filter(value => !value.equals(review._id));
+        actualBook.reviews = actualBook.reviews.filter(value => !value.equals(review._id));
+
+        await Promise.all([
+            actualReviewer.save(),
+            actualBook.save(),
+        ]);
 
         sendJSONresponse(res, 204, null);
     } catch(err) {

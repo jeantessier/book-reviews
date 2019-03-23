@@ -91,13 +91,6 @@ module.exports.updateOne = async (req, res) => {
 
         const { name, titles, authors, publisher, years, reviews } = req.body;
 
-        if (!name) {
-            sendJSONresponse(res, 400, {
-                "message": "All fields required"
-            });
-            return;
-        }
-
         const namedBook = await Book.findOne({ name });
         if (namedBook && namedBook != book) {
             sendJSONresponse(res, 409, {
