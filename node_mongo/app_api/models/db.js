@@ -37,6 +37,6 @@ process.on('SIGINT', () => {
 });
 
 // BRING IN YOUR SCHEMAS & MODELS
-require('./users');
-require('./books');
-require('./reviews');
+require('./user');
+require('./book');
+require('./review');

@@ -100,11 +100,6 @@ You can reset a user's password with:
     $ http --auth-type jwt PATCH :3000/api/user/<id> \
         password=abcd1234
 
-To add a review to a user, you have to override the entire `reviews` field:
-
-    $ http --auth-type jwt PATCH :3000/api/user/<id> \
-        reviews:='["<review ID 1>", "<review ID 2>"]'
-
 #### Modify an Entire User
 
     $ http --auth-type jwt PUT :3000/api/user/<id> \
@@ -151,11 +146,6 @@ It will fail if there is already a book by that `name`.
     $ http --auth-type jwt PATCH :3000/api/book/<id> \
         titles:='[{"title": "The Lord of the Rings", "link": "http://lotr.wikia.com"}, {"title": "Le seigneur des anneaux"}]' \
         years:='["1954", "1955"]'
-
-To add a review to a book, you have to override the entire `reviews` field:
-
-    $ http --auth-type jwt PATCH :3000/api/book/<id> \
-        reviews:='["<review ID 1>", "<review ID 2>"]'
 
 #### Modify an Entire Book (Admin-Only)
 

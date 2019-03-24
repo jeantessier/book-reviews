@@ -23,7 +23,7 @@ module.exports.create = async (req, res) => {
         return;
     }
 
-    const { name, titles, authors, publisher, years, reviews } = req.body;
+    const { name, titles, authors, publisher, years } = req.body;
 
     if (!name) {
         sendJSONresponse(res, 400, {
@@ -47,7 +47,6 @@ module.exports.create = async (req, res) => {
             authors: authors ? authors : [],
             publisher,
             years: years ? years : [],
-            reviews: reviews ? reviews : [],
         });
 
         await book.save();
@@ -89,7 +88,7 @@ module.exports.updateOne = async (req, res) => {
             return;
         }
 
-        const { name, titles, authors, publisher, years, reviews } = req.body;
+        const { name, titles, authors, publisher, years } = req.body;
 
         const namedBook = await Book.findOne({ name });
         if (namedBook && namedBook != book) {
@@ -114,9 +113,6 @@ module.exports.updateOne = async (req, res) => {
         if (years) {
             book.years = years;
         }
-        if (reviews) {
-            book.reviews = reviews;
-        }
 
         await book.save()
         sendJSONresponse(res, 200, book);
@@ -133,7 +129,7 @@ module.exports.replaceOne = async (req, res) => {
         return;
     }
 
-    const { name, titles, authors, publisher, years, reviews } = req.body;
+    const { name, titles, authors, publisher, years } = req.body;
 
     if (!name) {
         sendJSONresponse(res, 400, {
@@ -164,7 +160,6 @@ module.exports.replaceOne = async (req, res) => {
         book.authors = authors ? authors : [];
         book.publisher = publisher;
         book.years = years ? years : [];
-        book.reviews = reviews ? reviews : [];
 
         await book.save();
         sendJSONresponse(res, 200, book);

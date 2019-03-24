@@ -25,7 +25,7 @@ sub DocumentPartsAsMongo {
 
     local ($drop_stmt) = join("\n", "db.books.drop();", "db.reviews.drop();", "db.users.drop();");
     local ($time_stmt) = "var initTime = new Date();";
-    local ($user_stmt) = "var user = db.users.insertOne(" . &JsonRecord(name => &JsonText("Jean Tessier"), email => &JsonText("jean\@jeantessier.com"), hash => &JsonText("0123456789abcdef9842ed9614143f40ca11e5c24da1d1a115087efc6dc2205ce46ee788737dfe06d02ad5d2c5ba67b1ef571dd00bd50136ba2ed5e9f6301e0f"), salt => &JsonText("0123456789abcdef0123456789abcdef"), reviews => &JsonList(), roles => &JsonList(&JsonText("ROLE_USER")), __v => 0, createdAt => "initTime", updatedAt => "initTime") . ");";
+    local ($user_stmt) = "var user = db.users.insertOne(" . &JsonRecord(name => &JsonText("Jean Tessier"), email => &JsonText("jean\@jeantessier.com"), hash => &JsonText("0123456789abcdef9842ed9614143f40ca11e5c24da1d1a115087efc6dc2205ce46ee788737dfe06d02ad5d2c5ba67b1ef571dd00bd50136ba2ed5e9f6301e0f"), salt => &JsonText("0123456789abcdef0123456789abcdef"), roles => &JsonList(&JsonText("ROLE_USER")), __v => 0, createdAt => "initTime", updatedAt => "initTime") . ");";
     local (@book_stmts) = map { &DocumentPartAsMongo("$DIRNAME/$_") } reverse sort @files;
 
     return join("\n\n", $drop_stmt, $time_stmt, $user_stmt, @book_stmts);
@@ -83,13 +83,12 @@ sub DocumentPartAsMongo {
             } @titles),
             publisher => &JsonText($meta_data{"publisher"}),
             years => &JsonList(map { &JsonText($_) } @years),
-            reviews => &JsonList(),
             __v => 0,
             createdAt => "initTime",
             updatedAt => "initTime",
         ) . ");";
 
-    local ($review_stmt) = "var review = db.reviews.insertOne(" .
+    local ($review_stmt) = "db.reviews.insertOne(" .
         &JsonRecord(
             body => &JsonText(&WikiContentsAsJson(@lines)),
             start => &JsonText($meta_data{"start"}),
@@ -101,13 +100,5 @@ sub DocumentPartAsMongo {
             updatedAt => "initTime",
         ) . ");";
 
-    local ($user_review_stmt) = "db.users.updateOne(" .
-        &JsonRecord("_id" => "user.insertedId") . "," .
-        &JsonRecord("\$addToSet" => &JsonRecord(reviews => "review.insertedId")) . ");";
-
-    local ($book_review_stmt) = "db.books.updateOne(" .
-        &JsonRecord("_id" => "book.insertedId") . "," .
-        &JsonRecord("\$addToSet" => &JsonRecord(reviews => "review.insertedId")) . ");";
-
-    return join("\n", $book_stmt, $review_stmt, $user_review_stmt, $book_review_stmt);
+    return join("\n", $book_stmt, $review_stmt);
 }

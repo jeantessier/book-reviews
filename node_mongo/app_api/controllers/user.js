@@ -80,7 +80,7 @@ module.exports.updateOne = async (req, res) => {
             return;
         }
 
-        const { name, email, password, roles, reviews } = req.body;
+        const { name, email, password, roles } = req.body;
 
         if (name) {
             user.name = name;
@@ -90,9 +90,6 @@ module.exports.updateOne = async (req, res) => {
         }
         if (roles) {
             user.roles = roles;
-        }
-        if (reviews) {
-            user.reviews = reviews;
         }
         if (password) {
             user.setPassword(password);
@@ -113,7 +110,7 @@ module.exports.replaceOne = async (req, res) => {
         return;
     }
 
-    const { name, email, password, roles, reviews } = req.body;
+    const { name, email, password, roles } = req.body;
 
     if (!name || !email || !password) {
         sendJSONresponse(res, 400, {
@@ -134,7 +131,6 @@ module.exports.replaceOne = async (req, res) => {
         user.name = name;
         user.email = email;
         user.roles = roles ? roles : ["ROLE_USER"];
-        user.reviews = reviews ? reviews : [];
 
         user.setPassword(password);
 

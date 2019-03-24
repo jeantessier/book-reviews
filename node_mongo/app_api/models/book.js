@@ -20,7 +20,6 @@ const bookSchema = new mongoose.Schema({
     authors: [String],
     publisher: String,
     years: [String],
-    reviews: [ObjectId]
 });
 bookSchema.plugin(timestamps);
 
