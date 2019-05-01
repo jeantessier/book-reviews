@@ -14,11 +14,25 @@ info:
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
 spring:
+    jmx:
+        unique-names: true
     main:
         banner-mode: "off"
     groovy:
         template:
             check-template-location: false
+    devtools:
+        restart:
+            additional-exclude:
+                - '*.gsp'
+                - '**/*.gsp'
+                - '*.gson'
+                - '**/*.gson'
+                - 'logback.groovy'
+                - '*.properties'
+management:
+    endpoints:
+        enabled-by-default: false
 
 # Spring Actuator Endpoints are Disabled by Default
 endpoints:
@@ -75,12 +89,13 @@ grails:
             htmlcodec: xml
             codecs:
                 expression: html
-                scriptlets: html
+                scriptlet: html
                 taglib: none
                 staticparts: none
-endpoints:
-    jmx:
-        unique-names: true
+management:
+    endpoints:
+        jmx:
+            unique-names: true
 
 ---
 hibernate:
@@ -99,9 +114,9 @@ environments:
     development:
         dataSource:
             dbCreate: none
-            driverClassName: com.mysql.jdbc.Driver
+            driverClassName: com.mysql.cj.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-            url: jdbc:mysql://localhost/grails_mysql_book_reviews?useUnicode=true&character_set_server=utf8mb4
+            url: jdbc:mysql://localhost/grails_mysql_book_reviews?useUnicode=true&character_set_server=utf8mb4&serverTimezone=PST8PDT
             username: root
     test:
         dataSource:
