@@ -29,9 +29,9 @@ And some sequence diagram that show the control flow for simple use cases:
 
 * User creates a review.
     ![User write a review]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-create-review.png)
-* User edits a reviews.
+* User edits a review.
     ![User updates a review]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-update-review.png)
-* User deletes a reviews.
+* User deletes a review.
     ![User deletes a review]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-delete-review.png)
 * User requests to be forgotten.
     ![User requests to be forgotten]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-delete-user.png)
