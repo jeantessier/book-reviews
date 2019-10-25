@@ -48,10 +48,10 @@ Various frontend stacks:
 ### Book
 
 * `name` (unique string, no spaces, underscores separate words)
-* `titles` (a list of links with HTML markup)
-* `authors` (a list of names with HTML markup)
+* `titles` (an ordered list of links with HTML markup)
+* `authors` (an ordered list of names with HTML markup)
 * `publisher` (a string)
-* `years` (a list of year designations with HTML markup)
+* `years` (an ordered list of year designations with HTML markup)
 
 Books have a one-to-many relationship to reviews.
 
@@ -131,7 +131,7 @@ An example:
 ### Review
 
 * `body` (HTML markup)
-* `start` (a date for when the reviewer started reading the book)
+* `start` (an optional date for when the reviewer started reading the book)
 * `stop` (an optional date for when the reviewer finished reading the book)
 
 Each review also has a relationship with a book and a user who is the reviewer.
@@ -149,6 +149,12 @@ An example where the reviewer is still in the middle of reading the book:
     {
         "body": "<p>I read this back in high school.  Giving it a refresher.</p><p><i>More to come.</i></p>",
         "start": "2016-05-24"
+    }
+
+Sample where the reviewer hasn't even read the book:
+
+    {
+        "body": "<p>I haven't read it, but I still have an opinion.</p>"
     }
 
 ## Data
