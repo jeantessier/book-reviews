@@ -48,10 +48,10 @@ Various frontend stacks:
 ### Book
 
 * `name` (unique string, no spaces, underscores separate words)
-* `titles` (a list of links with HTML markup)
-* `authors` (a list of names with HTML markup)
+* `titles` (an ordered list of links with HTML markup)
+* `authors` (an ordered list of names with HTML markup)
 * `publisher` (a string)
-* `years` (a list of year designations with HTML markup)
+* `years` (an ordered list of year designations with HTML markup)
 
 Books have a one-to-many relationship to reviews.
 
