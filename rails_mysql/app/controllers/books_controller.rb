@@ -17,28 +17,26 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
 
-    begin
-      if @book.save
-        render json: @book, status: :created, location: @book
-      else
-        render json: @book.errors, status: :unprocessable_entity
-      end
-    rescue
+    if @book.save
+      render json: @book, status: :created, location: @book
+    else
       render json: @book.errors, status: :unprocessable_entity
     end
+
+    rescue
+      render json: {error: $!}, status: :unprocessable_entity
   end
 
   # PATCH/PUT /books/1
   def update
-    begin
-      if @book.update(book_params)
-        render json: @book
-      else
-        render json: @book.errors, status: :unprocessable_entity
-      end
-    rescue
+    if @book.update(book_params)
+      render json: @book
+    else
       render json: @book.errors, status: :unprocessable_entity
     end
+
+    rescue
+      render json: {error: $!}, status: :unprocessable_entity
   end
 
   # DELETE /books/1
