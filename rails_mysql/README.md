@@ -1,24 +1,41 @@
-# README
+# Rails with MySQL
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a Ruby on Rails application backed by a MySQL database.
 
-Things you may want to cover:
+* Ruby version: `2.4.3`
+* Rails version: `5.0.7.2`
 
-* Ruby version
+## MySQL
 
-* System dependencies
+This command will create a new database named `rails_mysql_book_reviews` and
+populate it with data derived from `../data/Books_????-??-??.txt`.
 
-* Configuration
+    $ ./Books_rails_mysql.pl | mysql -u root
 
-* Database creation
+## Running the Tests
 
-* Database initialization
+You can run all the tests with:
 
-* How to run the test suite
+    $ bundle exec rspec
 
-* Services (job queues, cache servers, search engines, etc.)
+## Running the Server
 
-* Deployment instructions
+You can start the application with:
 
-* ...
+    $ ./bin/rails server
+
+And use the base URL http://localhost:3000.
+
+## Making REST Calls
+
+To get a list of users:
+
+    $ http :3000/users
+
+To get a list of books:
+
+    $ http :3000/books
+
+To get the book with ID 2:
+
+    $ http :3000/books/2
