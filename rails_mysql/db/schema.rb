@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191105012820) do
+ActiveRecord::Schema.define(version: 20191105054028) do
 
   create_table "books", force: :cascade do |t|
     t.string   "name",       null: false
@@ -18,6 +18,14 @@ ActiveRecord::Schema.define(version: 20191105012820) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_books_on_name", unique: true
+  end
+
+  create_table "jwt_blacklists", force: :cascade do |t|
+    t.string   "jti"
+    t.datetime "exp"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["jti"], name: "index_jwt_blacklists_on_jti"
   end
 
   create_table "users", force: :cascade do |t|
