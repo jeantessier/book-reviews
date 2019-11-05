@@ -22,3 +22,4 @@
 
 # Ignore RubyMine and IntelliJ project files
 .idea
+.env
