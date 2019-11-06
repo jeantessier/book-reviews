@@ -47,6 +47,26 @@ RSpec.describe BooksController, type: :controller do
   # BooksController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  let!(:user) do
+    user = User.create email: "email-#{rand 1_000...10_000}@test.com"
+    user.password = "password #{rand 1_000...10_000}"
+    user.save!
+    return user
+  end
+
+  let(:jwt_token) { Knock::AuthToken.new(payload: { sub: user.id }).token }
+  let(:auth_header) { { 'Authorization': "Bearer #{jwt_token}" } }
+
+  # I think this version of RSpec does not handle headers passed to #get or #post
+  # So, we cannot use:
+  #     post :create, params: {book: valid_attributes}, session: valid_session, headers: auth_header
+  # We have to inject a valid token into the controller directly.  Yuck!
+  class BooksController
+    def token_from_request_headers
+      Knock::AuthToken.new(payload: { sub: 1 }).token
+    end
+  end
+
   describe "GET #index" do
     it "returns a success response" do
       book = Book.create! valid_attributes
