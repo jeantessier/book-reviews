@@ -1,4 +1,5 @@
 class BooksController < ApplicationController
+  before_action :authenticate_user, only: [:create, :update, :destroy]
   before_action :set_book, only: [:show, :update, :destroy]
 
   # GET /books
