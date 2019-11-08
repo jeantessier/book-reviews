@@ -25,15 +25,24 @@ require 'rails_helper'
 
 RSpec.describe BookYearsController, type: :controller do
 
+  let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
+
   # This should return the minimal set of attributes required to create a valid
   # BookYear. As you add validations to BookYear, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+        book_id: book.id,
+        year: "year #{rand 1_000...10_000}",
+        order: 0
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        book_id: book.id,
+        order: -1
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -44,7 +53,7 @@ RSpec.describe BookYearsController, type: :controller do
   describe "GET #index" do
     it "returns a success response" do
       book_year = BookYear.create! valid_attributes
-      get :index, params: {}, session: valid_session
+      get :index, params: {book_id: book.id}, session: valid_session
       expect(response).to be_success
     end
   end
@@ -52,7 +61,7 @@ RSpec.describe BookYearsController, type: :controller do
   describe "GET #show" do
     it "returns a success response" do
       book_year = BookYear.create! valid_attributes
-      get :show, params: {id: book_year.to_param}, session: valid_session
+      get :show, params: {book_id: book.id, id: book_year.to_param}, session: valid_session
       expect(response).to be_success
     end
   end
@@ -61,23 +70,22 @@ RSpec.describe BookYearsController, type: :controller do
     context "with valid params" do
       it "creates a new BookYear" do
         expect {
-          post :create, params: {book_year: valid_attributes}, session: valid_session
+          post :create, params: {book_id: book.id, book_year: valid_attributes}, session: valid_session
         }.to change(BookYear, :count).by(1)
       end
 
       it "renders a JSON response with the new book_year" do
 
-        post :create, params: {book_year: valid_attributes}, session: valid_session
+        post :create, params: {book_id: book.id, book_year: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(book_year_url(BookYear.last))
       end
     end
 
     context "with invalid params" do
       it "renders a JSON response with errors for the new book_year" do
 
-        post :create, params: {book_year: invalid_attributes}, session: valid_session
+        post :create, params: {book_id: book.id, book_year: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
@@ -86,21 +94,24 @@ RSpec.describe BookYearsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
+      let(:new_order) { rand(1_000...10_000) }
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+            order: new_order
+        }
       }
 
       it "updates the requested book_year" do
         book_year = BookYear.create! valid_attributes
-        put :update, params: {id: book_year.to_param, book_year: new_attributes}, session: valid_session
+        put :update, params: {book_id: book.id, id: book_year.to_param, book_year: new_attributes}, session: valid_session
         book_year.reload
-        skip("Add assertions for updated state")
+        expect(book_year.order).to eq(new_order)
       end
 
       it "renders a JSON response with the book_year" do
         book_year = BookYear.create! valid_attributes
 
-        put :update, params: {id: book_year.to_param, book_year: valid_attributes}, session: valid_session
+        put :update, params: {book_id: book.id, id: book_year.to_param, book_year: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
       end
@@ -110,7 +121,7 @@ RSpec.describe BookYearsController, type: :controller do
       it "renders a JSON response with errors for the book_year" do
         book_year = BookYear.create! valid_attributes
 
-        put :update, params: {id: book_year.to_param, book_year: invalid_attributes}, session: valid_session
+        put :update, params: {book_id: book.id, id: book_year.to_param, book_year: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
@@ -121,7 +132,7 @@ RSpec.describe BookYearsController, type: :controller do
     it "destroys the requested book_year" do
       book_year = BookYear.create! valid_attributes
       expect {
-        delete :destroy, params: {id: book_year.to_param}, session: valid_session
+        delete :destroy, params: {book_id: book.id, id: book_year.to_param}, session: valid_session
       }.to change(BookYear, :count).by(-1)
     end
   end
