@@ -4,29 +4,29 @@ RSpec.describe BookYearsController, type: :routing do
   describe "routing" do
 
     it "routes to #index" do
-      expect(:get => "/book_years").to route_to("book_years#index")
+      expect(:get => "/books/2/years").to route_to("book_years#index", :book_id => "2")
     end
 
 
     it "routes to #show" do
-      expect(:get => "/book_years/1").to route_to("book_years#show", :id => "1")
+      expect(:get => "/books/2/years/1").to route_to("book_years#show", :book_id => "2", :id => "1")
     end
 
 
     it "routes to #create" do
-      expect(:post => "/book_years").to route_to("book_years#create")
+      expect(:post => "/books/2/years").to route_to("book_years#create", :book_id => "2")
     end
 
     it "routes to #update via PUT" do
-      expect(:put => "/book_years/1").to route_to("book_years#update", :id => "1")
+      expect(:put => "/books/2/years/1").to route_to("book_years#update", :book_id => "2", :id => "1")
     end
 
     it "routes to #update via PATCH" do
-      expect(:patch => "/book_years/1").to route_to("book_years#update", :id => "1")
+      expect(:patch => "/books/2/years/1").to route_to("book_years#update", :book_id => "2", :id => "1")
     end
 
     it "routes to #destroy" do
-      expect(:delete => "/book_years/1").to route_to("book_years#destroy", :id => "1")
+      expect(:delete => "/books/2/years/1").to route_to("book_years#destroy", :book_id => "2", :id => "1")
     end
 
   end
