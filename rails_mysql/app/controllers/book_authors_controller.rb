@@ -39,10 +39,6 @@ class BookAuthorsController < ApplicationController
   end
 
   private
-    def set_book
-      @book = Book.find(params[:book_id])
-    end
-
     # Use callbacks to share common setup or constraints between actions.
     def set_book_author
       @book_author = @book.authors.find_by!(id: params[:id]) if @book

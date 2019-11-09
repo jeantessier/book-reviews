@@ -23,16 +23,16 @@ require 'rails_helper'
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem.
 
-RSpec.describe BookAuthorsController, type: :controller do
+RSpec.describe BookYearsController, type: :controller do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
 
   # This should return the minimal set of attributes required to create a valid
-  # BookAuthor. As you add validations to BookAuthor, be sure to
+  # BookYear. As you add validations to BookYear, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) do
     {
         book_id: book.id,
-        name: "author #{rand 1_000...10_000}",
+        year: "year #{rand 1_000...10_000}",
         order: 0
     }
   end
@@ -46,12 +46,12 @@ RSpec.describe BookAuthorsController, type: :controller do
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
-  # BookAuthorsController. Be sure to keep this updated too.
+  # BookYearsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
   describe "GET #index" do
     it "returns a success response" do
-      book_author = BookAuthor.create! valid_attributes
+      book_year = BookYear.create! valid_attributes
       get :index, params: {book_id: book.id}, session: valid_session
       expect(response).to be_success
     end
@@ -59,32 +59,32 @@ RSpec.describe BookAuthorsController, type: :controller do
 
   describe "GET #show" do
     it "returns a success response" do
-      book_author = BookAuthor.create! valid_attributes
-      get :show, params: {book_id: book.id, id: book_author.to_param}, session: valid_session
+      book_year = BookYear.create! valid_attributes
+      get :show, params: {book_id: book.id, id: book_year.to_param}, session: valid_session
       expect(response).to be_success
     end
   end
 
   describe "POST #create" do
     context "with valid params" do
-      it "creates a new BookAuthor" do
+      it "creates a new BookYear" do
         expect do
-          post :create, params: {book_id: book.id, book_author: valid_attributes}, session: valid_session
-        end.to change(BookAuthor, :count).by(1)
+          post :create, params: {book_id: book.id, book_year: valid_attributes}, session: valid_session
+        end.to change(BookYear, :count).by(1)
       end
 
-      it "renders a JSON response with the new book_author" do
+      it "renders a JSON response with the new book_year" do
 
-        post :create, params: {book_id: book.id, book_author: valid_attributes}, session: valid_session
+        post :create, params: {book_id: book.id, book_year: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
       end
     end
 
     context "with invalid params" do
-      it "renders a JSON response with errors for the new book_author" do
+      it "renders a JSON response with errors for the new book_year" do
 
-        post :create, params: {book_id: book.id, book_author: invalid_attributes}, session: valid_session
+        post :create, params: {book_id: book.id, book_year: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
@@ -100,27 +100,27 @@ RSpec.describe BookAuthorsController, type: :controller do
         }
       end
 
-      it "updates the requested book_author" do
-        book_author = BookAuthor.create! valid_attributes
-        put :update, params: {book_id: book.id, id: book_author.to_param, book_author: new_attributes}, session: valid_session
-        book_author.reload
-        expect(book_author.order).to eq(new_order)
+      it "updates the requested book_year" do
+        book_year = BookYear.create! valid_attributes
+        put :update, params: {book_id: book.id, id: book_year.to_param, book_year: new_attributes}, session: valid_session
+        book_year.reload
+        expect(book_year.order).to eq(new_order)
       end
 
-      it "renders a JSON response with the book_author" do
-        book_author = BookAuthor.create! valid_attributes
+      it "renders a JSON response with the book_year" do
+        book_year = BookYear.create! valid_attributes
 
-        put :update, params: {book_id: book.id, id: book_author.to_param, book_author: valid_attributes}, session: valid_session
+        put :update, params: {book_id: book.id, id: book_year.to_param, book_year: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
       end
     end
 
     context "with invalid params" do
-      it "renders a JSON response with errors for the book_author" do
-        book_author = BookAuthor.create! valid_attributes
+      it "renders a JSON response with errors for the book_year" do
+        book_year = BookYear.create! valid_attributes
 
-        put :update, params: {book_id: book.id, id: book_author.to_param, book_author: invalid_attributes}, session: valid_session
+        put :update, params: {book_id: book.id, id: book_year.to_param, book_year: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
@@ -128,11 +128,11 @@ RSpec.describe BookAuthorsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested book_author" do
-      book_author = BookAuthor.create! valid_attributes
+    it "destroys the requested book_year" do
+      book_year = BookYear.create! valid_attributes
       expect do
-        delete :destroy, params: {book_id: book.id, id: book_author.to_param}, session: valid_session
-      end.to change(BookAuthor, :count).by(-1)
+        delete :destroy, params: {book_id: book.id, id: book_year.to_param}, session: valid_session
+      end.to change(BookYear, :count).by(-1)
     end
   end
 

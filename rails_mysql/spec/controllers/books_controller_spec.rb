@@ -30,17 +30,17 @@ RSpec.describe BooksController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # Book. As you add validations to Book, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
+  let(:valid_attributes) do
     {
         name: book_name
     }
-  }
+  end
 
-  let(:invalid_attributes) {
+  let(:invalid_attributes) do
     {
         foo: "bar"
     }
-  }
+  end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -86,9 +86,9 @@ RSpec.describe BooksController, type: :controller do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new Book" do
-        expect {
+        expect do
           post :create, params: {book: valid_attributes}, session: valid_session
-        }.to change(Book, :count).by(1)
+        end.to change(Book, :count).by(1)
       end
 
       it "renders a JSON response with the new book" do
@@ -113,11 +113,11 @@ RSpec.describe BooksController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let (:expected_publisher) { "publisher #{rand 1_000...10_000}" }
-      let(:new_attributes) {
+      let(:new_attributes) do
         {
             publisher: expected_publisher
         }
-      }
+      end
 
       it "updates the requested book" do
         book = Book.create! valid_attributes
@@ -151,9 +151,9 @@ RSpec.describe BooksController, type: :controller do
   describe "DELETE #destroy" do
     it "destroys the requested book" do
       book = Book.create! valid_attributes
-      expect {
+      expect do
         delete :destroy, params: {id: book.to_param}, session: valid_session
-      }.to change(Book, :count).by(-1)
+      end.to change(Book, :count).by(-1)
     end
   end
 
