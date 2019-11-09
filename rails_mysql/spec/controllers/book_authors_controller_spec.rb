@@ -24,26 +24,25 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe BookAuthorsController, type: :controller do
-
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
 
   # This should return the minimal set of attributes required to create a valid
   # BookAuthor. As you add validations to BookAuthor, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
+  let(:valid_attributes) do
     {
         book_id: book.id,
         name: "author #{rand 1_000...10_000}",
         order: 0
     }
-  }
+  end
 
-  let(:invalid_attributes) {
+  let(:invalid_attributes) do
     {
         book_id: book.id,
         order: -1
     }
-  }
+  end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -69,9 +68,9 @@ RSpec.describe BookAuthorsController, type: :controller do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new BookAuthor" do
-        expect {
+        expect do
           post :create, params: {book_id: book.id, book_author: valid_attributes}, session: valid_session
-        }.to change(BookAuthor, :count).by(1)
+        end.to change(BookAuthor, :count).by(1)
       end
 
       it "renders a JSON response with the new book_author" do
@@ -95,11 +94,11 @@ RSpec.describe BookAuthorsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_order) { rand(1_000...10_000) }
-      let(:new_attributes) {
+      let(:new_attributes) do
         {
             order: new_order
         }
-      }
+      end
 
       it "updates the requested book_author" do
         book_author = BookAuthor.create! valid_attributes
@@ -131,9 +130,9 @@ RSpec.describe BookAuthorsController, type: :controller do
   describe "DELETE #destroy" do
     it "destroys the requested book_author" do
       book_author = BookAuthor.create! valid_attributes
-      expect {
+      expect do
         delete :destroy, params: {book_id: book.id, id: book_author.to_param}, session: valid_session
-      }.to change(BookAuthor, :count).by(-1)
+      end.to change(BookAuthor, :count).by(-1)
     end
   end
 
