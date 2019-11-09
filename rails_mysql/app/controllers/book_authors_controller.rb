@@ -1,4 +1,5 @@
 class BookAuthorsController < ApplicationController
+  before_action :authenticate_user, only: [:create, :update, :destroy]
   before_action :set_book
   before_action :set_book_author, only: [:show, :update, :destroy]
 
