@@ -61,8 +61,8 @@ RSpec.describe BooksController, type: :controller do
   # So, we cannot use:
   #     post :create, params: {book: valid_attributes}, session: valid_session, headers: auth_header
   # We have to inject a valid token into the controller directly.  Yuck!
-  class BooksController
-    def token_from_request_headers
+  before(:example) do
+    def @controller.token_from_request_headers
       Knock::AuthToken.new(payload: { sub: 1 }).token
     end
   end
