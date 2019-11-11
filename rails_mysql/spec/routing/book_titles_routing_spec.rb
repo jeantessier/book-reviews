@@ -4,29 +4,29 @@ RSpec.describe BookTitlesController, type: :routing do
   describe "routing" do
 
     it "routes to #index" do
-      expect(:get => "/book_titles").to route_to("book_titles#index")
+      expect(:get => "/books/2/titles").to route_to("book_titles#index", :book_id => "2")
     end
 
 
     it "routes to #show" do
-      expect(:get => "/book_titles/1").to route_to("book_titles#show", :id => "1")
+      expect(:get => "/books/2/titles/1").to route_to("book_titles#show", :book_id => "2", :id => "1")
     end
 
 
     it "routes to #create" do
-      expect(:post => "/book_titles").to route_to("book_titles#create")
+      expect(:post => "/books/2/titles").to route_to("book_titles#create", :book_id => "2")
     end
 
     it "routes to #update via PUT" do
-      expect(:put => "/book_titles/1").to route_to("book_titles#update", :id => "1")
+      expect(:put => "/books/2/titles/1").to route_to("book_titles#update", :book_id => "2", :id => "1")
     end
 
     it "routes to #update via PATCH" do
-      expect(:patch => "/book_titles/1").to route_to("book_titles#update", :id => "1")
+      expect(:patch => "/books/2/titles/1").to route_to("book_titles#update", :book_id => "2", :id => "1")
     end
 
     it "routes to #destroy" do
-      expect(:delete => "/book_titles/1").to route_to("book_titles#destroy", :id => "1")
+      expect(:delete => "/books/2/titles/1").to route_to("book_titles#destroy", :book_id => "2", :id => "1")
     end
 
   end
