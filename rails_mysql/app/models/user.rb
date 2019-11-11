@@ -6,6 +6,9 @@ class User < ApplicationRecord
 
   alias_method :authenticate, :valid_password?
 
+  has_many :reviews, dependent: :destroy, inverse_of: :reviewer, foreign_key: "reviewer_id"
+  has_many :books, through: :reviews
+
   def to_token_payload
     {
         sub: self.id,
