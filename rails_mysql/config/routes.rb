@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :reviews
   post 'user_token' => 'user_token#create'
   devise_for :users
   resources :books do
