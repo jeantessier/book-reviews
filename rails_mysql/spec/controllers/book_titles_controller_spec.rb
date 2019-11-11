@@ -24,27 +24,56 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe BookTitlesController, type: :controller do
+  let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
 
   # This should return the minimal set of attributes required to create a valid
   # BookTitle. As you add validations to BookTitle, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) do
+    {
+        book_id: book.id,
+        title: "title #{rand 1_000...10_000}",
+        link: "link #{rand 1_000...10_000}",
+        order: 0
+    }
+  end
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) do
+    {
+        book_id: book.id,
+        order: -1
+    }
+  end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # BookTitlesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  let!(:user) do
+    user = User.create email: "email-#{rand 1_000...10_000}@test.com"
+    user.password = "password #{rand 1_000...10_000}"
+    user.save!
+    return user
+  end
+
+  let(:jwt_token) { Knock::AuthToken.new(payload: { sub: user.id }).token }
+  let(:auth_header) { { 'Authorization': "Bearer #{jwt_token}" } }
+
+  # I think this version of RSpec does not handle headers passed to #get or #post
+  # So, we cannot use:
+  #     post :create, params: {book: valid_attributes}, session: valid_session, headers: auth_header
+  # We have to inject a valid token into the controller directly.  Yuck!
+  before(:example) do
+    def @controller.token_from_request_headers
+      Knock::AuthToken.new(payload: { sub: 1 }).token
+    end
+  end
+
   describe "GET #index" do
     it "returns a success response" do
       book_title = BookTitle.create! valid_attributes
-      get :index, params: {}, session: valid_session
+      get :index, params: {book_id: book.id}, session: valid_session
       expect(response).to be_success
     end
   end
@@ -52,7 +81,7 @@ RSpec.describe BookTitlesController, type: :controller do
   describe "GET #show" do
     it "returns a success response" do
       book_title = BookTitle.create! valid_attributes
-      get :show, params: {id: book_title.to_param}, session: valid_session
+      get :show, params: {book_id: book.id, id: book_title.to_param}, session: valid_session
       expect(response).to be_success
     end
   end
@@ -60,24 +89,23 @@ RSpec.describe BookTitlesController, type: :controller do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new BookTitle" do
-        expect {
-          post :create, params: {book_title: valid_attributes}, session: valid_session
-        }.to change(BookTitle, :count).by(1)
+        expect do
+          post :create, params: {book_id: book.id, book_title: valid_attributes}, session: valid_session
+        end.to change(BookTitle, :count).by(1)
       end
 
       it "renders a JSON response with the new book_title" do
 
-        post :create, params: {book_title: valid_attributes}, session: valid_session
+        post :create, params: {book_id: book.id, book_title: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(book_title_url(BookTitle.last))
       end
     end
 
     context "with invalid params" do
       it "renders a JSON response with errors for the new book_title" do
 
-        post :create, params: {book_title: invalid_attributes}, session: valid_session
+        post :create, params: {book_id: book.id, book_title: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
@@ -86,21 +114,24 @@ RSpec.describe BookTitlesController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_order) { rand(1_000...10_000) }
+      let(:new_attributes) do
+        {
+            order: new_order
+        }
+      end
 
       it "updates the requested book_title" do
         book_title = BookTitle.create! valid_attributes
-        put :update, params: {id: book_title.to_param, book_title: new_attributes}, session: valid_session
+        put :update, params: {book_id: book.id, id: book_title.to_param, book_title: new_attributes}, session: valid_session
         book_title.reload
-        skip("Add assertions for updated state")
+        expect(book_title.order).to eq(new_order)
       end
 
       it "renders a JSON response with the book_title" do
         book_title = BookTitle.create! valid_attributes
 
-        put :update, params: {id: book_title.to_param, book_title: valid_attributes}, session: valid_session
+        put :update, params: {book_id: book.id, id: book_title.to_param, book_title: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
       end
@@ -110,7 +141,7 @@ RSpec.describe BookTitlesController, type: :controller do
       it "renders a JSON response with errors for the book_title" do
         book_title = BookTitle.create! valid_attributes
 
-        put :update, params: {id: book_title.to_param, book_title: invalid_attributes}, session: valid_session
+        put :update, params: {book_id: book.id, id: book_title.to_param, book_title: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
       end
@@ -120,9 +151,9 @@ RSpec.describe BookTitlesController, type: :controller do
   describe "DELETE #destroy" do
     it "destroys the requested book_title" do
       book_title = BookTitle.create! valid_attributes
-      expect {
-        delete :destroy, params: {id: book_title.to_param}, session: valid_session
-      }.to change(BookTitle, :count).by(-1)
+      expect do
+        delete :destroy, params: {book_id: book.id, id: book_title.to_param}, session: valid_session
+      end.to change(BookTitle, :count).by(-1)
     end
   end
 
