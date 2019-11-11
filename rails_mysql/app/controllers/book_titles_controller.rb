@@ -1,39 +1,40 @@
 class BookTitlesController < ApplicationController
+  before_action :authenticate_user, only: [:create, :update, :destroy]
+  before_action :set_book
   before_action :set_book_title, only: [:show, :update, :destroy]
 
-  # GET /book_titles
+  # GET /books/:book_id/book_titles
   def index
-    @book_titles = BookTitle.all
-
-    render json: @book_titles
+    render json: @book.titles
   end
 
-  # GET /book_titles/1
+  # GET /books/:book_id/book_titles/1
   def show
     render json: @book_title
   end
 
-  # POST /book_titles
+  # POST /books/:book_id/book_titles
   def create
-    @book_title = BookTitle.new(book_title_params)
+    @book.titles.create!(book_title_params)
+    render json: @book, status: :created
 
-    if @book_title.save
-      render json: @book_title, status: :created, location: @book_title
-    else
-      render json: @book_title.errors, status: :unprocessable_entity
-    end
+    rescue
+      render json: {error: $!}, status: :unprocessable_entity
   end
 
-  # PATCH/PUT /book_titles/1
+  # PATCH/PUT /books/:book_id/book_titles/1
   def update
     if @book_title.update(book_title_params)
       render json: @book_title
     else
       render json: @book_title.errors, status: :unprocessable_entity
     end
+
+    rescue
+      render json: {error: $!}, status: :unprocessable_entity
   end
 
-  # DELETE /book_titles/1
+  # DELETE /books/:book_id/book_titles/1
   def destroy
     @book_title.destroy
   end
@@ -41,7 +42,7 @@ class BookTitlesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_title
-      @book_title = BookTitle.find(params[:id])
+      @book_title = @book.titles.find_by!(id: params[:id]) if @book
     end
 
     # Only allow a trusted parameter "white list" through.
