@@ -23,6 +23,9 @@ class ReviewsController < ApplicationController
     else
       render json: @review.errors, status: :unprocessable_entity
     end
+
+    rescue
+      render json: {error: $!}, status: :unprocessable_entity
   end
 
   # PATCH/PUT /reviews/1
@@ -32,6 +35,9 @@ class ReviewsController < ApplicationController
     else
       render json: @review.errors, status: :unprocessable_entity
     end
+
+    rescue
+      render json: {error: $!}, status: :unprocessable_entity
   end
 
   # DELETE /reviews/1
