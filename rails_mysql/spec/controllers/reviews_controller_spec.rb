@@ -24,22 +24,53 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe ReviewsController, type: :controller do
+  let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
+  let!(:user) do
+    user = User.create email: "email-#{rand 1_000...10_000}@test.com"
+    user.password = "password #{rand 1_000...10_000}"
+    user.save!
+    return user
+  end
 
   # This should return the minimal set of attributes required to create a valid
   # Review. As you add validations to Review, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) do
+    {
+        reviewer_id: user.id,
+        book_id: book.id,
+        body: "body #{rand 1_000...10_000}",
+    }
+  end
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) do
+    # {
+    #     reviewer_id: user.id,
+    #     book_id: book.id,
+    # }
+    {
+        reviewer_id: -1
+    }
+    # skip("Add a hash of attributes invalid for your model")
+  end
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # ReviewsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
+
+  let(:jwt_token) { Knock::AuthToken.new(payload: { sub: user.id }).token }
+  let(:auth_header) { { 'Authorization': "Bearer #{jwt_token}" } }
+
+  # I think this version of RSpec does not handle headers passed to #get or #post
+  # So, we cannot use:
+  #     post :create, params: {book: valid_attributes}, session: valid_session, headers: auth_header
+  # We have to inject a valid token into the controller directly.  Yuck!
+  before(:example) do
+    def @controller.token_from_request_headers
+      Knock::AuthToken.new(payload: { sub: 1 }).token
+    end
+  end
 
   describe "GET #index" do
     it "returns a success response" do
@@ -60,9 +91,9 @@ RSpec.describe ReviewsController, type: :controller do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new Review" do
-        expect {
+        expect do
           post :create, params: {review: valid_attributes}, session: valid_session
-        }.to change(Review, :count).by(1)
+        end.to change(Review, :count).by(1)
       end
 
       it "renders a JSON response with the new review" do
@@ -86,15 +117,18 @@ RSpec.describe ReviewsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_start) { Date.new }
+      let(:new_attributes) do
+        {
+            start: new_start,
+        }
+      end
 
       it "updates the requested review" do
         review = Review.create! valid_attributes
         put :update, params: {id: review.to_param, review: new_attributes}, session: valid_session
         review.reload
-        skip("Add assertions for updated state")
+        expect(review.start).to eq(new_start)
       end
 
       it "renders a JSON response with the review" do
@@ -120,9 +154,9 @@ RSpec.describe ReviewsController, type: :controller do
   describe "DELETE #destroy" do
     it "destroys the requested review" do
       review = Review.create! valid_attributes
-      expect {
+      expect do
         delete :destroy, params: {id: review.to_param}, session: valid_session
-      }.to change(Review, :count).by(-1)
+      end.to change(Review, :count).by(-1)
     end
   end
 
