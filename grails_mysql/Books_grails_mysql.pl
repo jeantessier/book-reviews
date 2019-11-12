@@ -35,7 +35,7 @@ sub DocumentPartsAsMysql {
     local ($user_stmts) = join("", @user_lines);
 
     opendir(DIRHANDLE, $DIRNAME);
-    local (@files) = grep { /^${document}_\d{4}-\d{2}-\d{2}.txt$/ } readdir(DIRHANDLE);
+    local (@files) = grep { /^${document}_\d{4}-\d{2}-\d{2}(_\w)?.txt$/ } readdir(DIRHANDLE);
     closedir(DIRHANDLE);
 
     local ($comments) = "--\n-- Books\n--";
