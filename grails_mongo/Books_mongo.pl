@@ -20,7 +20,7 @@ sub DocumentPartsAsMongo {
     local ($document) = @_;
 
     opendir(DIRHANDLE, $DIRNAME);
-    local (@files) = grep { /^${document}_\d{4}-\d{2}-\d{2}.txt$/ } readdir(DIRHANDLE);
+    local (@files) = grep { /^${document}_\d{4}-\d{2}-\d{2}(_\w)?.txt$/ } readdir(DIRHANDLE);
     closedir(DIRHANDLE);
 
     local ($drop_stmt) = join("\n", "db.books.drop();", "db.reviews.drop();", "db.users.drop();");
