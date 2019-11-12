@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BookYear, type: :model do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
   let(:year) { "year #{rand 1_000...10_000}" }
-  let(:order) { rand 0...10 }
+  let(:order) { rand 1..10 }
 
   context "create" do
     it "should save with a book" do
@@ -31,6 +31,26 @@ RSpec.describe BookYear, type: :model do
       it "should not save with an invalid order" do
         expect { BookYear.create! book: book, year: year, order: -1 }.to raise_error(ActiveRecord::RecordInvalid)
       end
+    end
+  end
+
+  context "sorting" do
+    let(:book_year) { BookYear.create! book: book, year: year, order: order }
+    let(:other_year) { "other year #{rand 1_000...10_000}" }
+
+    it "should come after another BookYear with lower order" do
+      other = BookYear.create! book: book, year: other_year, order: order - 1
+      expect(book_year <=> other).to eq(1)
+    end
+
+    it "should come the same another BookYear with the same order" do
+      other = BookYear.create! book: book, year: other_year, order: order
+      expect(book_year <=> other).to eq(0)
+    end
+
+    it "should come before another BookYear with higher order" do
+      other = BookYear.create! book: book, year: other_year, order: order + 1
+      expect(book_year <=> other).to eq(-1)
     end
   end
 end

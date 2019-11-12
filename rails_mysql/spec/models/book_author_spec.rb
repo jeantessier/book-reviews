@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe BookAuthor, type: :model do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
   let(:name) { "name #{rand 1_000...10_000}" }
-  let(:order) { rand 0...10 }
+  let(:order) { rand 1..10 }
 
   context "create" do
     it "should save with a book" do
@@ -31,6 +31,26 @@ RSpec.describe BookAuthor, type: :model do
       it "should not save with an invalid order" do
         expect { BookAuthor.create! book: book, name: name, order: -1 }.to raise_error(ActiveRecord::RecordInvalid)
       end
+    end
+  end
+
+  context "sorting" do
+    let(:book_author) { BookAuthor.create! book: book, name: name, order: order }
+    let(:other_name) { "other name #{rand 1_000...10_000}" }
+
+    it "should come after another BookAuthor with lower order" do
+      other = BookAuthor.create! book: book, name: other_name, order: order - 1
+      expect(book_author <=> other).to eq(1)
+    end
+
+    it "should come the same another BookAuthor with the same order" do
+      other = BookAuthor.create! book: book, name: other_name, order: order
+      expect(book_author <=> other).to eq(0)
+    end
+
+    it "should come before another BookAuthor with higher order" do
+      other = BookAuthor.create! book: book, name: other_name, order: order + 1
+      expect(book_author <=> other).to eq(-1)
     end
   end
 end

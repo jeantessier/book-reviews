@@ -4,7 +4,7 @@ RSpec.describe BookTitle, type: :model do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
   let(:title) { "title #{rand 1_000...10_000}" }
   let(:link) { "link #{rand 1_000...10_000}" }
-  let(:order) { rand 0...10 }
+  let(:order) { rand 1..10 }
 
   context "create" do
     it "should save with a book" do
@@ -36,6 +36,26 @@ RSpec.describe BookTitle, type: :model do
       it "should not save with an invalid order" do
         expect { BookTitle.create! book: book, title: title, link: link, order: -1 }.to raise_error(ActiveRecord::RecordInvalid)
       end
+    end
+  end
+
+  context "sorting" do
+    let(:book_title) { BookTitle.create! book: book, title: title, order: order }
+    let(:other_title) { "other title #{rand 1_000...10_000}" }
+
+    it "should come after another BookTitle with lower order" do
+      other = BookTitle.create! book: book, title: other_title, order: order - 1
+      expect(book_title <=> other).to eq(1)
+    end
+
+    it "should come the same another BookTitle with the same order" do
+      other = BookTitle.create! book: book, title: other_title, order: order
+      expect(book_title <=> other).to eq(0)
+    end
+
+    it "should come before another BookTitle with higher order" do
+      other = BookTitle.create! book: book, title: other_title, order: order + 1
+      expect(book_title <=> other).to eq(-1)
     end
   end
 end
