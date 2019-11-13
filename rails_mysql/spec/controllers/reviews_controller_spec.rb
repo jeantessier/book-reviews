@@ -68,7 +68,7 @@ RSpec.describe ReviewsController, type: :controller do
   # We have to inject a valid token into the controller directly.  Yuck!
   before(:example) do
     def @controller.token_from_request_headers
-      Knock::AuthToken.new(payload: { sub: 1 }).token
+      Knock::AuthToken.new(payload: { sub: User.all.first.id }).token
     end
   end
 
@@ -117,7 +117,7 @@ RSpec.describe ReviewsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_start) { Date.new }
+      let(:new_start) { Date.today }
       let(:new_attributes) do
         {
             start: new_start,

@@ -65,7 +65,7 @@ RSpec.describe BookYearsController, type: :controller do
   # We have to inject a valid token into the controller directly.  Yuck!
   before(:example) do
     def @controller.token_from_request_headers
-      Knock::AuthToken.new(payload: { sub: 1 }).token
+      Knock::AuthToken.new(payload: { sub: User.all.first.id }).token
     end
   end
 

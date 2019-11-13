@@ -9,8 +9,8 @@ RSpec.describe Review, type: :model do
   end
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
   let(:body) { "body #{rand 1_000...10_000}" }
-  let(:start) { Date.new }
-  let(:stop) { Date.new }
+  let(:start) { Date.today }
+  let(:stop) { Date.today }
 
   context "create" do
     it "should save with a reviewer and a book" do
