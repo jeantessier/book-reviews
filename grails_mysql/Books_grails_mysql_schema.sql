@@ -47,7 +47,7 @@ create table user (
     version bigint(20) not null default 0,
     name varchar(128) not null,
     email varchar(128) not null,
-    password varchar(128) not null,
+    password varchar(128) not null default '',
     enabled bit(1) not null default 1,
     account_expired bit(1) not null default 0,
     account_locked bit(1) not null default 0,

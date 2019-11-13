@@ -3,14 +3,12 @@
 --
 
 insert into
-    role(id, authority)
+    role(authority)
 values
     (
-        1,
         'ROLE_USER'
     ),
     (
-        2,
         'ROLE_ADMIN'
     );
 
@@ -19,27 +17,24 @@ values
 --
 
 -- Jean
+select 'Creating user Jean ...' as '';
 
 insert into
-    user(id, name, email, password, date_created, last_updated)
+    user(name, email, date_created, last_updated)
 values
     (
-        1,
         'Jean Tessier',
         'jean@jeantessier.com',
-        '0123456789abcdef0123456789abcdef',
         now(),
         now()
     );
 
+set @user_id = last_insert_id();
+
 insert into
     user_role(user_id, role_id)
-values
-    (
-        1,
-        1
-    ),
-    (
-        1,
-        2
-    );
+select
+    @user_id as user_id,
+    id as role_id
+from
+    role;

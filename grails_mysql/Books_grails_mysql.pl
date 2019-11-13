@@ -10,9 +10,6 @@ if ($0 =~ /(\w+)_grails_mysql\./) {
     $DOCUMENT = $1;
 }
 
-$USER_ID = 1;
-$BOOK_ID = 1;
-
 print &DocumentAsMysql($DOCUMENT);
 
 sub DocumentAsMysql {
@@ -47,8 +44,6 @@ sub DocumentPartsAsMysql {
 
 sub DocumentPartAsMysql {
     local ($filename) = @_;
-    local ($user_id) = $USER_ID;
-    local ($book_id) = $BOOK_ID++;
 
     open(FILEHANDLE, $filename);
     local (@lines) = <FILEHANDLE>;
@@ -82,33 +77,33 @@ sub DocumentPartAsMysql {
         $title = $2;
     }
 
-    local ($book_stmt) = "-- " . $title . "\n\ninsert into\n    book(id, name, publisher, date_created, last_updated)\nvalues\n    (" . $book_id . ", " . &SqlText($meta_data{"name"}) . ", " . &SqlText($meta_data{"publisher"}) . ", now(), now());";
+    local ($book_stmt) = "-- " . $title . "\nselect " . &SqlText("Inserting " . $title . " ...") . " as '';\n\ninsert into\n    book(name, publisher, date_created, last_updated)\nvalues\n    (" . &SqlText($meta_data{"name"}) . ", " . &SqlText($meta_data{"publisher"}) . ", now(), now());\nset \@book_id = last_insert_id();";
 
     local (@author_stmts) = map {
-        "insert into\n    book_authors(book_id, authors_string)\nvalues\n    (" . $book_id . ", " . &SqlText($_) . ");"
+        "insert into\n    book_authors(book_id, authors_string)\nvalues\n    (\@book_id, " . &SqlText($_) . ");"
     } @authors;
 
     local (@year_stmts) = map {
-        "insert into\n    book_years(book_id, years_string)\nvalues\n    (" . $book_id . ", " . &SqlText($_) . ");"
+        "insert into\n    book_years(book_id, years_string)\nvalues\n    (\@book_id, " . &SqlText($_) . ");"
     } @years;
 
     local (@title_stmts) = map {
         if (/\[\[([^\]]*)\]\[_(.*)_\]\]/) {
-            "insert into\n    title(book_id, title, link)\nvalues\n    (" . $book_id . ", " . &SqlText($2) . ", " . &SqlText($1) . ");";
+            "insert into\n    title(book_id, title, link)\nvalues\n    (\@book_id, " . &SqlText($2) . ", " . &SqlText($1) . ");";
         } elsif (/\[\[([^\]]*)\]\[(.*)\]\]/) {
-            "insert into\n    title(book_id, title, link)\nvalues\n    (" . $book_id . ", " . &SqlText($2) . ", " . &SqlText($1) . ");";
+            "insert into\n    title(book_id, title, link)\nvalues\n    (\@book_id, " . &SqlText($2) . ", " . &SqlText($1) . ");";
         } else {
-            "insert into\n    title(book_id, title)\nvalues\n    (" . $book_id . ", " . &SqlText($_) . ");";
+            "insert into\n    title(book_id, title)\nvalues\n    (\@book_id, " . &SqlText($_) . ");";
         }
     } @titles;
 
     local ($review_stmt);
     if (exists $meta_data{"stop"}) {
-        $review_stmt = "insert\n    into review(book_id, reviewer_id, body, start, stop, date_created, last_updated)\nvalues\n    (" . $book_id . ", " . $user_id . ", " . &WikiContentsAsSql(@lines) . ", " . &SqlText($meta_data{"start"}) . ", " . &SqlText($meta_data{"stop"}) . ", now(), now());";
+        $review_stmt = "insert\n    into review(book_id, reviewer_id, body, start, stop, date_created, last_updated)\nvalues\n    (\@book_id, \@user_id, " . &WikiContentsAsSql(@lines) . ", " . &SqlText($meta_data{"start"}) . ", " . &SqlText($meta_data{"stop"}) . ", now(), now());";
     } elsif (exists $meta_data{"start"}) {
-        $review_stmt = "insert\n    into review(book_id, reviewer_id, body, start, date_created, last_updated)\nvalues\n    (" . $book_id . ", " . $user_id . ", " . &WikiContentsAsSql(@lines) . ", " . &SqlText($meta_data{"start"}) . ", now(), now());";
+        $review_stmt = "insert\n    into review(book_id, reviewer_id, body, start, date_created, last_updated)\nvalues\n    (\@book_id, \@user_id, " . &WikiContentsAsSql(@lines) . ", " . &SqlText($meta_data{"start"}) . ", now(), now());";
     } else {
-        $review_stmt = "insert\n    into review(book_id, reviewer_id, body, date_created, last_updated)\nvalues\n    (" . $book_id . ", " . $user_id . ", " . &WikiContentsAsSql(@lines) . ", now(), now());";
+        $review_stmt = "insert\n    into review(book_id, reviewer_id, body, date_created, last_updated)\nvalues\n    (\@book_id, \@user_id, " . &WikiContentsAsSql(@lines) . ", now(), now());";
     }
 
     return join("\n\n", $book_stmt, @author_stmts, @year_stmts, @title_stmts, $review_stmt);
