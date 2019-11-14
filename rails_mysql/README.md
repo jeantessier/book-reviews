@@ -179,9 +179,11 @@ You will need to create a `User` and generate a JWT token for them.
 
 > For now, use the Rails console to create the `User`.
 > 
-> ```ruby
+> ```bash
 > $ bin/rails console
-> user = User.new email: jean@jeantessier.com, name: "Jean Tessier"
+> ```
+> ```ruby
+> user = User.new email: "jean@jeantessier.com", name: "Jean Tessier"
 > # We have to set the password separately so it gets encrypted.
 > user.password = "abcd1234"
 > user.save
