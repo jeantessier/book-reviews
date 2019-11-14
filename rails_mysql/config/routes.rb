@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   post 'user_token' => 'user_token#create'
+  get 'users/:id' => 'users#show'
   devise_for :users
   resources :books do
     resources :book_authors, path: "authors"

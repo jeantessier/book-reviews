@@ -44,14 +44,9 @@ RSpec.describe ReviewsController, type: :controller do
   end
 
   let(:invalid_attributes) do
-    # {
-    #     reviewer_id: user.id,
-    #     book_id: book.id,
-    # }
     {
         reviewer_id: -1
     }
-    # skip("Add a hash of attributes invalid for your model")
   end
 
   # This should return the minimal set of values that should be in the session
@@ -98,7 +93,7 @@ RSpec.describe ReviewsController, type: :controller do
 
       it "renders a JSON response with the new review" do
 
-        post :create, params: {review: valid_attributes}, session: valid_session
+        post :create, params: {review: valid_attributes}, session: valid_session, headers: auth_header
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
         expect(response.location).to eq(review_url(Review.last))
