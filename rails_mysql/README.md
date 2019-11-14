@@ -7,8 +7,9 @@ This is a Ruby on Rails application backed by a MySQL database.
 
 ## MySQL
 
-This command will create a new database named `rails_mysql_book_reviews` and
-populate it with data derived from `../data/Books_????-??-??.txt`.
+These commands will create a new database named
+`rails_mysql_book_reviews_development` and populate it with data derived from
+`../data/Books_????-??-??.txt`.
 
     $ bin/rake db:setup
     $ ./Books_rails_mysql.pl | mysql -u root
@@ -23,25 +24,114 @@ You can run all the tests with:
 
 You can start the application with:
 
-    $ ./bin/rails server
+    $ bin/rails server
 
 And use the base URL http://localhost:3000.
 
+### Calling the Server
+
+The examples below all use [Httpie](https://httpie.org/) to call the server from
+the command-line.  Feel free to use your favorite tool, such as
+[cURL](https://en.wikipedia.org/wiki/CURL) or
+[Postman](https://www.getpostman.com/) instead.  Httpie is a tool written in
+Python that installs itself in your local Python environment.  You can install
+it with:
+
+    $ pip install httpie
+
+It assumes HTTP and `localhost` by default, so a call can be as simple as:
+
+    $ http :3000
+
 ## Making REST Calls
 
-To get a list of users:
+To get a single review:
 
-    $ http :3000/users
+    $ http :3000/reviews/1
+    {
+        "id": 4,
+        "reviewer_id": 1,
+        "book_id": 4,
+        "body": "<p>I'm brushing up on my Ruby.  This book on the Ruby programming language had good reviews on Goodreads, and I like books published by Manning.</p><p><i>More to come.</i></p>",
+        "start": "2019-10-07",
+        "stop": null,
+        "created_at": "2019-11-12T17:43:41.000Z",
+        "updated_at": "2019-11-12T17:43:41.000Z"
+    }
+
+Use it's `book_id` attribute to fetch the book's details:
+
+    $ http :3000/books/4
+    {
+        "id": 4,
+        "name": "The_Well_Grounded_Rubyist_3ed",
+        "publisher": "Manning",
+        "created_at": "2019-11-12T17:43:41.000Z",
+        "updated_at": "2019-11-12T17:43:41.000Z"
+    }
+
+    $ http :3000/books/1/titles
+    [
+        {
+            "id": 4,
+            "book_id": 4,
+            "title": "The Well-Grounded Rubyist, Third Edition",
+            "link": "https://www.amazon.com/dp/1617295213",
+            "order": 1
+        }
+    ]
+
+    $ http :3000/books/1/authors
+    [
+        {
+            "id": 5,
+            "book_id": 4,
+            "name": "David A. Black",
+            "order": 1
+        },
+        {
+            "id": 6,
+            "book_id": 4,
+            "name": "Joseph Leo III",
+            "order": 2
+        }
+    ]
+
+    $ http :3000/books/1/years
+    [
+        {
+            "id": 4,
+            "book_id": 4,
+            "year": "2019",
+            "order": 1
+        }
+    ]
+
+Use it's `reviewer_id` attribute to fetch the reviewer's details:
+
+    $ http :3000/users/1
+    {
+        "id": 1,
+        "email": "jean@jeantessier.com",
+        "created_at": "2019-11-12T17:43:41.000Z",
+        "updated_at": "2019-11-12T17:43:41.000Z",
+        "name": "Jean Tessier"
+    }
+
+This implementation does not let you list all its users, but you can fetch
+information about individual users by ID.
+
+    $ http :3000/users/1
 
 To get a list of books:
 
     $ http :3000/books
 
-To get the book with ID 2:
-
-    $ http :3000/books/2
-
 ## Making Authenticated REST Calls
+
+You need to login to the application to do any _write_ operations, like
+creating, updating, or deleting objects in the system.  You can perform _read_
+operations anonymously, if you want.
 
 You will need to create a `User` and generate a JWT token for them.
 
@@ -87,3 +177,22 @@ fetch it from your shell's environment.
 To update a book:
 
     $ http --auth-type jwt PATCH :3000/books/1 publisher="Allen & Unwin"
+
+To add a title:
+
+    $ http --auth-type jwt POST :3000/books/1/titles title="The Hobbit"
+
+To add an author:
+
+    $ http --auth-type jwt POST :3000/books/1/authors name="J.R.R. Tolkien"
+
+To add a publication year:
+
+    $ http --auth-type jwt POST :3000/books/1/years year="J.R.R. Tolkien"
+
+To add a review:
+
+    $ http --auth-type jwt POST :3000/reviews reviewer_id:=1 book_id:=1 body="This book is amazing, so far." start=2019-11-10
+
+Right now, we have to pass in the reviewer's ID explicitly.  It will eventually
+be smart enough to figure out the reviewer based on the JWT.
