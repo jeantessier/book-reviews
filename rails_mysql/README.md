@@ -249,7 +249,7 @@ $ http --auth-type jwt POST :3000/books/1/authors name="J.R.R. Tolkien"
 To add a publication year:
 
 ```bash
-$ http --auth-type jwt POST :3000/books/1/years year="J.R.R. Tolkien"
+$ http --auth-type jwt POST :3000/books/1/years year=1937
 ```
 
 To add a review:
