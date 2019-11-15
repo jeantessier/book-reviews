@@ -5,3 +5,6 @@ yarn.lock
 
 # Environment variables
 .env
+
+# Ignore WebStorm and IntelliJ project files
+.idea
