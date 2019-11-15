@@ -202,7 +202,7 @@ And you'll get a response that looks like:
 
 ```json
 {
-    "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NzMxNjYxNjksInN1YiI6MSwiaWF0IjoxNTczMDc5NzY5LCJpc3MiOiJodHRwOi8vZ2l0aHViLmNvbS9qZWFudGVzc2llci9ib29rLXJldmlld3MiLCJuYW1lIjoiSmVhbiBUZXNzaWVyIn0.CBX6XBdbYInwTOH8fAml_-yzs83aXHjk2bhsOH3P9Pk"
+    "jwt": "eyJ0...P9Pk"
 }
 ```
 
@@ -214,7 +214,7 @@ To create a book:
 $ http \
     POST \
     :3000/books \
-    Authentication:"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NzMxNjYxNjksInN1YiI6MSwiaWF0IjoxNTczMDc5NzY5LCJpc3MiOiJodHRwOi8vZ2l0aHViLmNvbS9qZWFudGVzc2llci9ib29rLXJldmlld3MiLCJuYW1lIjoiSmVhbiBUZXNzaWVyIn0.CBX6XBdbYInwTOH8fAml_-yzs83aXHjk2bhsOH3P9Pk" \
+    Authentication:"Bearer eyJ0...P9Pk" \
     name=The_Hobbit \
     publisher="Houghton Mifflin"
 ```
@@ -224,7 +224,7 @@ fetch it from your shell's environment.
 
 ```bash
 $ pip install httpie-jwt-auth
-$ export JWT_AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NzMxNjYxNjksInN1YiI6MSwiaWF0IjoxNTczMDc5NzY5LCJpc3MiOiJodHRwOi8vZ2l0aHViLmNvbS9qZWFudGVzc2llci9ib29rLXJldmlld3MiLCJuYW1lIjoiSmVhbiBUZXNzaWVyIn0.CBX6XBdbYInwTOH8fAml_-yzs83aXHjk2bhsOH3P9Pk
+$ export JWT_AUTH_TOKEN=eyJ0...P9Pk
 $ http --auth-type jwt POST :3000/books name=The_Hobbit publisher="Houghton Mifflin"
 ```
 
