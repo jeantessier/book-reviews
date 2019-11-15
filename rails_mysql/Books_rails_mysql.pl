@@ -81,7 +81,7 @@ sub DocumentPartAsMysql {
 
     local ($author_order) = 1;
     local (@author_stmts) = map {
-        "insert into\n    book_authors(book_id, name, book_authors.order)\nvalues\n    (\@book_id, " . &SqlText($_) . ", " . $author_order++ . ");"
+        "insert into\n    book_authors(book_id, author, book_authors.order)\nvalues\n    (\@book_id, " . &SqlText($_) . ", " . $author_order++ . ");"
     } @authors;
 
     local ($year_order) = 1;

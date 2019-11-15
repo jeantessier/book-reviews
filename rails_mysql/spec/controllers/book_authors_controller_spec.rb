@@ -32,7 +32,7 @@ RSpec.describe BookAuthorsController, type: :controller do
   let(:valid_attributes) do
     {
         book_id: book.id,
-        name: "author #{rand 1_000...10_000}",
+        author: "author #{rand 1_000...10_000}",
         order: 0
     }
   end

@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191111203725) do
+ActiveRecord::Schema.define(version: 20191115061855) do
 
   create_table "book_authors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "book_id"
-    t.string  "name",                null: false
+    t.string  "author",              null: false
     t.integer "order",   default: 0, null: false
     t.index ["book_id"], name: "index_book_authors_on_book_id", using: :btree
   end
