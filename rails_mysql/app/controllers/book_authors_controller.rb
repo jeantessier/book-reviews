@@ -5,7 +5,7 @@ class BookAuthorsController < ApplicationController
 
   # GET /books/:book_id/book_authors
   def index
-    render json: @book.authors
+    render json: @book.authors.sort
   end
 
   # GET /books/:book_id/book_authors/1

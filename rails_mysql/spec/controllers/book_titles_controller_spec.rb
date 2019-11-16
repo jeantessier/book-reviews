@@ -57,8 +57,8 @@ RSpec.describe BookTitlesController, type: :controller do
     return user
   end
 
-  let(:jwt_token) { Knock::AuthToken.new(payload: { sub: user.id }).token }
-  let(:auth_header) { { 'Authorization': "Bearer #{jwt_token}" } }
+  let(:jwt_token) { Knock::AuthToken.new(payload: {sub: user.id}).token }
+  let(:auth_header) { {'Authorization': "Bearer #{jwt_token}"} }
 
   # I think this version of RSpec does not handle headers passed to #get or #post
   # So, we cannot use:
@@ -66,7 +66,7 @@ RSpec.describe BookTitlesController, type: :controller do
   # We have to inject a valid token into the controller directly.  Yuck!
   before(:example) do
     def @controller.token_from_request_headers
-      Knock::AuthToken.new(payload: { sub: User.all.first.id }).token
+      Knock::AuthToken.new(payload: {sub: User.all.first.id}).token
     end
   end
 
@@ -75,6 +75,24 @@ RSpec.describe BookTitlesController, type: :controller do
       book_title = BookTitle.create! valid_attributes
       get :index, params: {book_id: book.id}, session: valid_session
       expect(response).to be_success
+    end
+
+    context "sort order" do
+      let(:first_order) { rand 1...10 }
+      let(:middle_order) { rand 10...100 }
+      let(:last_order) { rand 100...1_000 }
+
+      it "titles are in increasing order" do
+        BookTitle.create! valid_attributes.merge(order: last_order)
+        BookTitle.create! valid_attributes.merge(order: middle_order)
+        BookTitle.create! valid_attributes.merge(order: first_order)
+        get :index, params: {book_id: book.id}, session: valid_session
+        expect(JSON.parse(response.body)).to match [
+            a_hash_including("order" => first_order),
+            a_hash_including("order" => middle_order),
+            a_hash_including("order" => last_order),
+        ]
+      end
     end
   end
 

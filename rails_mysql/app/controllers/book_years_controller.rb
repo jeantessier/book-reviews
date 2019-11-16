@@ -5,7 +5,7 @@ class BookYearsController < ApplicationController
 
   # GET /books/:book_id/book_years
   def index
-    render json: @book.years
+    render json: @book.years.sort
   end
 
   # GET /books/:book_id/book_years/1

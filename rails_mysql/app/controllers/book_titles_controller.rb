@@ -5,7 +5,7 @@ class BookTitlesController < ApplicationController
 
   # GET /books/:book_id/book_titles
   def index
-    render json: @book.titles
+    render json: @book.titles.sort
   end
 
   # GET /books/:book_id/book_titles/1
