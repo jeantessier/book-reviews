@@ -10,7 +10,7 @@ RSpec.describe BookAuthor, type: :model do
       expect { BookAuthor.create! book: book, author: author, order: order }.to_not raise_error
     end
 
-    it "should not save without a book" do
+    xit "should not save without a book" do
       expect { BookAuthor.create! author: author, order: order }.to raise_error(ActiveRecord::RecordInvalid)
     end
 

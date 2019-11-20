@@ -93,7 +93,7 @@ RSpec.describe ReviewsController, type: :controller do
 
       it "renders a JSON response with the new review" do
 
-        post :create, params: {review: valid_attributes}, session: valid_session, headers: auth_header
+        post :create, params: {review: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
         expect(response.location).to eq(review_url(Review.last))
