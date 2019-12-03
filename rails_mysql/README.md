@@ -21,7 +21,7 @@ $ ./Books_rails_mysql.pl | mysql -u root
 You can run all the tests with:
 
 ```bash
-$ bundle exec rspec
+$ bin/rspec
 ```
 
 ## Running the Server
