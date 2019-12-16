@@ -2,7 +2,7 @@
 
 This is a Ruby on Rails application backed by a MySQL database.
 
-* Ruby version: `2.5.7`
+* Ruby version: `2.6.5`
 * Rails version: `5.1.7`
 
 ## MySQL
