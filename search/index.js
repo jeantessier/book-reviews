@@ -5,20 +5,36 @@ const { buildFederatedSchema } = require('@apollo/federation');
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
-  type Query {
-    search: [Review!]!
-  }
-
   extend type Review @key(fields: "reviewId") {
     reviewId: ID! @external
   }
+
+  input AddSearchResultInput {
+      reviewId: ID!
+  }
+
+  type Query {
+    search(q: String): [Review!]!
+  }
+
+  type Mutation {
+      addSearchResult(searchResult: AddSearchResultInput): Review
+  }
 `;
+
+const reviews = [];
 
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
-    search: () => [],
+    search: async (_, { q }) => reviews,
+  },
+  Mutation: {
+    addSearchResult: async (_, { searchResult }) => {
+      reviews.push(searchResult);
+      return searchResult;
+    },
   }
 };
 
