@@ -2,7 +2,7 @@
 
 This is a Ruby on Rails application backed by a MySQL database.
 
-* Ruby version: `2.6.5`
+* Ruby version: `2.6.6`
 * Rails version: `5.1.7`
 
 ## MySQL
@@ -40,13 +40,13 @@ And use the base URL http://localhost:3000.
 > [Postman](https://www.getpostman.com/) instead.  Httpie is a tool written in
 > Python that installs itself in your local Python environment.  You can install
 > it with:
-> 
+>
 > ```bash
 > $ pip install httpie
 > ```
-> 
+>
 > It assumes HTTP and `localhost` by default, so a call can be as simple as:
-> 
+>
 > ```bash
 > $ http :3000
 > ```
@@ -178,7 +178,7 @@ operations anonymously, if you want.
 You will need to create a `User` and generate a JWT token for them.
 
 > For now, use the Rails console to create the `User`.
-> 
+>
 > ```bash
 > $ bin/rails console
 > ```
