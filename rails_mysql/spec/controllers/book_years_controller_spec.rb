@@ -115,7 +115,7 @@ RSpec.describe BookYearsController, type: :controller do
 
         post :create, params: {book_id: book.id, book_year: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
       end
     end
 
@@ -124,7 +124,7 @@ RSpec.describe BookYearsController, type: :controller do
 
         post :create, params: {book_id: book.id, book_year: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
       end
     end
   end
@@ -150,7 +150,7 @@ RSpec.describe BookYearsController, type: :controller do
 
         put :update, params: {book_id: book.id, id: book_year.to_param, book_year: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
       end
     end
 
@@ -160,7 +160,7 @@ RSpec.describe BookYearsController, type: :controller do
 
         put :update, params: {book_id: book.id, id: book_year.to_param, book_year: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
       end
     end
   end

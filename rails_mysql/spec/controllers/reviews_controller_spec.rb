@@ -95,7 +95,7 @@ RSpec.describe ReviewsController, type: :controller do
 
         post :create, params: {review: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
         expect(response.location).to eq(review_url(Review.last))
       end
     end
@@ -105,7 +105,7 @@ RSpec.describe ReviewsController, type: :controller do
 
         post :create, params: {review: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
       end
     end
   end
@@ -131,7 +131,7 @@ RSpec.describe ReviewsController, type: :controller do
 
         put :update, params: {id: review.to_param, review: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
       end
     end
 
@@ -141,7 +141,7 @@ RSpec.describe ReviewsController, type: :controller do
 
         put :update, params: {id: review.to_param, review: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
       end
     end
   end
