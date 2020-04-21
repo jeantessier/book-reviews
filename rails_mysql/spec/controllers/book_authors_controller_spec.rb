@@ -73,7 +73,7 @@ RSpec.describe BookAuthorsController, type: :controller do
     it "returns a success response" do
       book_author = BookAuthor.create! valid_attributes
       get :index, params: {book_id: book.id}, session: valid_session
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     context "sort order" do
@@ -99,7 +99,7 @@ RSpec.describe BookAuthorsController, type: :controller do
     it "returns a success response" do
       book_author = BookAuthor.create! valid_attributes
       get :show, params: {book_id: book.id, id: book_author.to_param}, session: valid_session
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 

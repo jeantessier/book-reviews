@@ -7,7 +7,7 @@ RSpec.describe "Books", type: :request do
     before { get books_path }
 
     it "returns 200 (Success)" do
-      expect(response).to have_http_status(:success)
+      expect(response).to be_successful
     end
 
     it "has the correct number of books" do

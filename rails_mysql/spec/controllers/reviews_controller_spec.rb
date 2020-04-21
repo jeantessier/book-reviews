@@ -71,7 +71,7 @@ RSpec.describe ReviewsController, type: :controller do
     it "returns a success response" do
       review = Review.create! valid_attributes
       get :index, params: {}, session: valid_session
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe ReviewsController, type: :controller do
     it "returns a success response" do
       review = Review.create! valid_attributes
       get :show, params: {id: review.to_param}, session: valid_session
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
