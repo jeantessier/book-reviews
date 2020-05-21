@@ -3,24 +3,30 @@ const { ApolloGateway } = require("@apollo/gateway");
 
 require('dotenv').config();
 
+const books_service = process.env.BOOKS_SERVICE || 'http://localhost:4001'
+const reviews_service = process.env.REVIEWS_SERVICE || 'http://localhost:4002'
+const users_service = process.env.USERS_SERVICE || 'http://localhost:4003'
+const search_service = process.env.SEARCH_SERVICE || 'http://localhost:4004'
+
 const gateway = new ApolloGateway({
   serviceList: [
-    { name: 'books', url: 'http://localhost:4001' },
-    { name: 'reviews', url: 'http://localhost:4002' },
-    { name: 'users', url: 'http://localhost:4003' },
-    { name: 'search', url: 'http://localhost:4004' },
+    { name: 'books', url: books_service },
+    { name: 'reviews', url: reviews_service },
+    { name: 'users', url: users_service },
+    { name: 'search', url: search_service },
   ]
 });
 
 // Pass the ApolloGateway to the ApolloServer constructor
 const server = new ApolloServer({
   gateway,
-  engine: { apiKey: process.env.ENGINE_API_KEY },
 
   // Disable subscriptions (not currently supported with ApolloGateway)
   subscriptions: false,
 });
 
-server.listen().then(({ url }) => {
+const port = process.env.PORT || 4000
+
+server.listen(port).then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });

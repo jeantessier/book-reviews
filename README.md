@@ -13,22 +13,46 @@ There are four underlying services:
 These four services each define a part of overall schema.  The `gateway` service
 ties them all together.
 
-## Running the Services
+## Running It
 
-First, start all the participating services.
+### Using Docker-Compose
+
+```bash
+docker-compose up -d
+```
+
+This will run each federated service nicely hidden inside a Docker network,
+where each one appears as its own host, using the default HTTP port 80.  For
+example, within the Docker network, the books service lives at `http://books/`.
+
+The gateway runs inside the Docker network as its own host and using the default
+HTTP port 80.  Inside the Docker network, it lives at `http://gateway`.  But it
+also maps the host's port 4000 to its port 80.  This way, from outside the
+Docker network, it lives at `http://localhost:4000` like a normal Node app.
+
+### Running Them Manually
+
+If you are not using Docker Compose, each application runs directly on the host
+machine.  Since they will share the IP address, we use different port numbers to
+communicate with each one.  For example, the books service lives at
+`http://localhost:4001`.
+
+#### Starting the Federated Services
 
 ```bash
 for service in books reviews users search
 do
-    (cd service; node index.js &)
+    (cd service; npm start &)
 done
 ```
 
-Once the services are running, you can start the gateway.
+#### Starting the Gateway
 
 ```bash
-(cd gateway; node index.js &)
+(cd gateway; npm start &)
 ```
+
+The gateway lives at `http://localhost:4000` like a normal Node app.
 
 When the gateway is running, you can update the Apollo Graph Manager.
 
@@ -43,7 +67,7 @@ their query variables to the UI to call them easily.
 
 ```graphql
 query AllBooks {
-	books {
+  books {
     bookId
     titles {
       title
