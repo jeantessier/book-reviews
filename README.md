@@ -54,7 +54,10 @@ done
 
 The gateway lives at `http://localhost:4000` like a normal Node app.
 
-When the gateway is running, you can update the Apollo Graph Manager.
+When the gateway is running, you can update the Apollo Graph Manager.  You will
+need an API key from the Apollo
+[Graph Manager](https://engine.apollographql.com/).  Once you have obtained it,
+copy the `.env.template` file to `.env` and put your key in the placeholder.
 
 ```bash
 (cd gateway; apollo service:push)
