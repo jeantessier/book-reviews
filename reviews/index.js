@@ -64,9 +64,21 @@ const resolvers = {
       return fetchReviewById(review.reviewId)
     }
   },
+  Book: {
+    reviews(book) {
+      return fetchReviewsByBookId(book.bookId);
+    }
+  },
+  User: {
+    reviews(user) {
+      return fetchReviewsByUserId(user.userId);
+    }
+  },
 };
 
 const fetchReviewById = reviewId => reviews.find(review => reviewId === review.reviewId);
+const fetchReviewsByBookId = bookId => reviews.filter(review => bookId === review.book.bookId);
+const fetchReviewsByUserId = userId => reviews.filter(review => userId === review.user.userId);
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),
