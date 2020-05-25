@@ -61,7 +61,7 @@ const resolvers = {
     __resolveReference(book) {
       return fetchBookById(book.bookId)
     }
-  }
+  },
 };
 
 const fetchBookById = bookId => books.find(book => bookId === book.bookId);

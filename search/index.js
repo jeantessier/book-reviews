@@ -35,7 +35,7 @@ const resolvers = {
       reviews.push(searchResult);
       return searchResult;
     },
-  }
+  },
 };
 
 const server = new ApolloServer({

@@ -45,7 +45,7 @@ const resolvers = {
     __resolveReference(user) {
       return fetchUserById(user.userId)
     }
-  }
+  },
 };
 
 const fetchUserById = userId => users.find(user => userId === user.userId);

@@ -63,7 +63,7 @@ const resolvers = {
     __resolveReference(review) {
       return fetchReviewById(review.reviewId)
     }
-  }
+  },
 };
 
 const fetchReviewById = reviewId => reviews.find(review => reviewId === review.reviewId);
