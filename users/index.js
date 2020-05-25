@@ -51,7 +51,18 @@ const resolvers = {
 const fetchUserById = userId => users.find(user => userId == user.userId);
 
 const server = new ApolloServer({
-  schema: buildFederatedSchema([{ typeDefs, resolvers }])
+  schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+  plugins: [
+    {
+      requestDidStart(requestContext) {
+        console.log("Request did start!");
+        console.log(`    query: ${requestContext.request.query}`);
+        console.log(`    operationName: ${requestContext.request.operationName}`);
+        console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`);
+        console.log(`    users: ${JSON.stringify(users)}`);
+      },
+    },
+  ],
 });
 
 const port = process.env.PORT || 4003
