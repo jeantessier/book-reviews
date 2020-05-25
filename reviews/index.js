@@ -59,6 +59,11 @@ const resolvers = {
       return review;
     },
   },
+  Review: {
+    __resolveReference(review) {
+      return fetchReviewById(review.reviewId)
+    }
+  },
   review: {
     __resolveReference(review) {
       return fetchReviewById(review.reviewId)
