@@ -66,7 +66,7 @@ const resolvers = {
   }
 };
 
-const fetchReviewById = reviewId => reviews.find(review => reviewId == review.reviewId);
+const fetchReviewById = reviewId => reviews.find(review => reviewId === review.reviewId);
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),

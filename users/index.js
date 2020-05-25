@@ -48,7 +48,7 @@ const resolvers = {
   }
 };
 
-const fetchUserById = userId => users.find(user => userId == user.userId);
+const fetchUserById = userId => users.find(user => userId === user.userId);
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),

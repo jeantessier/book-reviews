@@ -64,7 +64,7 @@ const resolvers = {
   }
 };
 
-const fetchBookById = bookId => books.find(book => bookId == book.bookId);
+const fetchBookById = bookId => books.find(book => bookId === book.bookId);
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),
