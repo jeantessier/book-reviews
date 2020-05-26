@@ -63,153 +63,261 @@ copy the `.env.template` file to `.env` and put your key in the placeholder.
 (cd gateway; apollo service:push)
 ```
 
+### Seed Data
+
+You can seed the system by running the `seed.sh` script in the top folder.
+
+It creates two users:
+
+- Jean Tessier
+- Simon Tolkien
+
+It creates four books:
+
+- The Lord of the Rings
+- The Fellowship of the Ring
+- The Two Towers
+- The Return of the King
+
+With matching reviews by the Jean Tessier user.
+
+All of these entities are indexed in the `search` service.
+
 ## Sample Queries
 
-You can access [`Playground`](http://localhost:4000) and copy these queries and
-their query variables to the UI to call them easily.
+You can access [`Playground`](http://localhost:4000) and copy the sample queries
+and their variables to the UI to call them easily.
+
+### Searching
+
+Here is a sample `search` query.  It shows the titles of matching books, the
+bodies of macthing reviews, and the names of matching users.
 
 ```graphql
-query AllBooks {
-  books {
-    bookId
-    titles {
-      title
+query MySearch($q: String!) {
+    search(q: $q) {
+        ... on Book {
+            titles {
+                title
+            }
+        }
+        ... on Review {
+            body
+        }
+        ... on User {
+            name
+        }
     }
-    authors
-    publisher
-    years
-  }
 }
+```
 
-mutation AddBook($book: BookInput) {
-  addBook(book: $book) {
-    bookId
-    titles {
-      title
+If you call it with the following variables:
+
+```json
+{
+  "q": "tolkien"
+}
+```
+
+It will return information about the user Simon Tolkien and all four books,
+because they were authored by J.R.R. Tolkien.
+
+If you call the same query with the variables:
+
+```json
+{
+  "q": "tessier"
+}
+```
+
+It will return the user Jean Tessier and all four reviews, because they were
+written by Jean Tessier.
+
+If you use the variables:
+
+```json
+{
+  "q": "jean tolkien"
+}
+```
+
+It will return both users and all the books and reviews, because each one is
+related to at least one of these words.
+
+### Adding Content
+
+#### Adding a Book
+
+You can use this query to create a new book entry:
+
+```graphql
+mutation AddBook($b: BookInput!) {
+    addBook(book: $b) {
+        bookId
+        name
     }
-    authors
-    publisher
-    years
-  }
 }
+```
 
-query AllUsers {
-	users {
-    userId
-    name
-    email
-  }
-}
+And structure the variables like this:
 
-mutation AddUser($user: UserInput) {
-  addUser(user: $user) {
-    userId
-    name
-    email
-  }
-}
-
-query AllReviews {
-  reviews {
-    reviewId
-    user {
-      name
-    }
-    book {
-      titles {
-        title
+```json
+{
+  "b": {
+    "name": "The_Silmarillion",
+    "titles": [
+      {
+        "title": "The Silmarillion",
+        "link": "https://en.wikipedia.org/wiki/The_Silmarillion"
       }
-      authors
-      years
-    }
-    body
-    start
-    stop
-  }
-}
-
-mutation AddReview($review: ReviewInput) {
-  addReview(review: $review) {
-    reviewId
-    user {
-      name
-    }
-    book {
-      titles {
-        title
-      }
-    }
-    body
-    start
-    stop
-  }
-}
-
-query Search {
-  search {
-    user {
-      name
-    }
-    book {
-      titles {
-        title
-      }
-      authors
-      years
-    }
-    body
-    start
-    stop
-  }
-}
-
-mutation AddSearchResult($searchResult: AddSearchResultInput) {
-  addSearchResult(searchResult: $searchResult) {
-    user {
-      name
-    }
-    book {
-      titles {
-        title
-      }
-      authors
-      years
-    }
-    body
-    start
-    stop
+    ],
+    "publisher": "Unwin & Allen",
+    "authors": [
+      "J.R.R. Tolkien",
+      "Christopher Tolkien"
+    ],
+    "years": ["1977"]
   }
 }
 ```
 
-with data:
+#### Indexing a Book
+
+You use a separate mutation to add your new book to the search index:
+
+```graphql
+mutation AddIndex($i: IndexInput!) {
+    addIndex(index: $i) {
+        ... on Book {
+            titles {
+                title
+            }
+        }
+    }
+}
+```
+
+The mutation will need the `bookId` from the previous mutation.  You also decide
+under which words to index the book.  The words are case-insensitive and they
+are separated by whitespaces.
 
 ```json
 {
-  "user": {
-	  "name": "Jean Tessier",
-  	"email": "jean@jeantessier.com"
-  },
-  "book": {
-    "name": "The_Hobbit",
-    "titles": [
-      { "title": "The Silmarillion" }
-    ],
-    "years": [ "1977" ],
-    "publisher": "Allen & Unwin",
-    "authors": [
-      "J.R.R. Tolkien",
-      "Christopher Tolkien"
-    ]
-  },
-  "review": {
-    "userId": "eee8e970-8297-44a9-8a96-9dc3cce7e2fa",
-    "bookId": "91583c67-a4d3-49d3-8343-c351485fafe3",
-    "body": "Asesome!!",
-    "start": "2019-12-27"
-  },
-  "searchResult": {
-    "reviewId": "80837d41-74ef-44a4-8f87-a2503e375566"
+  "i": {
+    "typename": "Book",
+    "id": "<bookId goes here>",
+    "words": "Silmarillion silmaril saga Christopher Chris Tolkien allen unwin"
+  }
+}
+```
+
+#### Adding a User
+
+You can use this query to register a new user:
+
+```graphql
+mutation AddUser($u: UserInput!) {
+    addUser(user: $u) {
+        userId
+        name
+    }
+}
+```
+
+And structure the variables like this:
+
+```json
+{
+  "u": {
+    "name": "Christopher Tolkien",
+    "email": "chris@tolien.com"
+  }
+}
+```
+
+#### Indexing a User
+
+You use a separate mutation to add your new user to the search index:
+
+```graphql
+mutation AddIndex($i: IndexInput!) {
+    addIndex(index: $i) {
+        ... on User {
+            name
+        }
+    }
+}
+```
+
+The mutation will need the `userId` from the previous mutation.  You also decide
+under which words to index the user.  The words are case-insensitive and they
+are separated by whitespaces.
+
+```json
+{
+  "i": {
+    "typename": "User",
+    "id": "<userId goes here>",
+    "words": "Christopher Chris Tolkien"
+  }
+}
+```
+
+#### Adding a Review
+
+You can use this query to add a new review:
+
+```graphql
+mutation AddReview($r: ReviewInput!) {
+    addReview(review: $r) {
+        reviewId
+        book {
+            name
+        }
+        user {
+            name
+        }
+    }
+}
+```
+
+And structure the variables like this:
+
+```json
+{
+  "r": {
+    "userId": "<userId of the reviewer goes here>",
+    "bookId": "<bookId of the book being reviewed goes here>",
+    "body": "This book is quite fascinating, so far.",
+    "start": "2020-05-21"
+  }
+}
+```
+
+#### Indexing a Review
+
+You use a separate mutation to add your new review to the search index:
+
+```graphql
+mutation AddIndex($i: IndexInput!) {
+    addIndex(index: $i) {
+        ... on Review {
+            body
+        }
+    }
+}
+```
+
+The mutation will need the `reviewId` from the previous mutation.  You also
+decide under which words to index the review.  The words are case-insensitive and
+they are separated by whitespaces.
+
+```json
+{
+  "i": {
+    "typename": "Review",
+    "id": "<reviewId goes here>",
+    "words": "Bob Reviewer book fascinating far"
   }
 }
 ```
