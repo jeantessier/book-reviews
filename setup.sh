@@ -1,5 +1,31 @@
 #!/bin/sh
 
+function addIndex() {
+  local typename=$1; shift
+  local id=$1; shift
+  local payload="$1"; shift
+
+  http :4000 \
+      query="mutation AddIndex(\$i: IndexInput!) {addIndex(index: \$i) {${payload}}}" \
+      variables:="{\"i\": {\"typename\": \"${typename}\", \"id\": \"${id}\", \"words\": \"$*\"}}" \
+      operationName=AddIndex | \
+  jq --raw-output ".data.addIndex"
+}
+
+#
+# User: Simon Tolkien
+#
+
+user_id=$(http :4000 \
+    query='mutation AddUser($u: UserInput!) {addUser(user: $u) {userId name}}' \
+    variables:="{\"u\": {\"name\": \"Simon Tolkien\", \"email\": \"simon@tolkien.com\"}}" \
+    operationName=AddUser | \
+jq --raw-output ".data.addUser.userId")
+
+echo user_id $user_id
+
+addIndex User $user_id "... on User {name}" Simon Tolkien
+
 #
 # User: Jean Tessier
 #
@@ -11,6 +37,8 @@ user_id=$(http :4000 \
 jq --raw-output ".data.addUser.userId")
 
 echo user_id $user_id
+
+addIndex User $user_id "... on User {name}" Jean Tessier
 
 #
 # Book: The Lord of the Rings
@@ -26,6 +54,8 @@ jq --raw-output ".data.addBook.bookId")
 
 echo book_id $book_id
 
+addIndex Book $book_id "... on Book {name}" lord ring Tolkien allen unwin
+
 # Review
 
 review_id=$(http :4000 \
@@ -36,13 +66,7 @@ jq --raw-output ".data.addReview.reviewId")
 
 echo review_id $review_id
 
-# Search Result
-
-http :4000 \
-    query='mutation AddSearchResult($sr: AddSearchResultInput!) {addSearchResult(searchResult: $sr) {reviewId book {name} user {name}}}' \
-    variables:="{\"sr\": {\"reviewId\": \"${review_id}\"}}" \
-    operationName=AddSearchResult | \
-jq --raw-output ".data"
+addIndex Review $review_id "... on Review {body}" awesome
 
 #
 # Book: The Fellowship of the Ring
@@ -58,6 +82,8 @@ jq --raw-output ".data.addBook.bookId")
 
 echo book_id $book_id
 
+addIndex Book $book_id "... on Book {name}" fellowship ring Tolkien allen unwin
+
 # Review
 
 review_id=$(http :4000 \
@@ -68,13 +94,7 @@ jq --raw-output ".data.addReview.reviewId")
 
 echo review_id $review_id
 
-# Search Result
-
-http :4000 \
-    query='mutation AddSearchResult($sr: AddSearchResultInput!) {addSearchResult(searchResult: $sr) {reviewId book {name} user {name}}}' \
-    variables:="{\"sr\": {\"reviewId\": \"${review_id}\"}}" \
-    operationName=AddSearchResult | \
-jq --raw-output ".data"
+addIndex Review $review_id "... on Review {body}" council Elrond little long
 
 #
 # Book: The Two Towers
@@ -90,6 +110,8 @@ jq --raw-output ".data.addBook.bookId")
 
 echo book_id $book_id
 
+addIndex Book $book_id "... on Book {name}" two tower Tolkien allen unwin
+
 # Review
 
 review_id=$(http :4000 \
@@ -100,13 +122,7 @@ jq --raw-output ".data.addReview.reviewId")
 
 echo review_id $review_id
 
-# Search Result
-
-http :4000 \
-    query='mutation AddSearchResult($sr: AddSearchResultInput!) {addSearchResult(searchResult: $sr) {reviewId book {name} user {name}}}' \
-    variables:="{\"sr\": {\"reviewId\": \"${review_id}\"}}" \
-    operationName=AddSearchResult | \
-jq --raw-output ".data"
+addIndex Review $review_id "... on Review {body}" battle Helm Deep little long
 
 #
 # Book: The Return of the King
@@ -122,6 +138,8 @@ jq --raw-output ".data.addBook.bookId")
 
 echo book_id $book_id
 
+addIndex Book $book_id "... on Book {name}" return king Tolkien allen unwin
+
 # Review
 
 review_id=$(http :4000 \
@@ -132,10 +150,4 @@ jq --raw-output ".data.addReview.reviewId")
 
 echo review_id $review_id
 
-# Search Result
-
-http :4000 \
-    query='mutation AddSearchResult($sr: AddSearchResultInput!) {addSearchResult(searchResult: $sr) {reviewId book {name} user {name}}}' \
-    variables:="{\"sr\": {\"reviewId\": \"${review_id}\"}}" \
-    operationName=AddSearchResult | \
-jq --raw-output ".data"
+addIndex Review $review_id "... on Review {body}" ending little long
