@@ -66,7 +66,7 @@ jq --raw-output ".data.addReview.reviewId")
 
 echo review_id $review_id
 
-addIndex Review $review_id "... on Review {body}" awesome
+addIndex Review $review_id "... on Review {body}" Jean Tessier awesome
 
 #
 # Book: The Fellowship of the Ring
@@ -88,13 +88,13 @@ addIndex Book $book_id "... on Book {name}" fellowship ring Tolkien allen unwin
 
 review_id=$(http :4000 \
     query='mutation AddReview($r: ReviewInput!) {addReview(review: $r) {reviewId book {name} user {name}}}' \
-    variables:="{\"r\": {\"userId\": \"${user_id}\", \"bookId\": \"${book_id}\", \"body\": \"The Council of Elrond is a little long.!\", \"start\": \"2020-05-02\", \"stop\": \"2020-05-20\"}}" \
+    variables:="{\"r\": {\"userId\": \"${user_id}\", \"bookId\": \"${book_id}\", \"body\": \"The Council of Elrond is a little long.!\", \"start\": \"2020-05-02\", \"stop\": \"2020-05-05\"}}" \
     operationName=AddReview | \
 jq --raw-output ".data.addReview.reviewId")
 
 echo review_id $review_id
 
-addIndex Review $review_id "... on Review {body}" council Elrond little long
+addIndex Review $review_id "... on Review {body}" Jean Tessier council Elrond little long
 
 #
 # Book: The Two Towers
@@ -116,13 +116,13 @@ addIndex Book $book_id "... on Book {name}" two tower Tolkien allen unwin
 
 review_id=$(http :4000 \
     query='mutation AddReview($r: ReviewInput!) {addReview(review: $r) {reviewId book {name} user {name}}}' \
-    variables:="{\"r\": {\"userId\": \"${user_id}\", \"bookId\": \"${book_id}\", \"body\": \"The Battle of Helm's Deep is a little long.!\", \"start\": \"2020-05-02\", \"stop\": \"2020-05-20\"}}" \
+    variables:="{\"r\": {\"userId\": \"${user_id}\", \"bookId\": \"${book_id}\", \"body\": \"The Battle of Helm's Deep is a little long.!\", \"start\": \"2020-05-06\", \"stop\": \"2020-05-10\"}}" \
     operationName=AddReview | \
 jq --raw-output ".data.addReview.reviewId")
 
 echo review_id $review_id
 
-addIndex Review $review_id "... on Review {body}" battle Helm Deep little long
+addIndex Review $review_id "... on Review {body}" Jean Tessier battle Helm Deep little long
 
 #
 # Book: The Return of the King
@@ -144,10 +144,10 @@ addIndex Book $book_id "... on Book {name}" return king Tolkien allen unwin
 
 review_id=$(http :4000 \
     query='mutation AddReview($r: ReviewInput!) {addReview(review: $r) {reviewId book {name} user {name}}}' \
-    variables:="{\"r\": {\"userId\": \"${user_id}\", \"bookId\": \"${book_id}\", \"body\": \"The ending is a little long.!\", \"start\": \"2020-05-02\", \"stop\": \"2020-05-20\"}}" \
+    variables:="{\"r\": {\"userId\": \"${user_id}\", \"bookId\": \"${book_id}\", \"body\": \"The ending is a little long.!\", \"start\": \"2020-05-11\", \"stop\": \"2020-05-20\"}}" \
     operationName=AddReview | \
 jq --raw-output ".data.addReview.reviewId")
 
 echo review_id $review_id
 
-addIndex Review $review_id "... on Review {body}" ending little long
+addIndex Review $review_id "... on Review {body}" Jean Tessier ending little long
