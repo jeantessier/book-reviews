@@ -54,7 +54,7 @@ communicate with each one.  For example, the books service lives at
 ```bash
 for service in books reviews users search
 do
-    (cd service; npm start &)
+    (cd $service; npm start &)
 done
 ```
 
