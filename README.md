@@ -15,6 +15,18 @@ ties them all together.
 
 ## Running It
 
+### Initial Setup
+
+Each service is a Node app.  You need to run `npm install` to fetch their
+dependencies.
+
+```bash
+for service in books reviews users search gateway
+do
+    (cd $service; npm install)
+done
+```
+
 ### Using Docker-Compose
 
 ```bash
