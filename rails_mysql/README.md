@@ -3,7 +3,7 @@
 This is a Ruby on Rails application backed by a MySQL database.
 
 * Ruby version: `2.6.6`
-* Rails version: `6.0.2.2`
+* Rails version: `6.0.3.3`
 
 ## MySQL
 
