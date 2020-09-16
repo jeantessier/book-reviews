@@ -71,7 +71,7 @@ $ http :3000/reviews/1
 }
 ```
 
-Use it's `book_id` attribute to fetch the book's details:
+Use its `book_id` attribute to fetch the book's details:
 
 ```bash
 $ http :3000/books/4
