@@ -183,10 +183,7 @@ You will need to create a `User` and generate a JWT token for them.
 > $ bin/rails console
 > ```
 > ```ruby
-> user = User.new email: "jean@jeantessier.com", name: "Jean Tessier"
-> # We have to set the password separately so it gets encrypted.
-> user.password = "abcd1234"
-> user.save
+> User.create! name: "Jean Tessier", email: "jean@jeantessier.com", password: "abcd1234"
 > ```
 
 Once you have a user, you can get the JWT token from the `/user_token` endpoint.
