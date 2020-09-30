@@ -9,10 +9,10 @@ This is a Ruby on Rails application backed by a MySQL database.
 
 These commands will create a new database named
 `rails_mysql_book_reviews_development` and populate it with data derived from
-`../data/Books_????-??-??*.txt`.
+`../data/Books_????-??-??*.md`.
 
 ```bash
-$ bin/rake db:setup
+$ bin/rails db:setup
 $ ./Books_rails_mysql.pl | mysql -u root
 ```
 

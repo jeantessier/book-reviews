@@ -32,7 +32,7 @@ sub DocumentPartsAsMysql {
     local ($user_stmts) = join("", @user_lines);
 
     opendir(DIRHANDLE, $DIRNAME);
-    local (@files) = grep { /^${document}_\d{4}-\d{2}-\d{2}(_\w)?.txt$/ } readdir(DIRHANDLE);
+    local (@files) = grep { /^${document}_\d{4}-\d{2}-\d{2}(_\w)?.md$/ } readdir(DIRHANDLE);
     closedir(DIRHANDLE);
 
     local ($comments) = "--\n-- Books\n--";
@@ -71,10 +71,8 @@ sub DocumentPartAsMysql {
     } until ($line =~ /^\s*$/);
 
     local ($title) = $titles[0];
-    if ($title =~ /\[\[([^\]]*)\]\[_(.*)_\]\]/) {
-        $title = $2;
-    } elsif ($title =~ /\[\[([^\]]*)\]\[(.*)\]\]/) {
-        $title = $2;
+    if ($title =~ /\[(.*)\]\(.*\)/) {
+        $title = $1;
     }
 
     local ($book_stmt) = "-- " . $title . "\nselect " . &SqlText("Inserting " . $title . " ...") . " as '';\n\ninsert into\n    books(name, publisher, created_at, updated_at)\nvalues\n    (" . &SqlText($meta_data{"name"}) . ", " . &SqlText($meta_data{"publisher"}) . ", now(), now());\nset \@book_id = last_insert_id();";
@@ -91,10 +89,8 @@ sub DocumentPartAsMysql {
 
     local ($title_order) = 1;
     local (@title_stmts) = map {
-        if (/\[\[([^\]]*)\]\[_(.*)_\]\]/) {
-            "insert into\n    book_titles(book_id, title, link, book_titles.order)\nvalues\n    (\@book_id, " . &SqlText($2) . ", " . &SqlText($1) . ", " . $title_order++ . ");";
-        } elsif (/\[\[([^\]]*)\]\[(.*)\]\]/) {
-            "insert into\n    book_titles(book_id, title, link, book_titles.order)\nvalues\n    (\@book_id, " . &SqlText($2) . ", " . &SqlText($1) . ", " . $title_order++ . ");";
+        if (/\[(.*)\]\((.*)\)/) {
+            "insert into\n    book_titles(book_id, title, link, book_titles.order)\nvalues\n    (\@book_id, " . &SqlText($1) . ", " . &SqlText($2) . ", " . $title_order++ . ");";
         } else {
             "insert into\n    book_titles(book_id, title, book_titles.order)\nvalues\n    (\@book_id, " . &SqlText($_) . ", " . $title_order++ . ");";
         }
