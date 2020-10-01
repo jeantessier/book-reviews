@@ -2,7 +2,7 @@
 layout: post
 title: "Upgrade Ruby and Rails versions to 2.6.6 and 6.0 respectively"
 date: 2020-04-21 16:13:00 -0800
-categories: rails, ruby
+categories: rails ruby
 ---
 Upgraded the Rails-based applications from `5.1.7` to `6.0.2.2`.
 
