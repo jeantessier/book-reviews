@@ -5,7 +5,7 @@ This is a Grails application backed by a MySQL database.
 ## MySQL
 
 This command will create a new database named `grails_mysql_book_reviews` and
-populate it with data derived from `../data/Books_????-??-??.txt`.
+populate it with data derived from `../data/Books_????-??-??.md`.
 
     $ ./Books_grails_mysql.pl | mysql -u root
 
