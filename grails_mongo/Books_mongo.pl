@@ -20,7 +20,7 @@ sub DocumentPartsAsMongo {
     local ($document) = @_;
 
     opendir(DIRHANDLE, $DIRNAME);
-    local (@files) = grep { /^${document}_\d{4}-\d{2}-\d{2}(_\w)?.txt$/ } readdir(DIRHANDLE);
+    local (@files) = grep { /^${document}_\d{4}-\d{2}-\d{2}(_\w)?.md$/ } readdir(DIRHANDLE);
     closedir(DIRHANDLE);
 
     local ($drop_stmt) = join("\n", "db.book.drop();", "db.review.drop();", "db.user.drop();");
@@ -63,15 +63,10 @@ sub DocumentPartAsMongo {
             name => &JsonText($meta_data{"name"}),
             authors => &JsonList(map { &JsonText($_) } @authors),
             titles => &JsonList(map {
-                if (/\[\[([^\]]*)\]\[_(.*)_\]\]/) {
+                if (/\[(.*)\]\((.*)\)/) {
                     &JsonRecord(
-                        title => &JsonText($2),
-                        link => &JsonText($1),
-                    );
-                } elsif (/\[\[([^\]]*)\]\[(.*)\]\]/) {
-                    &JsonRecord(
-                        title => &JsonText($2),
-                        link => &JsonText($1),
+                        title => &JsonText($1),
+                        link => &JsonText($2),
                     );
                 } else {
                     &JsonRecord(
@@ -89,7 +84,7 @@ sub DocumentPartAsMongo {
 
     local ($review_stmt) = "var review = db.review.insertOne(" .
         &JsonRecord(
-            body => &JsonText(&WikiContentsAsJson(@lines)),
+            body => &WikiContentsAsJson(@lines),
             start => "new Date(" . &JsonText($meta_data{"start"}) . ")",
             stop => (exists $meta_data{"stop"}) ? "new Date(" . &JsonText($meta_data{"stop"}) . ")" : "null",
             book => "book.insertedId",
