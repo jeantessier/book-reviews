@@ -156,6 +156,76 @@ If you use the variables:
 It will return both users and all the books and reviews, because each one is
 related to at least one of these words.
 
+#### Looking Up a Specific Entity
+
+Say you are building a page that shows a book.  How do you fetch the information
+about that book in order to populate the page?
+
+Search for its ID with this query:
+
+```graphql
+query MySearch($q: String!) {
+    search(q: $q) {
+        __typename
+        ... on Book {
+            bookId
+            titles {
+                title
+            }
+            authors
+            reviews {
+                reviewId
+                user {
+                    userId
+                    name
+                }
+            }
+        }
+        ... on Review {
+            reviewId
+            book {
+                bookId
+                titles {
+                    title
+                }
+                authors
+            }
+            user {
+                userId
+                name
+            }
+            body
+            start
+            stop
+        }
+        ... on User {
+            userId
+            name
+            reviews {
+                reviewId
+                book {
+                    bookId
+                    titles {
+                        title
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+If you call it the ID of an entity:
+
+```json
+{
+  "q": "53d01334-37f9-45bc-85fc-06b3f8a9bbf4"
+}
+```
+
+The search will return a single entry, either a `Book`, `User`, or `Review`, as
+the case may be.
+
 ### Adding Content
 
 #### Adding a Book
