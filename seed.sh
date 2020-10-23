@@ -5,11 +5,12 @@ function addIndex() {
   local id=$1; shift
   local payload="$1"; shift
 
-  http :4000 \
+  local indexCount=$(http :4000 \
       query="mutation AddIndex(\$i: IndexInput!) {addIndex(index: \$i) {${payload}}}" \
       variables:="{\"i\": {\"typename\": \"${typename}\", \"id\": \"${id}\", \"words\": \"$*\"}}" \
       operationName=AddIndex | \
-  jq --raw-output ".data.addIndex"
+  jq --raw-output ".data.addIndex | length")
+  echo "    is in ${indexCount} indices"
 }
 
 #
@@ -22,7 +23,7 @@ user_id=$(http :4000 \
     operationName=AddUser | \
 jq --raw-output ".data.addUser.userId")
 
-echo user_id $user_id
+echo User $user_id
 
 addIndex User $user_id "... on User {name}" Simon Tolkien
 
@@ -36,7 +37,7 @@ user_id=$(http :4000 \
     operationName=AddUser | \
 jq --raw-output ".data.addUser.userId")
 
-echo user_id $user_id
+echo User $user_id
 
 addIndex User $user_id "... on User {name}" Jean Tessier
 
@@ -52,7 +53,7 @@ book_id=$(http :4000 \
     operationName=AddBook | \
 jq --raw-output ".data.addBook.bookId")
 
-echo book_id $book_id
+echo Book $book_id
 
 addIndex Book $book_id "... on Book {name}" lord ring Tolkien allen unwin
 
@@ -64,7 +65,7 @@ review_id=$(http :4000 \
     operationName=AddReview | \
 jq --raw-output ".data.addReview.reviewId")
 
-echo review_id $review_id
+echo Review $review_id
 
 addIndex Review $review_id "... on Review {body}" Jean Tessier awesome
 
@@ -80,7 +81,7 @@ book_id=$(http :4000 \
     operationName=AddBook | \
 jq --raw-output ".data.addBook.bookId")
 
-echo book_id $book_id
+echo Book $book_id
 
 addIndex Book $book_id "... on Book {name}" fellowship ring Tolkien allen unwin
 
@@ -92,7 +93,7 @@ review_id=$(http :4000 \
     operationName=AddReview | \
 jq --raw-output ".data.addReview.reviewId")
 
-echo review_id $review_id
+echo Review $review_id
 
 addIndex Review $review_id "... on Review {body}" Jean Tessier council Elrond little long
 
@@ -108,7 +109,7 @@ book_id=$(http :4000 \
     operationName=AddBook | \
 jq --raw-output ".data.addBook.bookId")
 
-echo book_id $book_id
+echo Book $book_id
 
 addIndex Book $book_id "... on Book {name}" two tower Tolkien allen unwin
 
@@ -120,7 +121,7 @@ review_id=$(http :4000 \
     operationName=AddReview | \
 jq --raw-output ".data.addReview.reviewId")
 
-echo review_id $review_id
+echo Review $review_id
 
 addIndex Review $review_id "... on Review {body}" Jean Tessier battle Helm Deep little long
 
@@ -136,7 +137,7 @@ book_id=$(http :4000 \
     operationName=AddBook | \
 jq --raw-output ".data.addBook.bookId")
 
-echo book_id $book_id
+echo Book $book_id
 
 addIndex Book $book_id "... on Book {name}" return king Tolkien allen unwin
 
@@ -148,6 +149,6 @@ review_id=$(http :4000 \
     operationName=AddReview | \
 jq --raw-output ".data.addReview.reviewId")
 
-echo review_id $review_id
+echo Review $review_id
 
 addIndex Review $review_id "... on Review {body}" Jean Tessier ending little long

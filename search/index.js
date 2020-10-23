@@ -55,25 +55,31 @@ const addIndex = async (_, { index }) => {
   console.log(`***   index: ${index} (${typeof index}) [${JSON.stringify(index)}]`);
   console.log(`***   index.words: ${index.words} (${typeof index.words}) [${JSON.stringify(index.words)}]`);
 
+  indexWord(index.id, index, (i) => results.push(i));
+
   index.words.toLowerCase().split(/\s+/).forEach(word => {
-    if (!(word in indices)) {
-      console.log(`Creating index entry for "${word}"`);
-      indices[word] = {};
-    }
-    if (!(index.id in indices[word])) {
-      console.log(`Creating index entry for ${index.id} under "${word}"`);
-      indices[word][index.id] = {
-        __typename: index.typename,
-        // Being lazy and setting all IDs.  Gateway will filter on __typename.
-        bookId: index.id,
-        reviewId: index.id,
-        userId: index.id,
-      }
-      results.push(indices[word][index.id]);
-    }
+    indexWord(word, index, (i) => results.push(i));
   });
 
   return results;
+};
+
+const indexWord = (word, index, addedIndexCallback) => {
+  if (!(word in indices)) {
+    console.log(`Creating index entry for "${word}"`);
+    indices[word] = {};
+  }
+  if (!(index.id in indices[word])) {
+    console.log(`Creating index entry for ${index.id} under "${word}"`);
+    indices[word][index.id] = {
+      __typename: index.typename,
+      // Being lazy and setting all IDs.  Gateway will filter on __typename.
+      bookId: index.id,
+      reviewId: index.id,
+      userId: index.id,
+    }
+    addedIndexCallback(indices[word][index.id]);
+  }
 };
 
 // Resolvers define the technique for fetching the types defined in the
