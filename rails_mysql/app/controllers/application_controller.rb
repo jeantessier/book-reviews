@@ -9,6 +9,6 @@ class ApplicationController < ActionController::API
   end
 
   def current_user
-    User.find(jwt_payload['sub']) if jwt_payload
+    User.find_by(id: jwt_payload['sub']) if jwt_payload
   end
 end
