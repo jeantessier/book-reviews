@@ -257,3 +257,32 @@ $ http --auth-type jwt POST :3000/reviews reviewer_id:=1 book_id:=1 body="This b
 
 > Right now, we have to pass in the reviewer's ID explicitly.  It will
 > eventually be smart enough to figure out the reviewer based on the JWT.
+
+## Making GraphQL Calls
+
+### Sample Queries
+
+```bash
+$ http :3000/graphql query="{testField}" | jq '.data'
+```
+
+You can also issue GraphQL queries with http://localhost:3000/graphiql.
+
+_Come back later for more._
+
+### Extracting the Schema
+
+This will write the schema as
+GraphQL Schema Language to `app/graphql/rails_mysql_schema.graphql`.
+
+```bash
+$ bin/rake graphql:schema:idl
+```
+
+This will write the schema as
+GraphQL Schema Language to `app/graphql/rails_mysql_schema.graphql`
+and as JSON to `app/graphql/rails_mysql_schema.json`.
+
+```bash
+$ bin/rake graphql:schema:dump
+```
