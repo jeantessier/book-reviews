@@ -23,3 +23,7 @@
 # Ignore RubyMine and IntelliJ project files
 .idea
 .env
+
+# GraphQL schema dumps
+app/graphql/martian_library_schema.graphql
+app/graphql/martian_library_schema.json
