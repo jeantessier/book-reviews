@@ -263,10 +263,15 @@ $ http --auth-type jwt POST :3000/reviews reviewer_id:=1 book_id:=1 body="This b
 ### Sample Queries
 
 ```bash
-$ http :3000/graphql query="{testField}" | jq '.data'
+$ http :3000/graphql query="{me {name user {name email}}}" | jq '.data'
 ```
 
 You can also issue GraphQL queries with http://localhost:3000/graphiql.
+
+> GraphiQL does not let you set the `Authorization` header to pass in the JWT.
+> An alternative is to launch Playground from another application and point it
+> to http://localhost:3000/graphql.  Playground allows you to set arbitrary
+> headers in the request.
 
 _Come back later for more._
 
