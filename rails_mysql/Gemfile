@@ -50,3 +50,5 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'dotenv-rails'
 end
+
+gem "graphql", "~> 1.11"
