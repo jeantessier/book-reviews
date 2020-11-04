@@ -25,5 +25,5 @@
 .env
 
 # GraphQL schema dumps
-app/graphql/martian_library_schema.graphql
-app/graphql/martian_library_schema.json
+app/graphql/rails_mysql_schema.graphql
+app/graphql/rails_mysql_schema.json
