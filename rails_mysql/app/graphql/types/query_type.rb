@@ -1,12 +1,12 @@
 module Types
   class QueryType < Types::BaseObject
     field :me,
-          Types::UserType,
-          null: true,
-          description: "Returns the currently logged in user"
+          Types::JwtType,
+          null: false,
+          description: "Returns the information about the currently logged in user"
 
     def me
-      context[:current_user]
+      context[:jwt]
     end
   end
 end
