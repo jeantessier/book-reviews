@@ -3,8 +3,8 @@ module Types
     field :id, ID, null: false
     field :reviewer, Types::UserType, null: false
     field :book, Types::BookType, null: false
-    field :body, String, null: false
-    field :start, GraphQL::Types::ISO8601Date, null: true
-    field :stop, GraphQL::Types::ISO8601Date, null: true
+    field :body, String, 'The text of the review.', null: false
+    field :start, GraphQL::Types::ISO8601Date, 'Date when the reviewer started reading the book.', null: true
+    field :stop, GraphQL::Types::ISO8601Date, 'Date when the reviewer finisned reading the book.', null: true
   end
 end

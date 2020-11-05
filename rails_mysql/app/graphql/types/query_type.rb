@@ -9,21 +9,21 @@ module Types
       Types::BookType,
       null: true,
       description: "Returns a specific book by its ID." do
-      argument :book_id, ID, '', required: true
+      argument :book_id, ID, required: true
     end
 
     field :reviews,
       [Types::ReviewType],
       null: false,
       description: "Returns all the reviews in the system, or all reviews by a given reviewer."do
-      argument :for_reviewer, ID, '', required: false
+      argument :for_reviewer, ID, required: false
     end
 
     field :review,
       Types::ReviewType,
       null: true,
       description: "Returns a specific book by its ID." do
-      argument :review_id, ID, '', required: true
+      argument :review_id, ID, required: true
     end
 
     field :users,
@@ -35,7 +35,7 @@ module Types
       Types::UserType,
       null: true,
       description: "Returns a specific user by its ID." do
-      argument :user_id, ID, '', required: true
+      argument :user_id, ID, required: true
     end
 
     field :me,
