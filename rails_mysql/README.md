@@ -280,6 +280,72 @@ You can also issue GraphQL queries with http://localhost:3000/graphiql.
 
 _Come back later for more._
 
+### Making Authenticated GraphQL Calls
+
+Use this mutation to sign in and get a JWT:
+
+```graphql
+mutation SignIn($signInInput: SignInMutationInput!) {
+  signIn(input: $signInInput) {
+    jwt
+  }
+}
+```
+
+With the following variables:
+
+```json
+{
+  "signInInput": {
+    "email": "jean@jeantessier.com",
+    "password": "abcd1234"
+  }
+}
+```
+
+The response will look like:
+
+```json
+{
+  "data": {
+    "signIn": {
+      "jwt": "eyJ0...P9Pk"
+    }
+  }
+}
+```
+
+> Handy one-liner:
+> ```bash
+> export JWT_AUTH_TOKEN=$(http :3000/graphql query='mutation SignIn($signInInput: SignInMutationInput!) {signIn(input: $signInInput) {jwt}}' variables:='{"signInInput": {"email": "jean@jeantessier.com", "password": "abcd1234"}}' | jq -r '.data.signIn.jwt')
+> ```
+
+If the authentication fails, whether it's because the email address is unknown
+or because the password doesn't match, you will get an error that will look like
+this:
+
+```json
+{
+    "data": {
+        "signIn": null
+    },
+    "errors": [
+        {
+            "locations": [
+                {
+                    "column": 54,
+                    "line": 1
+                }
+            ],
+            "message": "Authentication failure",
+            "path": [
+                "signIn"
+            ]
+        }
+    ]
+}
+```
+
 ### N+1 Problem
 
 Take a query like:
