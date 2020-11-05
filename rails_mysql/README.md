@@ -225,6 +225,11 @@ $ export JWT_AUTH_TOKEN=eyJ0...P9Pk
 $ http --auth-type jwt POST :3000/books name=The_Hobbit publisher="Houghton Mifflin"
 ```
 
+> Handy one-liner:
+> ```bash
+> export JWT_AUTH_TOKEN=$(http POST :3000/user_token auth:='{"email": "jean@jeantessier.com", "password": "abcd1234"}' | jq -r '.jwt')
+> ```
+
 To update a book:
 
 ```bash
