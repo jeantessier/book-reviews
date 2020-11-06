@@ -1,5 +1,7 @@
 module GraphQL
   module BatchLoaders
+    # Taken from the examples in Shopify's graphql-batch gem.
+    # https://github.com/Shopify/graphql-batch#schema-configuration
     class RecordLoader < GraphQL::Batch::Loader
       def initialize(model)
         @model = model
