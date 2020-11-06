@@ -10,7 +10,7 @@ module Mutations
     # Inspired by Knock::AuthTokenController
     def resolve(email:, password:)
       user = User.find_by(email: email)
-      raise GraphQL::ExecutionError, "Authentication failure" unless user.present? && user.authenticate(password)
+      raise GraphQL::ExecutionError, "Failed to sign in as #{email}" unless user.present? && user.authenticate(password)
 
       auth_token = Knock::AuthToken.new payload: user.to_token_payload
       {
