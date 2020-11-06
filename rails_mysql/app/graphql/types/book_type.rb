@@ -9,12 +9,34 @@ module Types
     field :reviews, [Types::ReviewType], null: false
     field :reviewers, [Types::UserType], null: false
 
+    def titles
+      GraphQL::BatchLoaders::AssociationLoader.for(Book, :titles).load(object).then do
+        object.titles
+      end
+    end
+
     def authors
-      object.authors.collect {|ba| ba.author}
+      GraphQL::BatchLoaders::AssociationLoader.for(Book, :authors).load(object).then do
+        object.authors.collect {|ba| ba.author}
+      end
     end
 
     def years
-      object.years.collect {|by| by.year}
+      GraphQL::BatchLoaders::AssociationLoader.for(Book, :years).load(object).then do
+        object.years.collect {|by| by.year}
+      end
+    end
+
+    def reviews
+      GraphQL::BatchLoaders::AssociationLoader.for(Book, :reviews).load(object).then do
+        object.reviews
+      end
+    end
+
+    def reviewers
+      GraphQL::BatchLoaders::AssociationLoader.for(Book, :reviewers).load(object).then do
+        object.reviewers
+      end
     end
   end
 end
