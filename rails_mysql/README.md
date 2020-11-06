@@ -377,10 +377,9 @@ these are all cached for the time of the request.
 You can see it in the Rails log output:
 
 ```
-Started POST "/graphql" for 127.0.0.1 at 2020-11-04 21:23:20 -0800
-   (0.5ms)  SET NAMES utf8,  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483
-Processing by GraphqlController#execute as */*
-  Parameters: {"operationName"=>"MyBookReviews", "variables"=>{"id"=>2}, "query"=>"query UsersReviews($id: ID!) {\n  reviews(forReviewer: $id) {\n    book {\n      titles {\n        title\n      }\n    }\n    reviewer {\n      name\n    }\n  }\n}\n\nquery Review($id: ID!) {\n  review(reviewId: $id) {\n    book {\n      titles {\n        title\n      }\n    }\n    reviewer {\n      name\n    }\n  }\n}\n\nquery User($id: ID!) {\n  user(userId: $id) {\n    books {\n      titles {\n        title\n      }\n    }\n  }\n}\n\nquery Books {\n  books {\n    name\n  }\n}\n\nquery Book($id: ID!) {\n  book(bookId: $id) {\n    titles {\n      title\n    }\n    reviewers {\n      name\n    }\n  }\n}\n\nquery Me {\n  me {\n    user {\n      books {\n        name\n      }\n    }\n  }\n}\n\nquery MyBookReviews {\n  me {\n    user {\n      books {\n        name\n        reviews {\n          body\n          reviewer {\n            name\n          }\n        }\n      }\n    }\n  }\n}\n", "graphql"=>{"operationName"=>"MyBookReviews", "variables"=>{"id"=>2}, "query"=>"query UsersReviews($id: ID!) {\n  reviews(forReviewer: $id) {\n    book {\n      titles {\n        title\n      }\n    }\n    reviewer {\n      name\n    }\n  }\n}\n\nquery Review($id: ID!) {\n  review(reviewId: $id) {\n    book {\n      titles {\n        title\n      }\n    }\n    reviewer {\n      name\n    }\n  }\n}\n\nquery User($id: ID!) {\n  user(userId: $id) {\n    books {\n      titles {\n        title\n      }\n    }\n  }\n}\n\nquery Books {\n  books {\n    name\n  }\n}\n\nquery Book($id: ID!) {\n  book(bookId: $id) {\n    titles {\n      title\n    }\n    reviewers {\n      name\n    }\n  }\n}\n\nquery Me {\n  me {\n    user {\n      books {\n        name\n      }\n    }\n  }\n}\n\nquery MyBookReviews {\n  me {\n    user {\n      books {\n        name\n        reviews {\n          body\n          reviewer {\n            name\n          }\n        }\n      }\n    }\n  }\n}\n"}}
+Started POST "/graphql" for 127.0.0.1 at 2020-11-05 21:19:36 -0800
+Processing by GraphqlController#execute as HTML
+  Parameters: {"query"=>"{me {user {books {name reviews {body reviewer {name}}}}}}", "graphql"=>{"query"=>"{me {user {books {name reviews {body reviewer {name}}}}}}"}}
   User Load (5.8ms)  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 LIMIT 1
   Book Load (6.0ms)  SELECT `books`.* FROM `books` INNER JOIN `reviews` ON `books`.`id` = `reviews`.`book_id` WHERE `reviews`.`reviewer_id` = 1
   Review Load (0.4ms)  SELECT `reviews`.* FROM `reviews` WHERE `reviews`.`book_id` = 1
@@ -392,7 +391,7 @@ Processing by GraphqlController#execute as */*
   ...
   Review Load (0.3ms)  SELECT `reviews`.* FROM `reviews` WHERE `reviews`.`book_id` = 133
   CACHE User Load (0.0ms)  SELECT `users`.* FROM `users` WHERE `users`.`id` = 1 LIMIT 1  [["id", 1], ["LIMIT", 1]]
-Completed 200 OK in 232ms (Views: 14.7ms | ActiveRecord: 50.0ms | Allocations: 106694)
+Completed 200 OK in 217ms (Views: 11.1ms | ActiveRecord: 44.3ms | Allocations: 100535)
 ```
 
 After configuring batch loaders, we're able to reduce it significantly by
