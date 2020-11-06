@@ -48,7 +48,7 @@ module Types
     end
 
     def book(book_id:)
-      Book.find_by(id: book_id)
+      GraphQL::BatchLoaders::RecordLoader.for(Book).load(book_id)
     end
 
     def reviews(for_reviewer: nil)
@@ -56,7 +56,7 @@ module Types
     end
 
     def review(review_id:)
-      Review.find_by(id: review_id)
+      GraphQL::BatchLoaders::RecordLoader.for(Review).load(review_id)
     end
 
     def users
@@ -64,7 +64,7 @@ module Types
     end
 
     def user(user_id:)
-      User.find_by(id: user_id)
+      GraphQL::BatchLoaders::RecordLoader.for(User).load(user_id)
     end
 
     def me
