@@ -4,12 +4,17 @@ This is a Ruby on Rails application backed by a MySQL database.
 
 ## MySQL
 
-These commands will create a new database named
-`rails_mysql_book_reviews_development` and populate it with data derived from
-`../data/Books_????-??-??*.md`.
+This command will create a new database named
+`rails_mysql_book_reviews_development` and populate it with seed data.
 
 ```bash
 $ bin/rails db:setup
+```
+
+This command will replace the seed data with data derived from
+`../data/Books_????-??-??*.md`.
+
+```bash
 $ ./Books_rails_mysql.pl | mysql -u root
 ```
 
@@ -172,9 +177,13 @@ You need to login to the application to do any _write_ operations, like
 creating, updating, or deleting objects in the system.  You can perform _read_
 operations anonymously, if you want.
 
+The database is seeded with two users.  Their email addresses are
+`jean@jeantessier.com` and `simon@tolkien.com`.  The password for either one is
+`abcd1234`.
+
 You will need to create a `User` and generate a JWT token for them.
 
-> For now, use the Rails console to create the `User`.
+> For now, you can use the Rails console if you need to create additional users.
 >
 > ```bash
 > $ bin/rails console
@@ -224,7 +233,7 @@ $ http --auth-type jwt POST :3000/books name=The_Hobbit publisher="Houghton Miff
 
 > Handy one-liner:
 > ```bash
-> export JWT_AUTH_TOKEN=$(http POST :3000/user_token auth:='{"email": "jean@jeantessier.com", "password": "abcd1234"}' | jq -r '.jwt')
+> export JWT_AUTH_TOKEN=$(http POST :3000/user_token auth:='{"email": "jean@jeantessier.com", "password": "abcd1234"}' | jq --raw-output '.jwt')
 > ```
 
 To update a book:
@@ -314,7 +323,7 @@ The response will look like:
 
 > Handy one-liner:
 > ```bash
-> export JWT_AUTH_TOKEN=$(http :3000/graphql query='mutation SignIn($signInInput: SignInMutationInput!) {signIn(input: $signInInput) {jwt}}' variables:='{"signInInput": {"email": "jean@jeantessier.com", "password": "abcd1234"}}' | jq -r '.data.signIn.jwt')
+> export JWT_AUTH_TOKEN=$(http :3000/graphql query='mutation SignIn($signInInput: SignInMutationInput!) {signIn(input: $signInInput) {jwt}}' variables:='{"signInInput": {"email": "jean@jeantessier.com", "password": "abcd1234"}}' | jq --raw-output '.data.signIn.jwt')
 > ```
 
 If the authentication fails, whether it's because the email address is unknown
@@ -334,7 +343,7 @@ this:
                     "line": 1
                 }
             ],
-            "message": "Authentication failure",
+            "message": "Failed to sign in as jean@jeantessier.com",
             "path": [
                 "signIn"
             ]
