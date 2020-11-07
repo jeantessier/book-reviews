@@ -7,15 +7,11 @@ module Types
     field :books, [Types::BookType], null: false
 
     def reviews
-      GraphQL::BatchLoaders::AssociationLoader.for(User, :reviews).load(object).then do
-        object.reviews
-      end
+      load_association(:reviews).then(&:reviews)
     end
 
     def books
-      GraphQL::BatchLoaders::AssociationLoader.for(User, :books).load(object).then do
-        object.books
-      end
+      load_association(:books).then(&:books)
     end
   end
 end

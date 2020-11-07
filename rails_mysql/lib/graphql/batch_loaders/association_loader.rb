@@ -27,7 +27,7 @@ module GraphQL
 
       def perform(records)
         preload_association(records)
-        records.each { |record| fulfill(record, read_association(record)) }
+        records.each { |record| fulfill(record, record) }
       end
 
       private
