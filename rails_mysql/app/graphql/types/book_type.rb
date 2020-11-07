@@ -14,14 +14,14 @@ module Types
     end
 
     def authors
-      load_association(:authors).then do
-        object.authors.collect {|ba| ba.author}
+      load_association(:authors).then do |book|
+        book.authors.collect(&:author)
       end
     end
 
     def years
-      load_association(:years).then do
-        object.years.collect {|by| by.year}
+      load_association(:years).then do |book|
+        book.years.collect(&:year)
       end
     end
 
