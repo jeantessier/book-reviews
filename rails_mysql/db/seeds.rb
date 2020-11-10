@@ -20,52 +20,52 @@ simon = User.create name: 'Simon Tolkien', email: 'simon@tolkien.com', password:
 # Book: The Hobbit
 
 book = Book.create name: 'The_Hobbbit', publisher: 'Unwin & Allen'
-BookTitle.create book: book, title: 'The Hobbit', link: 'https://en.wikipedia.org/wiki/The_Hobbit'
-BookTitle.create book: book, title: 'Bilbo le Hobbit', link: 'https://fr.wikipedia.org/wiki/Le_Hobbit'
-BookAuthor.create book: book, author: 'J.R.R. Tolkien'
-BookYear.create book: book, year: '1937'
-Review.create book: book, reviewer: jean, body: 'Awesome!', start: '2020-05-02', stop: '2020-05-20'
-Review.create book: book, reviewer: simon, body: 'Reminds me of when I was a kid.', start: '2020-05-01', stop: '2020-05-01'
+book.titles.create title: 'The Hobbit', link: 'https://en.wikipedia.org/wiki/The_Hobbit', order: 1
+book.titles.create title: 'Bilbo le Hobbit', link: 'https://fr.wikipedia.org/wiki/Le_Hobbit', order: 2
+book.authors.create author: 'J.R.R. Tolkien'
+book.years.create year: '1937'
+book.reviews.create reviewer: jean, body: 'Awesome!', start: '2020-05-02', stop: '2020-05-20'
+book.reviews.create reviewer: simon, body: 'Reminds me of when I was a kid.', start: '2020-05-01', stop: '2020-05-01'
 
 # Book: The Lord of the Rings
 
 book = Book.create name: 'The_Lord_of_the_Rings', publisher: 'Unwin & Allen'
-BookTitle.create book: book, title: 'The Lord of the Rings', link: 'https://en.wikipedia.org/wiki/The_Lord_of_the_Rings'
-BookAuthor.create book: book, author: 'J.R.R. Tolkien'
-BookYear.create book: book, year: '1954'
-BookYear.create book: book, year: '1955'
-Review.create book: book, reviewer: jean, body: 'Awesome!', start: '2020-05-02', stop: '2020-05-20'
+book.titles.create title: 'The Lord of the Rings', link: 'https://en.wikipedia.org/wiki/The_Lord_of_the_Rings'
+book.authors.create author: 'J.R.R. Tolkien'
+book.years.create year: '1954', order: 1
+book.years.create year: '1955', order: 2
+book.reviews.create reviewer: jean, body: 'Awesome!', start: '2020-05-02', stop: '2020-05-20'
 
 # Book: The Fellowship of the Ring
 
 book = Book.create name: 'The_Fellowship_of_the_Ring', publisher: 'Unwin & Allen'
-BookTitle.create book: book, title: 'The Fellowship of the Ring', link: 'https://en.wikipedia.org/wiki/The_Fellowship_of_the_Ring'
-BookAuthor.create book: book, author: 'J.R.R. Tolkien'
-BookYear.create book: book, year: '1954'
-Review.create book: book, reviewer: jean, body: 'The Council of Elrond is a little long.', start: '2020-05-02', stop: '2020-05-05'
+book.titles.create title: 'The Fellowship of the Ring', link: 'https://en.wikipedia.org/wiki/The_Fellowship_of_the_Ring'
+book.authors.create author: 'J.R.R. Tolkien'
+book.years.create year: '1954'
+book.reviews.create reviewer: jean, body: 'The Council of Elrond is a little long.', start: '2020-05-02', stop: '2020-05-05'
 
 # Book: The Two Towers
 
 book = Book.create name: 'The_Two_Towers', publisher: 'Unwin & Allen'
-BookTitle.create book: book, title: 'The Two Towers', link: 'https://en.wikipedia.org/wiki/The_Two_Towers'
-BookAuthor.create book: book, author: 'J.R.R. Tolkien'
-BookYear.create book: book, year: '1954'
-Review.create book: book, reviewer: jean, body: 'The Battle of Helm\'s Deep is a little long.', start: '2020-05-06', stop: '2020-05-10'
+book.titles.create title: 'The Two Towers', link: 'https://en.wikipedia.org/wiki/The_Two_Towers'
+book.authors.create author: 'J.R.R. Tolkien'
+book.years.create year: '1954'
+book.reviews.create reviewer: jean, body: 'The Battle of Helm\'s Deep is a little long.', start: '2020-05-06', stop: '2020-05-10'
 
 # Book: The Return of the King
 
 book = Book.create name: 'The_Return_of_the_King', publisher: 'Unwin & Allen'
-BookTitle.create book: book, title: 'The Return of the King', link: 'https://en.wikipedia.org/wiki/The_Return_of_the_King'
-BookAuthor.create book: book, author: 'J.R.R. Tolkien'
-BookYear.create book: book, year: '1955'
-Review.create book: book, reviewer: jean, body: 'The ending is a little long.', start: '2020-05-11', stop: '2020-05-20'
+book.titles.create title: 'The Return of the King', link: 'https://en.wikipedia.org/wiki/The_Return_of_the_King'
+book.authors.create author: 'J.R.R. Tolkien'
+book.years.create year: '1955'
+book.reviews.create reviewer: jean, body: 'The ending is a little long.', start: '2020-05-11', stop: '2020-05-20'
 
 # Book: The Silmarillion
 
 book = Book.create name: 'The_Silmarillion', publisher: 'Unwin & Allen'
-BookTitle.create book: book, title: 'The Silmarillion', link: 'https://en.wikipedia.org/wiki/The_Silmarillion'
-BookAuthor.create book: book, author: 'Christopher Tolkien'
-BookAuthor.create book: book, author: 'J.R.R. Tolkien'
-BookYear.create book: book, year: '1977'
-Review.create book: book, reviewer: jean, body: 'Epic!', start: '2020-05-21', stop: '2020-05-30'
-Review.create book: book, reviewer: simon, body: 'Bacon!', start: '2019-12-11', stop: '2019-12-20'
+book.titles.create title: 'The Silmarillion', link: 'https://en.wikipedia.org/wiki/The_Silmarillion'
+book.authors.create author: 'Christopher Tolkien', order: 1
+book.authors.create author: 'J.R.R. Tolkien', order: 2
+book.years.create year: '1977'
+book.reviews.create reviewer: jean, body: 'Epic!', start: '2020-05-21', stop: '2020-05-30'
+book.reviews.create reviewer: simon, body: 'Bacon!', start: '2019-12-11', stop: '2019-12-20'
