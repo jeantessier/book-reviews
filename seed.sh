@@ -26,7 +26,7 @@ function addBook() {
 }
 
 function addReview() {
-  local user_id=$1; shift
+  local reviewer_id=$1; shift
   local book_id=$1; shift
   local body=$1; shift
   local start=$1; shift
@@ -34,7 +34,7 @@ function addReview() {
 
   http :4000 \
     query='mutation AddReview($r: ReviewInput!) {addReview(review: $r) {reviewId}}' \
-    variables:="{\"r\": {\"userId\": \"${user_id}\", \"bookId\": \"${book_id}\", \"body\": \"${body}\", \"start\": \"${start}\", \"stop\": \"${stop}\"}}" \
+    variables:="{\"r\": {\"reviewerId\": \"${reviewer_id}\", \"bookId\": \"${book_id}\", \"body\": \"${body}\", \"start\": \"${start}\", \"stop\": \"${stop}\"}}" \
     operationName=AddReview | \
   jq --raw-output ".data.addReview.reviewId"
 }

@@ -8,7 +8,7 @@ const uuidv4 = require('uuid/v4');
 const typeDefs = gql`
   type Review @key(fields: "reviewId") {
     reviewId: ID!
-    user: User!
+    reviewer: User!
     book: Book!
     body: String!
     start: String
@@ -16,7 +16,7 @@ const typeDefs = gql`
   }
 
   input ReviewInput {
-      userId: ID!
+      reviewerId: ID!
       bookId: ID!
       body: String!
       start: String
@@ -53,7 +53,7 @@ const resolvers = {
   Mutation: {
     addReview: async (_, { review }) => {
       review.reviewId = uuidv4();
-      review.user = { userId: review.userId };
+      review.reviewer = { userId: review.reviewerId };
       review.book = { bookId: review.bookId };
       reviews.push(review);
       return review;
@@ -83,7 +83,7 @@ const resolvers = {
 
 const fetchReviewById = reviewId => reviews.find(review => reviewId === review.reviewId);
 const fetchReviewsByBookId = bookId => reviews.filter(review => bookId === review.book.bookId);
-const fetchReviewsByUserId = userId => reviews.filter(review => userId === review.user.userId);
+const fetchReviewsByUserId = userId => reviews.filter(review => userId === review.reviewer.userId);
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),

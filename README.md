@@ -175,7 +175,7 @@ query MySearch($q: String!) {
             authors
             reviews {
                 reviewId
-                user {
+                reviewer {
                     userId
                     name
                 }
@@ -190,7 +190,7 @@ query MySearch($q: String!) {
                 }
                 authors
             }
-            user {
+            reviewer {
                 userId
                 name
             }
@@ -356,7 +356,7 @@ mutation AddReview($r: ReviewInput!) {
         book {
             name
         }
-        user {
+        reviewer {
             name
         }
     }
@@ -368,7 +368,7 @@ And structure the variables like this:
 ```json
 {
   "r": {
-    "userId": "<userId of the reviewer goes here>",
+    "reviewerId": "<userId of the reviewer goes here>",
     "bookId": "<bookId of the book being reviewed goes here>",
     "body": "This book is quite fascinating, so far.",
     "start": "2020-05-21"
