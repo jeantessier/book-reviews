@@ -43,6 +43,13 @@ module Types
       null: false,
       description: "Returns the information about the currently logged in user"
 
+    field :search,
+      [Types::SearchResultUnion],
+      null: false,
+      description: "Returns books, reviews, and/or users that match a query" do
+      argument :q, String, required: true
+    end
+
     def books
       Book.all
     end
@@ -69,6 +76,33 @@ module Types
 
     def me
       context[:jwt]
+    end
+
+    def search(q:)
+      results = []
+      results += Book.where(id: search_books(q))
+      results += Review.where(id: search_reviews(q))
+      results += User.where(id: search_users(q))
+      results
+    end
+
+    private
+
+    def search_books(q)
+      results = Set.new
+      results += Book.where('publisher LIKE :q', {q: "%#{q}%"}).pluck(:id)
+      results += BookTitle.where('title LIKE :q OR link LIKE :q', {q: "%#{q}%"}).pluck(:book_id)
+      results += BookAuthor.where('author LIKE :q', {q: "%#{q}%"}).pluck(:book_id)
+      results += BookYear.where('year LIKE :q', {q: "%#{q}%"}).pluck(:book_id)
+      results.to_a
+    end
+
+    def search_reviews(q)
+      Review.where('body LIKE :q OR start LIKE :q OR stop LIKE :q', {q: "%#{q}%"}).pluck(:id)
+    end
+
+    def search_users(q)
+      User.where('name LIKE :q OR email LIKE :q', {q: "%#{q}%"}).pluck(:id)
     end
   end
 end
