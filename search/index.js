@@ -30,7 +30,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-      addIndex(index: IndexInput): [SearchResult!]!
+    addIndex(index: IndexInput): [SearchResult!]!
   }
 `;
 
