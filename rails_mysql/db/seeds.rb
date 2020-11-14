@@ -19,7 +19,7 @@ simon = User.create name: 'Simon Tolkien', email: 'simon@tolkien.com', password:
 
 # Book: The Hobbit
 
-book = Book.create name: 'The_Hobbbit', publisher: 'Unwin & Allen'
+book = Book.create name: 'The_Hobbit', publisher: 'Unwin & Allen'
 book.titles.create title: 'The Hobbit', link: 'https://en.wikipedia.org/wiki/The_Hobbit', order: 1
 book.titles.create title: 'Bilbo le Hobbit', link: 'https://fr.wikipedia.org/wiki/Le_Hobbit', order: 2
 book.authors.create author: 'J.R.R. Tolkien'
