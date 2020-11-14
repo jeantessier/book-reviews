@@ -168,30 +168,30 @@ query MySearch($q: String!) {
     search(q: $q) {
         __typename
         ... on Book {
-            bookId
+            id
             titles {
                 title
             }
             authors
             reviews {
-                reviewId
+                id
                 reviewer {
-                    userId
+                    id
                     name
                 }
             }
         }
         ... on Review {
-            reviewId
+            id
             book {
-                bookId
+                id
                 titles {
                     title
                 }
                 authors
             }
             reviewer {
-                userId
+                id
                 name
             }
             body
@@ -199,12 +199,12 @@ query MySearch($q: String!) {
             stop
         }
         ... on User {
-            userId
+            id
             name
             reviews {
-                reviewId
+                id
                 book {
-                    bookId
+                    id
                     titles {
                         title
                     }
@@ -235,7 +235,7 @@ You can use this query to create a new book entry:
 ```graphql
 mutation AddBook($b: BookInput!) {
     addBook(book: $b) {
-        bookId
+        id
         name
     }
 }
@@ -279,7 +279,7 @@ mutation AddIndex($i: IndexInput!) {
 }
 ```
 
-The mutation will need the `bookId` from the previous mutation.  You also decide
+The mutation will need the `id` from the previous mutation.  You also decide
 under which words to index the book.  The words are case-insensitive and they
 are separated by whitespaces.
 
@@ -287,7 +287,7 @@ are separated by whitespaces.
 {
   "i": {
     "typename": "Book",
-    "id": "<bookId goes here>",
+    "id": "<book's id goes here>",
     "words": "Silmarillion silmaril saga Christopher Chris Tolkien allen unwin"
   }
 }
@@ -300,7 +300,7 @@ You can use this query to register a new user:
 ```graphql
 mutation AddUser($u: UserInput!) {
     addUser(user: $u) {
-        userId
+        id
         name
     }
 }
@@ -312,7 +312,7 @@ And structure the variables like this:
 {
   "u": {
     "name": "Christopher Tolkien",
-    "email": "chris@tolien.com"
+    "email": "chris@tolkien.com"
   }
 }
 ```
@@ -331,7 +331,7 @@ mutation AddIndex($i: IndexInput!) {
 }
 ```
 
-The mutation will need the `userId` from the previous mutation.  You also decide
+The mutation will need the `id` from the previous mutation.  You also decide
 under which words to index the user.  The words are case-insensitive and they
 are separated by whitespaces.
 
@@ -339,7 +339,7 @@ are separated by whitespaces.
 {
   "i": {
     "typename": "User",
-    "id": "<userId goes here>",
+    "id": "<user's id goes here>",
     "words": "Christopher Chris Tolkien"
   }
 }
@@ -352,7 +352,7 @@ You can use this query to add a new review:
 ```graphql
 mutation AddReview($r: ReviewInput!) {
     addReview(review: $r) {
-        reviewId
+        id
         book {
             name
         }
@@ -368,8 +368,8 @@ And structure the variables like this:
 ```json
 {
   "r": {
-    "reviewerId": "<userId of the reviewer goes here>",
-    "bookId": "<bookId of the book being reviewed goes here>",
+    "reviewerId": "<id of the reviewer goes here>",
+    "bookId": "<id of the book being reviewed goes here>",
     "body": "This book is quite fascinating, so far.",
     "start": "2020-05-21"
   }
@@ -390,15 +390,15 @@ mutation AddIndex($i: IndexInput!) {
 }
 ```
 
-The mutation will need the `reviewId` from the previous mutation.  You also
-decide under which words to index the review.  The words are case-insensitive and
-they are separated by whitespaces.
+The mutation will need the `id` from the previous mutation.  You also decide
+under which words to index the review.  The words are case-insensitive and they
+are separated by whitespaces.
 
 ```json
 {
   "i": {
     "typename": "Review",
-    "id": "<reviewId goes here>",
+    "id": "<review's id goes here>",
     "words": "Bob Reviewer book fascinating far"
   }
 }

@@ -5,10 +5,10 @@ function addUser() {
   local email=$1; shift
 
   http :4000 \
-    query='mutation AddUser($u: UserInput!) {addUser(user: $u) {userId}}' \
+    query='mutation AddUser($u: UserInput!) {addUser(user: $u) {id}}' \
     variables:="{\"u\": {\"name\": \"${name}\", \"email\": \"${email}\"}}" \
     operationName=AddUser | \
-  jq --raw-output ".data.addUser.userId"
+  jq --raw-output ".data.addUser.id"
 }
 
 function addBook() {
@@ -19,10 +19,10 @@ function addBook() {
   local years=$1; shift
 
   http :4000 \
-    query='mutation AddBook($b: BookInput!) {addBook(book: $b) {bookId}}' \
+    query='mutation AddBook($b: BookInput!) {addBook(book: $b) {id}}' \
     variables:="{\"b\": {\"name\": \"${name}\", \"titles\": ${titles}, \"publisher\": \"${publisher}\", \"authors\": ${authors}, \"years\": ${years}}}" \
     operationName=AddBook | \
-  jq --raw-output ".data.addBook.bookId"
+  jq --raw-output ".data.addBook.id"
 }
 
 function addReview() {
@@ -33,10 +33,10 @@ function addReview() {
   local stop=$1; shift
 
   http :4000 \
-    query='mutation AddReview($r: ReviewInput!) {addReview(review: $r) {reviewId}}' \
+    query='mutation AddReview($r: ReviewInput!) {addReview(review: $r) {id}}' \
     variables:="{\"r\": {\"reviewerId\": \"${reviewer_id}\", \"bookId\": \"${book_id}\", \"body\": \"${body}\", \"start\": \"${start}\", \"stop\": \"${stop}\"}}" \
     operationName=AddReview | \
-  jq --raw-output ".data.addReview.reviewId"
+  jq --raw-output ".data.addReview.id"
 }
 
 function addIndex() {

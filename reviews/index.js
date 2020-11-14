@@ -6,8 +6,8 @@ const uuidv4 = require('uuid/v4');
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
-  type Review @key(fields: "reviewId") {
-    reviewId: ID!
+  type Review @key(fields: "id") {
+    id: ID!
     reviewer: User!
     book: Book!
     body: String!
@@ -23,13 +23,13 @@ const typeDefs = gql`
       stop: String
   }
 
-  extend type User @key(fields: "userId") {
-    userId: ID! @external
+  extend type User @key(fields: "id") {
+    id: ID! @external
     reviews: [Review!]!
   }
 
-  extend type Book @key(fields: "bookId") {
-    bookId: ID! @external
+  extend type Book @key(fields: "id") {
+    id: ID! @external
     reviews: [Review!]!
   }
 
@@ -52,38 +52,38 @@ const resolvers = {
   },
   Mutation: {
     addReview: async (_, { review }) => {
-      review.reviewId = uuidv4();
-      review.reviewer = { userId: review.reviewerId };
-      review.book = { bookId: review.bookId };
+      review.id = uuidv4();
+      review.reviewer = { id: review.reviewerId };
+      review.book = { id: review.bookId };
       reviews.push(review);
       return review;
     },
   },
   Review: {
     __resolveReference(review) {
-      return fetchReviewById(review.reviewId)
+      return fetchReviewById(review.id)
     }
   },
   review: {
     __resolveReference(review) {
-      return fetchReviewById(review.reviewId)
+      return fetchReviewById(review.id)
     }
   },
   Book: {
     reviews(book) {
-      return fetchReviewsByBookId(book.bookId);
+      return fetchReviewsByBookId(book.id);
     }
   },
   User: {
     reviews(user) {
-      return fetchReviewsByUserId(user.userId);
+      return fetchReviewsByReviewerId(user.id);
     }
   },
 };
 
-const fetchReviewById = reviewId => reviews.find(review => reviewId === review.reviewId);
-const fetchReviewsByBookId = bookId => reviews.filter(review => bookId === review.book.bookId);
-const fetchReviewsByUserId = userId => reviews.filter(review => userId === review.reviewer.userId);
+const fetchReviewById = id => reviews.find(review => id === review.id);
+const fetchReviewsByBookId = id => reviews.filter(review => id === review.book.id);
+const fetchReviewsByReviewerId = id => reviews.filter(review => id === review.reviewer.id);
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),

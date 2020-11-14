@@ -6,8 +6,8 @@ const uuidv4 = require('uuid/v4');
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
-  type Book @key(fields: "bookId") {
-    bookId: ID!
+  type Book @key(fields: "id") {
+    id: ID!
     name: String!
     titles: [Title!]!
     authors: [String!]!
@@ -52,19 +52,19 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (_, { book }) => {
-      book.bookId = uuidv4();
+      book.id = uuidv4();
       books.push(book);
       return book;
     },
   },
   Book: {
     __resolveReference(book) {
-      return fetchBookById(book.bookId)
+      return fetchBookById(book.id)
     }
   },
 };
 
-const fetchBookById = bookId => books.find(book => bookId === book.bookId);
+const fetchBookById = id => books.find(book => id === book.id);
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),

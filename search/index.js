@@ -5,16 +5,16 @@ const { buildFederatedSchema } = require('@apollo/federation');
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
-  extend type Book @key(fields: "bookId") {
-    bookId: ID! @external
+  extend type Book @key(fields: "id") {
+    id: ID! @external
   }
 
-  extend type Review @key(fields: "reviewId") {
-    reviewId: ID! @external
+  extend type Review @key(fields: "id") {
+    id: ID! @external
   }
 
-  extend type User @key(fields: "userId") {
-    userId: ID! @external
+  extend type User @key(fields: "id") {
+    id: ID! @external
   }
 
   union SearchResult = Book | Review | User
@@ -73,10 +73,7 @@ const indexWord = (word, index, addedIndexCallback) => {
     console.log(`Creating index entry for ${index.id} under "${word}"`);
     indices[word][index.id] = {
       __typename: index.typename,
-      // Being lazy and setting all IDs.  Gateway will filter on __typename.
-      bookId: index.id,
-      reviewId: index.id,
-      userId: index.id,
+      id: index.id,
     }
     addedIndexCallback(indices[word][index.id]);
   }
