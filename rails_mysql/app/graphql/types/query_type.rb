@@ -79,30 +79,21 @@ module Types
     end
 
     def search(q:)
-      results = []
-      results += Book.where(id: search_books(q))
-      results += Review.where(id: search_reviews(q))
-      results += User.where(id: search_users(q))
-      results
+      search_books(q) + search_reviews(q) + search_users(q)
     end
 
     private
 
     def search_books(q)
-      results = Set.new
-      results += Book.where('publisher LIKE :q', {q: "%#{q}%"}).pluck(:id)
-      results += BookTitle.where('title LIKE :q OR link LIKE :q', {q: "%#{q}%"}).pluck(:book_id)
-      results += BookAuthor.where('author LIKE :q', {q: "%#{q}%"}).pluck(:book_id)
-      results += BookYear.where('year LIKE :q', {q: "%#{q}%"}).pluck(:book_id)
-      results.to_a
+      Book.joins([:titles, :authors, :years]).where('publisher LIKE :q OR book_titles.title LIKE :q OR book_titles.link LIKE :q OR book_authors.author LIKE :q OR book_years.year LIKE :q', {q: "%#{q}%"}).distinct
     end
 
     def search_reviews(q)
-      Review.where('body LIKE :q OR start LIKE :q OR stop LIKE :q', {q: "%#{q}%"}).pluck(:id)
+      Review.where('body LIKE :q OR start LIKE :q OR stop LIKE :q', {q: "%#{q}%"}).distinct
     end
 
     def search_users(q)
-      User.where('name LIKE :q OR email LIKE :q', {q: "%#{q}%"}).pluck(:id)
+      User.where('name LIKE :q OR email LIKE :q', {q: "%#{q}%"}).distinct
     end
   end
 end
