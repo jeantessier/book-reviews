@@ -53,24 +53,52 @@ function addIndex() {
 }
 
 #
-# User: Simon Tolkien
-#
-
-user_id=$(addUser "Simon Tolkien" "simon@tolkien.com")
-
-echo User $user_id
-
-addIndex User $user_id "... on User {name}" Simon Tolkien
-
-#
 # User: Jean Tessier
 #
 
-user_id=$(addUser "Jean Tessier" "jean@jeantessier.com")
+jean_id=$(addUser "Jean Tessier" "jean@jeantessier.com")
 
-echo User $user_id
+echo User $jean_id
 
-addIndex User $user_id "... on User {name}" Jean Tessier
+addIndex User $jean_id "... on User {name}" Jean Tessier
+
+#
+# User: Simon Tolkien
+#
+
+simon_id=$(addUser "Simon Tolkien" "simon@tolkien.com")
+
+echo User $simon_id
+
+addIndex User $simon_id "... on User {name}" Simon Tolkien
+
+#
+# Book: The Hobbit
+#
+
+# Book
+
+book_id=$(addBook "The_Hobbit" "[{\"title\": \"The Hobbit\", \"link\": \"https://en.wikipedia.org/wiki/The_Hobbit\"}, {\"title\": \"Bilbo le Hobbit\", \"link\": \"https://fr.wikipedia.org/wiki/Le_Hobbit\"}]" "Unwin & Allen" "[\"J.R.R. Tolkien\"]" "[\"1937\"]")
+
+echo Book $book_id
+
+addIndex Book $book_id "... on Book {name}" lord ring Tolkien allen unwin 1954 1955
+
+# Review
+
+review_id=$(addReview $jean_id $book_id "Awesome!" "2020-05-02" "2020-05-20")
+
+echo Review $review_id
+
+addIndex Review $review_id "... on Review {body}" Jean Tessier awesome
+
+# Review
+
+review_id=$(addReview $simon_id $book_id "Reminds me of when I was a kid." "2020-05-01" "2020-05-01")
+
+echo Review $review_id
+
+addIndex Review $review_id "... on Review {body}" Simon Tolkien Reminds me when I was kid
 
 #
 # Book: The Lord of the Rings
@@ -86,7 +114,7 @@ addIndex Book $book_id "... on Book {name}" lord ring Tolkien allen unwin 1954 1
 
 # Review
 
-review_id=$(addReview $user_id $book_id "Awesome!" "2020-05-02" "2020-05-20")
+review_id=$(addReview $jean_id $book_id "Awesome!" "2020-05-02" "2020-05-20")
 
 echo Review $review_id
 
@@ -106,7 +134,7 @@ addIndex Book $book_id "... on Book {name}" fellowship ring Tolkien allen unwin 
 
 # Review
 
-review_id=$(addReview $user_id $book_id "The Council of Elrond is a little long." "2020-05-02" "2020-05-05")
+review_id=$(addReview $jean_id $book_id "The Council of Elrond is a little long." "2020-05-02" "2020-05-05")
 
 echo Review $review_id
 
@@ -126,7 +154,7 @@ addIndex Book $book_id "... on Book {name}" two tower Tolkien allen unwin 1955
 
 # Review
 
-review_id=$(addReview $user_id $book_id "The Battle of Helm's Deep is a little long." "2020-05-06" "2020-05-10")
+review_id=$(addReview $jean_id $book_id "The Battle of Helm's Deep is a little long." "2020-05-06" "2020-05-10")
 
 echo Review $review_id
 
@@ -146,8 +174,36 @@ addIndex Book $book_id "... on Book {name}" return king Tolkien allen unwin 1955
 
 # Review
 
-review_id=$(addReview $user_id $book_id "The ending is a little long." "2020-05-11" "2020-05-20")
+review_id=$(addReview $jean_id $book_id "The ending is a little long." "2020-05-11" "2020-05-20")
 
 echo Review $review_id
 
 addIndex Review $review_id "... on Review {body}" Jean Tessier ending little long
+
+#
+# Book: The Silmarillion
+#
+
+# Book
+
+book_id=$(addBook "The_Silmarillion" "[{\"title\": \"The Silmarillion\", \"link\": \"https://en.wikipedia.org/wiki/The_Silmarillion\"}]" "Unwin & Allen" "[\"Christopher Tolkien\", \"J.R.R. Tolkien\"]" "[\"1977\"]")
+
+echo Book $book_id
+
+addIndex Book $book_id "... on Book {name}" Silmarillion Christopher Tolkien allen unwin 1977
+
+# Review
+
+review_id=$(addReview $jean_id $book_id "Epic!" "2020-05-21" "2020-05-30")
+
+echo Review $review_id
+
+addIndex Review $review_id "... on Review {body}" Jean Tessier epic
+
+# Review
+
+review_id=$(addReview $simon_id $book_id "Bacon!" "2019-12-11" "2019-12-20")
+
+echo Review $review_id
+
+addIndex Review $review_id "... on Review {body}" Simon Tolkien bacon
