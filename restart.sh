@@ -1,9 +1,11 @@
 #!/bin/sh
 
+readonly BINDIR=$(dirname $0)
+
 docker-compose stop
 docker-compose up -d
 
-echo waiting for servers to start ...
+echo Waiting for servers to start ...
 docker-compose logs --follow --tail 100 gateway | while read line
 do
   if [[ $line =~ 'Server ready at' ]]
@@ -12,4 +14,4 @@ do
   fi
 done
 
-./seed.sh
+$BINDIR/seed.sh
