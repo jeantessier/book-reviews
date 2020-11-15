@@ -1,10 +1,12 @@
 #!/bin/sh
 
+readonly GRAPHQL_ENDPOINT=:4000
+
 function addUser() {
   local name=$1; shift
   local email=$1; shift
 
-  http :4000 \
+  http $GRAPHQL_ENDPOINT \
     query='mutation AddUser($u: UserInput!) {addUser(user: $u) {id}}' \
     variables:="{\"u\": {\"name\": \"${name}\", \"email\": \"${email}\"}}" \
     operationName=AddUser | \
@@ -18,7 +20,7 @@ function addBook() {
   local authors=$1; shift
   local years=$1; shift
 
-  http :4000 \
+  http $GRAPHQL_ENDPOINT \
     query='mutation AddBook($b: BookInput!) {addBook(book: $b) {id}}' \
     variables:="{\"b\": {\"name\": \"${name}\", \"titles\": ${titles}, \"publisher\": \"${publisher}\", \"authors\": ${authors}, \"years\": ${years}}}" \
     operationName=AddBook | \
@@ -32,7 +34,7 @@ function addReview() {
   local start=$1; shift
   local stop=$1; shift
 
-  http :4000 \
+  http $GRAPHQL_ENDPOINT \
     query='mutation AddReview($r: ReviewInput!) {addReview(review: $r) {id}}' \
     variables:="{\"r\": {\"reviewerId\": \"${reviewer_id}\", \"bookId\": \"${book_id}\", \"body\": \"${body}\", \"start\": \"${start}\", \"stop\": \"${stop}\"}}" \
     operationName=AddReview | \
@@ -44,7 +46,7 @@ function addIndex() {
   local id=$1; shift
   local payload="$1"; shift
 
-  local indexCount=$(http :4000 \
+  local indexCount=$(http $GRAPHQL_ENDPOINT \
       query="mutation AddIndex(\$i: IndexInput!) {addIndex(index: \$i) {${payload}}}" \
       variables:="{\"i\": {\"typename\": \"${typename}\", \"id\": \"${id}\", \"words\": \"$*\"}}" \
       operationName=AddIndex | \
