@@ -26,6 +26,7 @@ const server = new ApolloServer({
   plugins: [
     {
       requestDidStart(requestContext) {
+        console.log(`====================   ${new Date().toJSON()}   ====================`);
         console.log("Request did start!");
         console.log(`    query: ${requestContext.request.query}`);
         console.log(`    operationName: ${requestContext.request.operationName}`);

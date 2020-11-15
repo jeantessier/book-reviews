@@ -19,6 +19,7 @@ const typeDefs = gql`
 
   type Query {
     users: [User!]!
+    user(id: ID!): User
   }
 
   type Mutation {
@@ -28,18 +29,21 @@ const typeDefs = gql`
 
 const users = [];
 
+const addUser = async (_, { user }) => {
+  user.id = uuidv4();
+  users.push(user);
+  return user;
+};
+
 // Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
+// schema. This resolver retrieves users from the "users" array above.
 const resolvers = {
   Query: {
-    users: () => users,
+    users: async () => users,
+    user: async (_, { id }) => fetchUserById(id),
   },
   Mutation: {
-    addUser: async (_, { user }) => {
-      user.id = uuidv4();
-      users.push(user);
-      return user;
-    },
+    addUser,
   },
   User: {
     __resolveReference(user) {
@@ -55,6 +59,7 @@ const server = new ApolloServer({
   plugins: [
     {
       requestDidStart(requestContext) {
+        console.log(`====================   ${new Date().toJSON()}   ====================`);
         console.log("Request did start!");
         console.log(`    query: ${requestContext.request.query}`);
         console.log(`    operationName: ${requestContext.request.operationName}`);

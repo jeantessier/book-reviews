@@ -35,6 +35,7 @@ const typeDefs = gql`
 
   type Query {
     reviews: [Review!]!
+    review(id: ID!): Review
   }
 
   type Mutation {
@@ -44,20 +45,23 @@ const typeDefs = gql`
 
 const reviews = [];
 
+const addReview = async (_, { review }) => {
+  review.id = uuidv4();
+  review.reviewer = { id: review.reviewerId };
+  review.book = { id: review.bookId };
+  reviews.push(review);
+  return review;
+};
+
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves reviews from the "reviews" array above.
 const resolvers = {
   Query: {
-    reviews: () => reviews,
+    reviews: async () => reviews,
+    review: async (_, { id }) => fetchReviewById(id),
   },
   Mutation: {
-    addReview: async (_, { review }) => {
-      review.id = uuidv4();
-      review.reviewer = { id: review.reviewerId };
-      review.book = { id: review.bookId };
-      reviews.push(review);
-      return review;
-    },
+    addReview
   },
   Review: {
     __resolveReference(review) {
@@ -90,6 +94,7 @@ const server = new ApolloServer({
   plugins: [
     {
       requestDidStart(requestContext) {
+        console.log(`====================   ${new Date().toJSON()}   ====================`);
         console.log("Request did start!");
         console.log(`    query: ${requestContext.request.query}`);
         console.log(`    operationName: ${requestContext.request.operationName}`);

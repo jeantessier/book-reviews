@@ -35,6 +35,7 @@ const typeDefs = gql`
 
   type Query {
     books: [Book!]!
+    book(id: ID!): Book
   }
 
   type Mutation {
@@ -44,18 +45,21 @@ const typeDefs = gql`
 
 const books = [];
 
+const addBook = async (_, { book }) => {
+  book.id = uuidv4();
+  books.push(book);
+  return book;
+};
+
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
-    books: () => books,
+    books: async () => books,
+    book: async (_, { id }) => fetchBookById(id),
   },
   Mutation: {
-    addBook: async (_, { book }) => {
-      book.id = uuidv4();
-      books.push(book);
-      return book;
-    },
+    addBook
   },
   Book: {
     __resolveReference(book) {
@@ -71,6 +75,7 @@ const server = new ApolloServer({
   plugins: [
     {
       requestDidStart(requestContext) {
+        console.log(`====================   ${new Date().toJSON()}   ====================`);
         console.log("Request did start!");
         console.log(`    query: ${requestContext.request.query}`);
         console.log(`    operationName: ${requestContext.request.operationName}`);

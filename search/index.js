@@ -80,7 +80,8 @@ const indexWord = (word, index, addedIndexCallback) => {
 };
 
 // Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
+// schema. This resolver retrieves search results from the "indices"
+// structure above.
 const resolvers = {
   Query: {
     search,
@@ -95,6 +96,7 @@ const server = new ApolloServer({
   plugins: [
     {
       requestDidStart(requestContext) {
+        console.log(`====================   ${new Date().toJSON()}   ====================`);
         console.log("Request did start!");
         console.log(`    query: ${requestContext.request.query}`);
         console.log(`    operationName: ${requestContext.request.operationName}`);
