@@ -3,14 +3,14 @@ module GraphQL
     # Taken from the examples in Shopify's graphql-batch gem.
     # https://github.com/Shopify/graphql-batch/blob/master/examples/association_loader.rb
     class AssociationLoader < GraphQL::Batch::Loader
-      def self.validate(model, association_name)
-        new(model, association_name)
+      def self.validate(model, associations)
+        new(model, associations)
         nil
       end
 
-      def initialize(model, association_name)
+      def initialize(model, associations)
         @model = model
-        @association_name = association_name
+        @associations = associations
       end
 
       def load(record)
@@ -31,7 +31,7 @@ module GraphQL
       private
 
       def preload_association(records)
-        ::ActiveRecord::Associations::Preloader.new.preload(records, @association_name)
+        ::ActiveRecord::Associations::Preloader.new.preload(records, @associations)
       end
     end
   end
