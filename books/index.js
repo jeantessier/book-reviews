@@ -9,6 +9,7 @@ const typeDefs = gql`
   type Book @key(fields: "id") {
     id: ID!
     name: String!
+    title: String
     titles: [Title!]!
     authors: [String!]!
     publisher: String!
@@ -67,7 +68,8 @@ const resolvers = {
         ...book,
         ...fetchBookById(book.id),
       };
-    }
+    },
+    title: async book => fetchBookById(book.id)?.titles[0]?.title,
   },
 };
 
