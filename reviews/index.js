@@ -69,17 +69,13 @@ const resolvers = {
         ...review,
         ...fetchReviewById(review.id),
       };
-    }
+    },
   },
   Book: {
-    reviews(book) {
-      return fetchReviewsByBookId(book.id);
-    }
+    reviews: async book => fetchReviewsByBookId(book.id),
   },
   User: {
-    reviews(user) {
-      return fetchReviewsByReviewerId(user.id);
-    }
+    reviews: async user => fetchReviewsByReviewerId(user.id),
   },
 };
 
