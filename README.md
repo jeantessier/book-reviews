@@ -3,14 +3,15 @@
 This is a sample set of applications that show how to put book reviews in a
 federated GraphQL schema.
 
-There are four underlying services:
+There are five underlying services:
 
 - `books` has per-book data
 - `users` has per-user data
 - `reviews` has the reviews themselves
 - `search` runs the search query
+- `signatures` augments users with a fancier signature
 
-These four services each define a part of overall schema.  The `gateway` service
+These five services each define a part of overall schema.  The `gateway` service
 ties them all together.
 
 ## Running It
@@ -177,7 +178,7 @@ query MySearch($q: String!) {
                 id
                 reviewer {
                     id
-                    name
+                    signature
                 }
             }
         }
@@ -192,7 +193,7 @@ query MySearch($q: String!) {
             }
             reviewer {
                 id
-                name
+                signature
             }
             body
             start
