@@ -26,11 +26,13 @@ const typeDefs = gql`
   extend type User @key(fields: "id") {
     id: ID! @external
     reviews: [Review!]!
+    books: [Book!]!
   }
 
   extend type Book @key(fields: "id") {
     id: ID! @external
     reviews: [Review!]!
+    reviewers: [User!]!
   }
 
   type Query {
@@ -47,8 +49,8 @@ const reviews = [];
 
 const addReview = async (_, { review }) => {
   review.id = uuidv4();
-  review.reviewer = { id: review.reviewerId };
-  review.book = { id: review.bookId };
+  review.reviewer = { __typename: 'User', id: review.reviewerId };
+  review.book = { __typename: 'Book', id: review.bookId };
   reviews.push(review);
   return review;
 };
@@ -73,9 +75,11 @@ const resolvers = {
   },
   Book: {
     reviews: async book => fetchReviewsByBookId(book.id),
+    reviewers: async book => fetchReviewsByBookId(book.id).map(review => review.reviewer),
   },
   User: {
     reviews: async user => fetchReviewsByReviewerId(user.id),
+    books: async user => fetchReviewsByReviewerId(user.id).map(review => review.book),
   },
 };
 
