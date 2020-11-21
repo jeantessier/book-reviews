@@ -64,13 +64,11 @@ const resolvers = {
     addReview
   },
   Review: {
-    __resolveReference(review) {
-      return fetchReviewById(review.id)
-    }
-  },
-  review: {
-    __resolveReference(review) {
-      return fetchReviewById(review.id)
+    __resolveReference: async review => {
+      return {
+        ...review,
+        ...fetchReviewById(review.id),
+      };
     }
   },
   Book: {

@@ -46,8 +46,11 @@ const resolvers = {
     addUser,
   },
   User: {
-    __resolveReference(user) {
-      return fetchUserById(user.id)
+    __resolveReference: async user => {
+      return {
+        ...user,
+        ...fetchUserById(user.id),
+      };
     }
   },
 };

@@ -62,8 +62,11 @@ const resolvers = {
     addBook
   },
   Book: {
-    __resolveReference(book) {
-      return fetchBookById(book.id)
+    __resolveReference: async book => {
+      return {
+        ...book,
+        ...fetchBookById(book.id),
+      };
     }
   },
 };

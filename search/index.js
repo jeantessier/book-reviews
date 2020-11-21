@@ -51,10 +51,6 @@ const search = async (_, { q }) => {
 const addIndex = async (_, { index }) => {
   const results = [];
 
-  console.log(`***   Starting addIndex()`);
-  console.log(`***   index: ${index} (${typeof index}) [${JSON.stringify(index)}]`);
-  console.log(`***   index.words: ${index.words} (${typeof index.words}) [${JSON.stringify(index.words)}]`);
-
   indexWord(index.id, index, (i) => results.push(i));
 
   index.words.toLowerCase().split(/\s+/).forEach(word => {
