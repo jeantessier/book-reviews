@@ -42,6 +42,15 @@ services:
       - PORT=80
     command: npm start
 
+  signatures:
+    image: node:alpine
+    working_dir: /home/node/app
+    volumes:
+      - ./signatures:/home/node/app
+    environment:
+      - PORT=80
+    command: npm start
+
   gateway:
     image: node:alpine
     working_dir: /home/node/app
@@ -53,9 +62,11 @@ services:
       - REVIEWS_SERVICE=http://reviews
       - USERS_SERVICE=http://users
       - SEARCH_SERVICE=http://search
+      - SIGNATURES_SERVICE=http://signatures
     command: npm start
     depends_on:
       - books
       - reviews
       - users
       - search
+      - signatures

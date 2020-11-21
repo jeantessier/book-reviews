@@ -21,7 +21,7 @@ Each service is a Node app.  You need to run `npm install` to fetch their
 dependencies.
 
 ```bash
-for service in books reviews users search gateway
+for service in books reviews users search signatures gateway
 do
     (cd $service; npm install)
 done
@@ -52,7 +52,7 @@ communicate with each one.  For example, the books service lives at
 #### Starting the Federated Services
 
 ```bash
-for service in books reviews users search
+for service in books reviews users search signatures
 do
     (cd $service; npm start &)
 done
