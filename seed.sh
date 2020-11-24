@@ -84,7 +84,7 @@ book_id=$(addBook "The_Hobbit" "[{\"title\": \"The Hobbit\", \"link\": \"https:/
 
 echo Book $book_id
 
-addIndex Book $book_id "... on Book {name}" lord ring Tolkien allen unwin 1937
+addIndex Book $book_id "... on Book {name}" hobbit Bilbo Tolkien allen unwin 1937
 
 # Review
 
