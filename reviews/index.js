@@ -36,7 +36,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    reviews: [Review!]!
+    reviews(forReviewer: ID): [Review!]!
     review(id: ID!): Review
   }
 
@@ -59,7 +59,7 @@ const addReview = async (_, { review }) => {
 // schema. This resolver retrieves reviews from the "reviews" array above.
 const resolvers = {
   Query: {
-    reviews: async () => reviews,
+    reviews: async (_, { forReviewer }) => forReviewer ? reviews.filter(r => r.reviewer.id === forReviewer) : reviews,
     review: async (_, { id }) => fetchReviewById(id),
   },
   Mutation: {
