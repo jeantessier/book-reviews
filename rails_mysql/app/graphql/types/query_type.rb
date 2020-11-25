@@ -32,7 +32,7 @@ module Types
       description: "Returns all the users in the system."
 
     field :user,
-      Types::UserType,
+      Types::UserPayload,
       null: true,
       description: "Returns a specific user by its ID." do
       argument :user_id, ID, required: true
@@ -71,7 +71,13 @@ module Types
     end
 
     def user(user_id:)
-      GraphQL::BatchLoaders::RecordLoader.for(User).load(user_id)
+      GraphQL::BatchLoaders::RecordLoader.for(User).load(user_id).then do |user|
+        if user.nil?
+          add_user_error argument: :user_id, message: 'No user by that id'
+        end
+
+        with_user_errors(user: user)
+      end
     end
 
     def me
