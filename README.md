@@ -24,6 +24,7 @@ dependencies.
 ```bash
 for service in books reviews users search signatures gateway
 do
+    echo '==========' $service '=========='
     (cd $service; npm install)
 done
 ```
@@ -55,6 +56,7 @@ communicate with each one.  For example, the books service lives at
 ```bash
 for service in books reviews users search signatures
 do
+    echo '==========' $service '=========='
     (cd $service; npm start &)
 done
 ```
