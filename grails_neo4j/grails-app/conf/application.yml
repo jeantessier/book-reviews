@@ -94,7 +94,6 @@ management:
 ---
 grails:
     neo4j:
-        type: embedded
-        location: build/data/neo4j
-        # username: ""
-        # password: ""
+        url: bolt://localhost
+        username: "neo4j"
+        password: "abcd1234"
