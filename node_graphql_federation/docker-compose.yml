@@ -1,0 +1,72 @@
+version: '3.7'
+
+#
+# docker-compose up -d
+#
+
+services:
+
+  books:
+    image: node:alpine
+    working_dir: /home/node/app
+    volumes:
+      - ./books:/home/node/app
+    environment:
+      - PORT=80
+    command: npm start
+
+  reviews:
+    image: node:alpine
+    working_dir: /home/node/app
+    volumes:
+      - ./reviews:/home/node/app
+    environment:
+      - PORT=80
+    command: npm start
+
+  users:
+    image: node:alpine
+    working_dir: /home/node/app
+    volumes:
+      - ./users:/home/node/app
+    environment:
+      - PORT=80
+    command: npm start
+
+  search:
+    image: node:alpine
+    working_dir: /home/node/app
+    volumes:
+      - ./search:/home/node/app
+    environment:
+      - PORT=80
+    command: npm start
+
+  signatures:
+    image: node:alpine
+    working_dir: /home/node/app
+    volumes:
+      - ./signatures:/home/node/app
+    environment:
+      - PORT=80
+    command: npm start
+
+  gateway:
+    image: node:alpine
+    working_dir: /home/node/app
+    volumes:
+      - ./gateway:/home/node/app
+    environment:
+      - PORT=80
+      - BOOKS_SERVICE=http://books
+      - REVIEWS_SERVICE=http://reviews
+      - USERS_SERVICE=http://users
+      - SEARCH_SERVICE=http://search
+      - SIGNATURES_SERVICE=http://signatures
+    command: npm start
+    depends_on:
+      - books
+      - reviews
+      - users
+      - search
+      - signatures
