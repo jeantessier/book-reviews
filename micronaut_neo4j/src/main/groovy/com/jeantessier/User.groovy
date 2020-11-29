@@ -11,8 +11,8 @@ class User {
     String password
     String name
 
-//    Date dateCreated
-//    Date lastUpdated
+    Date dateCreated
+    Date lastUpdated
 
     static constraints = {
 //        id maxSize: 36, nullable: true // Gets assigned automatically by the mapping generator
