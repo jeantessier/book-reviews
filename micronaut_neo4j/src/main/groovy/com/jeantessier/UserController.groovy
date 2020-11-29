@@ -22,7 +22,7 @@ class UserController {
     @Post("/")
     @Transactional
     def save(String email, String password, String name) {
-        def user = new User(email: email, password: password, name: name)
+        def user = new User(id: UUID.randomUUID() as String, email: email, password: password, name: name)
         if (user.save()) {
             return user
         } else {
