@@ -11,6 +11,7 @@ class Book {
     String publisher
 
     static hasMany = [
+            titles: Title,
             authors: String,
             years: String,
     ]
@@ -25,6 +26,7 @@ class Book {
 
     static mapping = {
         id generator: "assigned", name: "id"
+        titles type: "TITLE"
     }
 
 }
