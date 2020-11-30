@@ -26,7 +26,7 @@ class Book {
 
     static mapping = {
         id generator: "assigned", name: "id"
-        titles type: "TITLE"
+        titles type: "TITLE", fetch: "eager"
     }
 
 }

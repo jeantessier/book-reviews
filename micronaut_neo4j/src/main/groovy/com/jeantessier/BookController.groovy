@@ -32,6 +32,18 @@ class BookController {
         }
     }
 
+    @Post("/{id}/titles")
+    @Transactional
+    def addTitle(id, Title title) {
+        def book = Book.get(id)
+        book.addToTitles title
+        if (book.save()) {
+            return book
+        } else {
+            return book.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", ")
+        }
+    }
+
     @Patch("/{id}")
     @Transactional
     def update(id, Optional<String> name, Optional<String> publisher, Optional<List<String>> authors, Optional<List<String>> years) {
