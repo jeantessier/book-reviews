@@ -26,7 +26,7 @@ technology stack.
 Various storage options:
 
 * Relational database (MySQL)
-* NoSQL (MongoDB, Redis)
+* NoSQL (MongoDB, Neo4j, Redis)
 
 Various stacks for middleware, returning both HTML and JSON:
 
@@ -44,6 +44,8 @@ Various frontend stacks:
 * React
 
 ## Model
+
+![Book Reviews Schema](book_reviews_schema.png)
 
 ### Book
 
