@@ -1,21 +1,21 @@
 package grails_neo4j
 
-class UserController {
+class BookController {
 
     static responseFormats = [ 'json', 'xml' ]
 
-    def userService
+    def bookService
 
     def index() {
-        respond User.list()
+        respond Book.list()
     }
 
     def show(int id) {
-        respond User.get(id)
+        respond Book.get(id)
     }
 
     def find(String q) {
-        respond userService.findAll(q)
+        respond bookService.findAll(q)
     }
 
 }
