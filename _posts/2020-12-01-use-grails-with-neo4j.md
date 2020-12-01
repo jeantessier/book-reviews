@@ -17,4 +17,4 @@ docker run \
     neo4j:3.5
 ```
 
-After that, most things worked as advertised.
+After that, things worked mostly as advertised.  Mostly.
