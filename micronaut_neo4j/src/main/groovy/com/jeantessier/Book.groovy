@@ -12,6 +12,7 @@ class Book {
             titles: Title,
             authors: String,
             years: String,
+//            reviews: Review,
     ]
 
     Date dateCreated
