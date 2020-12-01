@@ -1,0 +1,16 @@
+import grails_neo4j.Review
+import groovy.transform.Field
+
+@Field Review review
+
+json {
+    reviewer review.from.id
+    book review.to.id
+    body review.body
+    if (review.start) {
+        start review.start
+    }
+    if (review.stop) {
+        stop review.stop
+    }
+}

@@ -1,0 +1,14 @@
+import grails_neo4j.Book
+import groovy.transform.Field
+
+@Field Book book
+
+json {
+    id book.id
+    name book.name
+    authors book.authors
+    publisher book.publisher
+    years book.years
+    titles g.render(book.titles)
+    reviews g.render(book.reviews)
+}

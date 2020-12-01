@@ -1,0 +1,11 @@
+import grails_neo4j.Title
+import groovy.transform.Field
+
+@Field Title title
+
+json {
+    label title.title
+    if (title.link) {
+        link title.link
+    }
+}

@@ -9,9 +9,9 @@ class User {
     String password
     String name
 
-//    static hasMany = [
-//            reviews: Review,
-//    ]
+    static hasMany = [
+            reviews: Review,
+    ]
 
     Date dateCreated
     Date lastUpdated

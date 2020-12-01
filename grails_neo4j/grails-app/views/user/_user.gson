@@ -1,0 +1,11 @@
+import grails_neo4j.User
+import groovy.transform.Field
+
+@Field User user
+
+json {
+    id user.id
+    name user.name
+    email user.email
+    reviews g.render(user.reviews)
+}
