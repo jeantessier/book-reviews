@@ -5,6 +5,8 @@ federated GraphQL schema.
 
 There are five underlying services:
 
+![GraphQL Schemas of Individual Services](federated_schema_1.png)
+
 - `books` has per-book data
 - `users` has per-user data
 - `reviews` has the reviews themselves
@@ -12,7 +14,9 @@ There are five underlying services:
 - `signatures` augments users with a fancier signature
 
 These five services each define a part of overall schema.  The `gateway` service
-ties them all together.
+ties them all together into a single, unified schema.
+
+![Unified GraphQL Schema](federated_schema_2.png)
 
 ## Running It
 
