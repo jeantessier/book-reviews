@@ -23,7 +23,7 @@ class BookController {
     @Post("/")
     @Transactional
     def save(String name, String publisher, List<Title> titles, List<String> authors, List<String> years) {
-        def book = new Book(id: UUID.randomUUID(), name: name, publisher: publisher, authors: authors, years: years)
+        def book = new Book(name: name, publisher: publisher, authors: authors, years: years)
         titles.each { book.addToTitles it }
         if (book.save()) {
             return book
