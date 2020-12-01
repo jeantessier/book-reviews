@@ -1,0 +1,49 @@
+plugins {
+    id("groovy")
+    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("io.micronaut.application") version "1.2.0"
+}
+
+version = "0.1"
+group = "com.jeantessier"
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("com.jeantessier.*")
+    }
+}
+
+dependencies {
+    implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut.groovy:micronaut-runtime-groovy")
+    implementation("javax.annotation:javax.annotation-api")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.neo4j:micronaut-neo4j-bolt")
+    implementation("io.micronaut.groovy:micronaut-neo4j-gorm")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    testRuntimeOnly("org.neo4j.test:neo4j-harness")
+}
+
+
+application {
+    mainClass.set("com.jeantessier.Application")
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("13")
+    targetCompatibility = JavaVersion.toVersion("13")
+}
+
+tasks {
+
+
+}
+
