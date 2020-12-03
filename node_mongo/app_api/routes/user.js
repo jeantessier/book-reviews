@@ -3,7 +3,8 @@ const router = express.Router();
 const jwt = require('express-jwt');
 const auth = jwt({
     secret: process.env.JWT_SECRET,
-    userProperty: 'currentUser'
+    userProperty: 'currentUser',
+    algorithms: ['HS256']
 });
 
 const ctrlUser = require('../controllers/user');
