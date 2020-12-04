@@ -12,7 +12,8 @@ const ctrlUser = require('../controllers/user');
 router
     .route("/")
     .get(ctrlUser.list)
-    .post(auth, ctrlUser.create);
+    .post(auth, ctrlUser.create)
+    .delete(auth, ctrlUser.deleteAll);
 
 router
     .route("/:id")

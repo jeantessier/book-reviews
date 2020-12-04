@@ -189,3 +189,19 @@ module.exports.deleteOne = async (req, res) => {
         sendJSONresponse(res, 404, err);
     }
 };
+
+module.exports.deleteAll = async (req, res) => {
+    if (!req.currentUser.admin) {
+        sendJSONresponse(res, 403, {
+            "message": "You need admin privileges for this operation"
+        });
+        return;
+    }
+
+    try {
+        await Book.deleteMany();
+        sendJSONresponse(res, 204, null);
+    } catch(err) {
+        sendJSONresponse(res, 404, err);
+    }
+};

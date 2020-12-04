@@ -189,3 +189,17 @@ module.exports.deleteOne = async (req, res) => {
         sendJSONresponse(res, 404, err);
     }
 };
+
+module.exports.deleteAll = async (req, res) => {
+    try {
+        if (req.currentUser.admin) {
+            await Review.deleteMany();
+        } else {
+            await Review.deleteMany({ reviewer: req.currentUser.sub });
+        }
+
+        sendJSONresponse(res, 204, null);
+    } catch(err) {
+        sendJSONresponse(res, 404, err);
+    }
+};

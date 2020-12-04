@@ -12,7 +12,8 @@ const ctrlReview = require('../controllers/review');
 router
     .route("/")
     .get(ctrlReview.list)
-    .post(auth, ctrlReview.create);
+    .post(auth, ctrlReview.create)
+    .delete(auth, ctrlReview.deleteAll);
 
 router
     .route("/:id")

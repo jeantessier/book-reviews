@@ -12,7 +12,8 @@ const ctrlBook = require('../controllers/book');
 router
     .route("/")
     .get(ctrlBook.list)
-    .post(auth, ctrlBook.create);
+    .post(auth, ctrlBook.create)
+    .delete(auth, ctrlBook.deleteAll);
 
 router
     .route("/:id")
