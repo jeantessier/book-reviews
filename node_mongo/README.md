@@ -12,6 +12,12 @@ populate it with collections derived from `Books_????-??-??.md`.
 
 ## Running the Server
 
+You need to configure the secret to sign JWTs and the location of the database
+in the `.env` file on the project's top-level folder.  For example:
+
+    JWT_SECRET=<put your signature secret here>
+    MONGODB_URI=mongodb://localhost/node_mongo_book_reviews
+
 You can start the application with:
 
     $ npm start
@@ -109,9 +115,16 @@ You can reset a user's password with:
 
 The `roles` will revert to `ROLE_USER` unless you provide them explicitly.
 
-#### Remove a User
+#### Remove a User (Admin-Only)
 
     $ http --auth-type jwt DELETE :3000/api/user/<id>
+
+#### Remove All Users (Admin-Only)
+
+    $ http --auth-type jwt DELETE :3000/api/user
+
+This will delete all users, including the admin account.  The user will still be
+able to act in the system for as long as their JWT is valid.
 
 ### Books
 
@@ -162,11 +175,34 @@ It will fail if there is already another book by that `name`.
 
     $ http --auth-type jwt DELETE :3000/api/book/<id>
 
+#### Remove All Books (Admin-Only)
+
+    $ http --auth-type jwt DELETE :3000/api/book
+
 ### Reviews
 
 #### See All Reviews
 
     $ http :3000/api/review
+
+```
+$ http :3000/api/review | jq '.|length'
+```
+
+This second command uses `jq` to show the total number of reviews in the system.
+
+#### See All Reviews For a Given Book
+
+    $ http :3000/api/review \
+        | jq '.|map(select(.book == "<book id>"))'
+
+This command uses `jq` to pick specific reviews from the full list.
+
+    $ http :3000/api/review \
+        | jq '.|map(select(.book == "<book id>"))|map({_id, body, start, stop})'
+
+This command also uses `jq` to narrow down the output to just a few, specific
+fields of the reviews.
 
 #### See a Single Review
 
@@ -218,3 +254,10 @@ author of the review.
 
 Admins can delete any review.  Otherwise, the subject of the JWT must match the
 author of the review.
+
+#### Remove All Reviews (Owner- or Admin-Only)
+
+    $ http --auth-type jwt DELETE :3000/api/review
+
+Admins can delete **all** review.  Otherwise, the subject of the JWT will delete
+all of **their** own reviews.
