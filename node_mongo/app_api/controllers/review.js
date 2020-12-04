@@ -169,7 +169,7 @@ module.exports.replaceOne = async (req, res) => {
 
 module.exports.deleteOne = async (req, res) => {
     try {
-        const review = await Review.findOneAndDelete({ _id: req.params.id });
+        const review = await Review.findOne({ _id: req.params.id });
         if (!review) {
             sendJSONresponse(res, 404, {
                 "message": `No review with ID ${req.params.id}`
@@ -183,6 +183,7 @@ module.exports.deleteOne = async (req, res) => {
             return;
         }
 
+        await Review.deleteOne({ _id: req.params.id });
         sendJSONresponse(res, 204, null);
     } catch(err) {
         sendJSONresponse(res, 404, err);
