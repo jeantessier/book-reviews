@@ -9,12 +9,12 @@ class User {
     String password
     String name
 
+    Date dateCreated
+    Date lastUpdated
+
     static hasMany = [
             reviews: Review,
     ]
-
-    Date dateCreated
-    Date lastUpdated
 
     static constraints = {
         email email: true

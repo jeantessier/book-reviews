@@ -4,8 +4,8 @@ import groovy.transform.Field
 @Field Review review
 
 json {
-    reviewer review.from.id
-    book review.to.id
+    reviewer g.render(review.reviewer)
+    book g.render(review.book)
     body review.body
     if (review.start) {
         start review.start
