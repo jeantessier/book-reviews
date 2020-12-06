@@ -1,10 +1,9 @@
 package com.jeantessier
 
 import grails.gorm.annotation.Entity
-import grails.neo4j.Relationship
 
 @Entity
-class Review implements Relationship<User, Book> {
+class Review {
 
     String body
     String start
@@ -12,6 +11,11 @@ class Review implements Relationship<User, Book> {
 
     Date dateCreated
     Date lastUpdated
+
+    static hasOne = [
+            reviewer: User,
+            book: Book,
+    ]
 
     static constraints = {
         start nullable: true

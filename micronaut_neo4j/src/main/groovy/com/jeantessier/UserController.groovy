@@ -1,6 +1,7 @@
 package com.jeantessier
 
 import grails.gorm.transactions.Transactional
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import java.text.*
 
@@ -24,9 +25,9 @@ class UserController {
     def save(String email, String password, String name) {
         def user = new User(email: email, password: password, name: name)
         if (user.save()) {
-            return user
+            return HttpResponse.created(user)
         } else {
-            return user.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", ")
+            return HttpResponse.badRequest(user.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", "))
         }
     }
 
@@ -46,7 +47,7 @@ class UserController {
         if (user.save()) {
             return user
         } else {
-            return user.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", ")
+            return HttpResponse.badRequest(user.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", "))
         }
     }
 
@@ -63,9 +64,9 @@ class UserController {
         def user = User.get(id)
         if (user) {
             user.delete()
-            return "OK"
+            return HttpResponse.noContent()
         } else {
-            return "Could not delete user ${id}."
+            return HttpResponse.notFound("Could not delete user ${id}.")
         }
     }
 

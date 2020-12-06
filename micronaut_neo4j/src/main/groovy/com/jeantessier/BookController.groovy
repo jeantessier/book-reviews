@@ -1,6 +1,7 @@
 package com.jeantessier
 
 import grails.gorm.transactions.Transactional
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 
 import java.text.MessageFormat
@@ -26,9 +27,9 @@ class BookController {
         def book = new Book(name: name, publisher: publisher, authors: authors, years: years)
         titles.each { book.addToTitles it }
         if (book.save()) {
-            return book
+            return HttpResponse.created(book)
         } else {
-            return book.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", ")
+            return HttpResponse.badRequest(book.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", "))
         }
     }
 
@@ -40,7 +41,7 @@ class BookController {
         if (book.save()) {
             return book
         } else {
-            return book.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", ")
+            return HttpResponse.badRequest(book.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", "))
         }
     }
 
@@ -63,7 +64,7 @@ class BookController {
         if (book.save()) {
             return book
         } else {
-            return book.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", ")
+            return HttpResponse.badRequest(book.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", "))
         }
     }
 
@@ -71,7 +72,7 @@ class BookController {
     @Transactional
     def delete() {
         def numberDeleted = Book.executeUpdate("DELETE FROM book")
-        return "Deleted ${numberDeleted} records."
+        return HttpResponse.ok("Deleted ${numberDeleted} record${numberDeleted == 1 ? "" : "s"}.")
     }
 
     @Delete("/{id}")
@@ -80,9 +81,9 @@ class BookController {
         def book = Book.get(id)
         if (book) {
             book.delete()
-            return "OK"
+            return HttpResponse.noContent()
         } else {
-            return "Could not delete book ${id}."
+            return HttpResponse.notFound("Could not delete book ${id}.")
         }
     }
 

@@ -1,6 +1,7 @@
 package com.jeantessier
 
 import grails.gorm.transactions.Transactional
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 
 import java.text.MessageFormat
@@ -14,7 +15,7 @@ class ReviewController {
         def user = User.get(userId)
         def book = Book.get(bookId)
         Review.where {
-            from == user && to == book
+            reviewer == user && book == book
         }.list()
     }
 
@@ -23,11 +24,11 @@ class ReviewController {
     def save(userId, bookId, String body, Optional<String> start, Optional<String> stop) {
         def user = User.get(userId)
         def book = Book.get(bookId)
-        def review = new Review(from: user, to: book, body: body, start: start.get(), stop: stop.get())
+        def review = new Review(reviewer: user, book: book, body: body, start: start.get(), stop: stop.get())
         if (review.save()) {
-            return review
+            return HttpResponse.created(review)
         } else {
-            return review.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", ")
+            return HttpResponse.badRequest(review.errors.allErrors.collect { MessageFormat.format(it.defaultMessage, it.arguments) }.join(", "))
         }
     }
 
