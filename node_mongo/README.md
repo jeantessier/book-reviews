@@ -24,6 +24,19 @@ You can start the application with:
 
 And point your browser to http://localhost:3000.
 
+## Experimental Setup
+
+You can use Docker Compose to run the database and the server together.  This
+way, you don't need to install MongoDB explicitly.
+
+    $ docker-compose up -d
+
+It does make initializing the database a little more difficult.
+
+    $ ./Books_mongo.pl > book_reviews.js
+    $ docker cp book_reviews.js node_mongo_mongo_1:/tmp/book_reviews.js
+    $ docker-compose exec mongo mongo node_mongo_book_reviews /tmp/book_reviews.js
+
 ## Sample Commands
 
 All examples use [HTTPie](https://httpie.org/).
@@ -53,6 +66,15 @@ manually in MongoDB.
         { $addToSet: { roles: "ROLE_ADMIN" } }
     );
 
+> If you are using the experimental setup with Docker Compose to run the server,
+> you can get into the database with:
+> 
+>     $ docker-compose exec mongo mongo node_mongo_book_reviews
+> 
+> You do need the double "mongo" in the command above. The first one is the name
+> of the database container under Docker Compose.  The second one is the MongoDB
+> CLI shell.
+
 Once you have a functioning admin user, you can use it to grant `ROLE_ADMIN` to
 other users, using the `PATCH` verb.
 
@@ -74,6 +96,10 @@ observe its contents at [jwt.io](https://jwt.io/).
 If you don't want to enter the token with every request, you can save it with:
 
     $ export JWT_AUTH_TOKEN=eyJh...IET4
+
+> Handy one-liner:
+> 
+>     $ export JWT_AUTH_TOKEN=$(http :3000/api/login email=admin@bookreviews.com password=abcd1234 | jq --raw-output '.token')
 
 And then call HTTPie with `--auth-type jwt`.
 
