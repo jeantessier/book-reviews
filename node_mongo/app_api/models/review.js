@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var timestamps = require('mongoose-timestamp');
+const timestamps = require('mongoose-timestamp');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const reviewSchema = new mongoose.Schema({

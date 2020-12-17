@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-var timestamps = require('mongoose-timestamp');
-const ObjectId = mongoose.Schema.Types.ObjectId;
+const timestamps = require('mongoose-timestamp');
 
 const titleSchema = new mongoose.Schema({
     title: {

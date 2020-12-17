@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-var timestamps = require('mongoose-timestamp');
-const ObjectId = mongoose.Schema.Types.ObjectId;
+const timestamps = require('mongoose-timestamp');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
