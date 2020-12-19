@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BookAuthorsController, type: :routing do
+RSpec.describe BookAuthorsController do
   describe "routing" do
 
     it "routes to #index" do

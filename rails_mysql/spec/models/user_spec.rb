@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
   let(:email) { "email-#{rand 1_000...10_000}@test.com" }
   let(:password) { "password #{rand 1_000...10_000}" }
 

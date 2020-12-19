@@ -23,7 +23,7 @@ require 'rails_helper'
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem.
 
-RSpec.describe ReviewsController, type: :controller do
+RSpec.describe ReviewsController do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
   let!(:user) do
     user = User.create email: "email-#{rand 1_000...10_000}@test.com"

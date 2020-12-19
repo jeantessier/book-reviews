@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Books", type: :request do
+RSpec.describe "Books" do
   describe "GET /books" do
     let!(:books) { FactoryBot.create_list(:random_book, 3) }
 

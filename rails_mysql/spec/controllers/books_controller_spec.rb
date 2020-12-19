@@ -23,7 +23,7 @@ require 'rails_helper'
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem.
 
-RSpec.describe BooksController, type: :controller do
+RSpec.describe BooksController do
 
   let(:book_name) { "name #{rand 1_000...10_000}" }
 

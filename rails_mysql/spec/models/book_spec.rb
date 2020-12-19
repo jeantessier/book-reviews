@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Book, type: :model do
+RSpec.describe Book do
   let(:expected_name) { "name #{rand 1_000...10_000}" }
 
   context ".name" do

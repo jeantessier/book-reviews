@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BookYear, type: :model do
+RSpec.describe BookYear do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
   let(:year) { "year #{rand 1_000...10_000}" }
   let(:order) { rand 1..10 }

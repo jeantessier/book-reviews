@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BookAuthor, type: :model do
+RSpec.describe BookAuthor do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
   let(:author) { "author #{rand 1_000...10_000}" }
   let(:order) { rand 1..10 }

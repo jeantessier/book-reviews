@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe UsersController, type: :controller do
+RSpec.describe UsersController do
   let!(:user) do
     user = User.create email: "email-#{rand 1_000...10_000}@test.com"
     user.password = "password #{rand 1_000...10_000}"

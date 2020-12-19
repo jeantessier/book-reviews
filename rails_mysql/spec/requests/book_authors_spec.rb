@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "BookAuthors", type: :request do
+RSpec.describe "BookAuthors" do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
 
   describe "GET /books/1/authors" do

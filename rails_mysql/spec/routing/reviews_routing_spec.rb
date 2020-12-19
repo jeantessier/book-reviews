@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ReviewsController, type: :routing do
+RSpec.describe ReviewsController do
   describe "routing" do
 
     it "routes to #index" do

@@ -23,7 +23,7 @@ require 'rails_helper'
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem.
 
-RSpec.describe BookAuthorsController, type: :controller do
+RSpec.describe BookAuthorsController do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
 
   # This should return the minimal set of attributes required to create a valid

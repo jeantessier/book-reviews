@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Reviews", type: :request do
+RSpec.describe "Reviews" do
   describe "GET /reviews" do
     it "works! (now write some real specs)" do
       get reviews_path

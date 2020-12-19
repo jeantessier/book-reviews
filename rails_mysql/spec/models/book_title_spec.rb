@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BookTitle, type: :model do
+RSpec.describe BookTitle do
   let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
   let(:title) { "title #{rand 1_000...10_000}" }
   let(:link) { "link #{rand 1_000...10_000}" }

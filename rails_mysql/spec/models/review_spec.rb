@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Review, type: :model do
+RSpec.describe Review do
   let(:reviewer) do
     user = User.new email: "email-#{rand 1_000...10_000}@test.com"
     user.password = "password #{rand 1+000...10_000}"
