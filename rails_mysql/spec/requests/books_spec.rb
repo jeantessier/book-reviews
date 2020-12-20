@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Books" do
   describe "GET /books" do
-    let!(:books) { FactoryBot.create_list(:random_book, 3) }
+    let!(:books) { FactoryBot.create_list(:book, 3) }
 
     before { get books_path }
 

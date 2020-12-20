@@ -1,16 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Review do
-  let(:reviewer) do
-    user = User.new email: "email-#{rand 1_000...10_000}@test.com"
-    user.password = "password #{rand 1+000...10_000}"
-    user.save!
-    return user
-  end
-  let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
-  let(:body) { "body #{rand 1_000...10_000}" }
-  let(:start) { Date.today }
-  let(:stop) { Date.today }
+  let(:reviewer) { FactoryBot.create :user }
+  let(:book) { FactoryBot.create :book }
+  let(:body) { Faker::Markdown.random }
+  let(:start) { Faker::Date.backward }
+  let(:stop) { Faker::Date.between from: start, to: Date.today }
 
   context "create" do
     it "should save with a reviewer and a book" do

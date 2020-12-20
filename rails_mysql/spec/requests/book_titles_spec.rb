@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "BookTitles" do
-  let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
+  let(:book) { FactoryBot.create :book }
 
   describe "GET /books/1/titles" do
     it "works! (now write some real specs)" do

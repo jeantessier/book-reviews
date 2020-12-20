@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User do
-  let(:email) { "email-#{rand 1_000...10_000}@test.com" }
-  let(:password) { "password #{rand 1_000...10_000}" }
+  let(:email) { Faker::Internet.unique.email }
+  let(:password) { Faker::Internet.password }
 
   subject { User.new email: email, password: password }
 

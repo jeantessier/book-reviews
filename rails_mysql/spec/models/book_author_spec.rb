@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe BookAuthor do
-  let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
-  let(:author) { "author #{rand 1_000...10_000}" }
+  let(:book) { FactoryBot.create :book }
+  let(:author) { Faker::Book.author }
   let(:order) { rand 1..10 }
 
   context "create" do
@@ -35,21 +35,20 @@ RSpec.describe BookAuthor do
   end
 
   context "sorting" do
-    let(:book_author) { BookAuthor.create! book: book, author: author, order: order }
-    let(:other_author) { "other name #{rand 1_000...10_000}" }
+    let(:book_author) { FactoryBot.build :book_author, book: book, order: order }
 
     it "should come after another BookAuthor with lower order" do
-      other = BookAuthor.create! book: book, author: other_author, order: order - 1
+      other = FactoryBot.build :book_author, book: book, order: order - 1
       expect(book_author <=> other).to eq(1)
     end
 
     it "should come the same another BookAuthor with the same order" do
-      other = BookAuthor.create! book: book, author: other_author, order: order
+      other = FactoryBot.build :book_author, book: book, order: order
       expect(book_author <=> other).to eq(0)
     end
 
     it "should come before another BookAuthor with higher order" do
-      other = BookAuthor.create! book: book, author: other_author, order: order + 1
+      other = FactoryBot.build :book_author, book: book, order: order + 1
       expect(book_author <=> other).to eq(-1)
     end
   end

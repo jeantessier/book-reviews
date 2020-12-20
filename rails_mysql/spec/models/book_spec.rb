@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Book do
-  let(:expected_name) { "name #{rand 1_000...10_000}" }
+  let(:expected_name) { Faker::Book.unique.title.gsub(' ', '_') }
 
   context ".name" do
     subject { Book.new(name: expected_name) }
@@ -17,8 +17,9 @@ RSpec.describe Book do
   end
 
   context ".publisher" do
+    let(:expected_publisher) { Faker::Book.publisher }
+
     subject { Book.new(name: expected_name, publisher: expected_publisher) }
-    let(:expected_publisher) { "publisher #{rand 1_000...10_000}" }
 
     it "can have a publisher" do
       expect(subject.publisher).to eq(expected_publisher)

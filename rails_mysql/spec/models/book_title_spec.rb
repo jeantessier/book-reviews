@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe BookTitle do
-  let(:book) { Book.create! name: "book_#{rand 1_000...10_000}" }
-  let(:title) { "title #{rand 1_000...10_000}" }
-  let(:link) { "link #{rand 1_000...10_000}" }
+  let(:book) { FactoryBot.create :book }
+  let(:title) { Faker::Book.title }
+  let(:link) { Faker::Internet.url }
   let(:order) { rand 1..10 }
 
   context "create" do
@@ -40,21 +40,20 @@ RSpec.describe BookTitle do
   end
 
   context "sorting" do
-    let(:book_title) { BookTitle.create! book: book, title: title, order: order }
-    let(:other_title) { "other title #{rand 1_000...10_000}" }
+    let(:book_title) { FactoryBot.build :book_title, book: book, order: order }
 
     it "should come after another BookTitle with lower order" do
-      other = BookTitle.create! book: book, title: other_title, order: order - 1
+      other = FactoryBot.build :book_title, book: book, order: order - 1
       expect(book_title <=> other).to eq(1)
     end
 
     it "should come the same another BookTitle with the same order" do
-      other = BookTitle.create! book: book, title: other_title, order: order
+      other = FactoryBot.build :book_title, book: book, order: order
       expect(book_title <=> other).to eq(0)
     end
 
     it "should come before another BookTitle with higher order" do
-      other = BookTitle.create! book: book, title: other_title, order: order + 1
+      other = FactoryBot.build :book_title, book: book, order: order + 1
       expect(book_title <=> other).to eq(-1)
     end
   end

@@ -1,12 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe UsersController do
-  let!(:user) do
-    user = User.create email: "email-#{rand 1_000...10_000}@test.com"
-    user.password = "password #{rand 1_000...10_000}"
-    user.save!
-    return user
-  end
+  let!(:user) { FactoryBot.create :user }
 
   describe "GET #show" do
     it "returns a success response" do
