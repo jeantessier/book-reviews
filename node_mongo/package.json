@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -20,5 +21,8 @@
     "passport-local": "^1.0.0",
     "pug": "^3.0.0",
     "serve-favicon": "^2.5.0"
+  },
+  "devDependencies": {
+    "cypress": "^6.1.0"
   }
 }
