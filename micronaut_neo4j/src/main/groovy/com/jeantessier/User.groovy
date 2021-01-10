@@ -1,5 +1,6 @@
 package com.jeantessier
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import grails.gorm.annotation.*
 
 @Entity
@@ -18,6 +19,7 @@ class User {
         name blank: false
     }
 
+    @JsonIgnore
     def getReviews() {
         Review.where { reviewer == this }.list()
     }

@@ -1,5 +1,6 @@
 package com.jeantessier
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import grails.gorm.annotation.Entity
 
 @Entity
@@ -25,6 +26,7 @@ class Book {
         titles type: "TITLE", fetch: "eager"
     }
 
+    @JsonIgnore
     def getReviews() {
         Review.where { book == this }.list()
     }
