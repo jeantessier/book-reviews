@@ -19,5 +19,5 @@ enforce_privacy: false
 # Note that packages in this list require their own `package.yml` file
 dependencies:
   - .
-  - app/packages/books
-  - app/packages/reviews
+  - packages/books
+  - packages/users

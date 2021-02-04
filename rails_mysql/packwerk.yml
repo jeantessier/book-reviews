@@ -23,20 +23,20 @@ load_paths:
   - app/mailers
   - app/models
   - app/models/concerns
-  - app/packages
-  - app/packages/books/controllers
-  - app/packages/books/graphql
-  - app/packages/books/models
-  - app/packages/jwt/controllers
-  - app/packages/jwt/controllers/concerns
-  - app/packages/jwt/graphql
-  - app/packages/reviews/controllers
-  - app/packages/reviews/graphql
-  - app/packages/reviews/models
-  - app/packages/search/graphql
-  - app/packages/users/controllers
-  - app/packages/users/graphql
-  - app/packages/users/models
+  - packages
+  - packages/books/controllers
+  - packages/books/graphql
+  - packages/books/models
+  - packages/jwt/controllers
+  - packages/jwt/controllers/concerns
+  - packages/jwt/graphql
+  - packages/reviews/controllers
+  - packages/reviews/graphql
+  - packages/reviews/models
+  - packages/search/graphql
+  - packages/users/controllers
+  - packages/users/graphql
+  - packages/users/models
 
 # List of custom associations, if any
 # custom_associations:
