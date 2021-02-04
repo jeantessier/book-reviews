@@ -1,0 +1,45 @@
+# This file contains a list of dependencies that are not part of the long term plan for app/packages/reviews.
+# We should generally work to reduce this list, but not at the expense of actually getting work done.
+#
+# You can regenerate this file using the following command:
+#
+# bundle exec packwerk update-deprecations app/packages/reviews
+---
+".":
+  "::ApplicationController":
+    violations:
+    - dependency
+    files:
+    - app/packages/reviews/controllers/reviews_controller.rb
+  "::ApplicationRecord":
+    violations:
+    - dependency
+    files:
+    - app/packages/reviews/models/review.rb
+  "::Types::BaseObject":
+    violations:
+    - dependency
+    files:
+    - app/packages/reviews/graphql/types/review_type.rb
+app/packages/books:
+  "::Book":
+    violations:
+    - dependency
+    files:
+    - app/packages/reviews/models/review.rb
+  "::Types::BookType":
+    violations:
+    - dependency
+    files:
+    - app/packages/reviews/graphql/types/review_type.rb
+app/packages/users:
+  "::Types::UserType":
+    violations:
+    - dependency
+    files:
+    - app/packages/reviews/graphql/types/review_type.rb
+  "::User":
+    violations:
+    - dependency
+    files:
+    - app/packages/reviews/models/review.rb
