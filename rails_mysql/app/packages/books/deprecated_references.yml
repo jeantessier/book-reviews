@@ -5,29 +5,6 @@
 #
 # bundle exec packwerk update-deprecations app/packages/books
 ---
-".":
-  "::ApplicationController":
-    violations:
-    - dependency
-    files:
-    - app/packages/books/controllers/book_authors_controller.rb
-    - app/packages/books/controllers/book_titles_controller.rb
-    - app/packages/books/controllers/book_years_controller.rb
-    - app/packages/books/controllers/books_controller.rb
-  "::ApplicationRecord":
-    violations:
-    - dependency
-    files:
-    - app/packages/books/models/book.rb
-    - app/packages/books/models/book_author.rb
-    - app/packages/books/models/book_title.rb
-    - app/packages/books/models/book_year.rb
-  "::Types::BaseObject":
-    violations:
-    - dependency
-    files:
-    - app/packages/books/graphql/types/book_type.rb
-    - app/packages/books/graphql/types/title_type.rb
 app/packages/reviews:
   "::Review":
     violations:

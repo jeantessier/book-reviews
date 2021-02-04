@@ -5,37 +5,6 @@
 #
 # bundle exec packwerk update-deprecations app/packages/users
 ---
-".":
-  "::ApplicationController":
-    violations:
-    - dependency
-    files:
-    - app/packages/users/controllers/users_controller.rb
-  "::ApplicationRecord":
-    violations:
-    - dependency
-    files:
-    - app/packages/users/models/user.rb
-  "::Interfaces::BaseInterface":
-    violations:
-    - dependency
-    files:
-    - app/packages/users/graphql/interfaces/user_error_payload.rb
-  "::Mutations::BaseMutation":
-    violations:
-    - dependency
-    files:
-    - app/packages/users/graphql/mutations/sign_in_mutation.rb
-    - app/packages/users/graphql/mutations/user_mutation.rb
-  "::Types::BaseObject":
-    violations:
-    - dependency
-    files:
-    - app/packages/users/graphql/mutations/sign_in_mutation_payload.rb
-    - app/packages/users/graphql/mutations/user_mutation_payload.rb
-    - app/packages/users/graphql/types/user_error.rb
-    - app/packages/users/graphql/types/user_payload.rb
-    - app/packages/users/graphql/types/user_type.rb
 app/packages/books:
   "::Book":
     violations:
