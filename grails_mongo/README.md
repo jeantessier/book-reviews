@@ -20,7 +20,7 @@ And point your browser to http://localhost:8080.
 
 ## Making REST Calls
 
-to get a list of users:
+To get a list of users:
 
     $ curl http://localhost:8080/user/index.json
 
