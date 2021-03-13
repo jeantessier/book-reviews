@@ -9,6 +9,7 @@ group = "com.jeantessier"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 micronaut {
