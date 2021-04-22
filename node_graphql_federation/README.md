@@ -33,10 +33,10 @@ do
 done
 ```
 
-### Using Docker-Compose
+### Using Docker Compose
 
 ```bash
-docker-compose up -d
+docker compose --file docker-compose.yml --file docker-compose.override.yml up -d
 ```
 
 This will run each federated service nicely hidden inside a Docker network,
