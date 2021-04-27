@@ -18,8 +18,6 @@ enforce_privacy: false
 # A list of this package's dependencies
 # Note that packages in this list require their own `package.yml` file
 dependencies:
+  - .
   - packages/books
-  - packages/jwt
   - packages/reviews
-  - packages/search
-  - packages/users

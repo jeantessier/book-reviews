@@ -39,5 +39,8 @@ module RailsMysql
         )
       end
     end
+
+    # For Packwerk
+    config.paths.add 'packages', glob: '*/{*,*/concerns,app/public}', eager_load: true
   end
 end
