@@ -26,8 +26,8 @@ trigger more events.
 
 There is an interesting variation where handling a mutation coming from the
 client only triggers an event without changing the local state, yet.  The
-cluster listens for this event and an instance will receive the event, maybe the
-same instance that handled the mutation or maybe a different one.  The state
+cluster listens for this event, and an instance will receive the event, maybe
+the same instance that handled the mutation or maybe a different one.  The state
 change only occurs in response to events.
 
 Adding an instance to the cluster is pretty quick: spin up a new instance,
@@ -46,7 +46,11 @@ Kafka can hold on to events indefinitely and consumers can replay the event
 stream from the very beginning.  If all state mutations occur through events,
 we can recreate the state by replaying the stream.  Instead of synchronizing
 the instances in a cluster through a shared local storage, we can let each one
-build its own representation in memory by replaying the event stream.
+build its own representation in memory by replaying the event stream.  The
+mutations that create a record are responsible for finding a unique key for that
+record and include it in the creation event, so that all present and future
+instances in the cluster share the same ID for the record.  A UUID is an obvious
+simple solution, but so are `Book.name` and `User.email` in our case, here.
 
 Because each instance needs to receive all events, it precludes using a consumer
 group.  This will mean more communication between Kafka and the instances.
