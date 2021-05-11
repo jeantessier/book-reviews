@@ -14,6 +14,8 @@ services:
     environment:
       - PORT=80
     command: npm start
+#    deploy:
+#      replicas: 4
 
   reviews:
     image: node:alpine
@@ -23,6 +25,8 @@ services:
     environment:
       - PORT=80
     command: npm start
+#    deploy:
+#      replicas: 4
 
   users:
     image: node:alpine
@@ -32,6 +36,8 @@ services:
     environment:
       - PORT=80
     command: npm start
+#    deploy:
+#      replicas: 4
 
   search:
     image: node:alpine
@@ -41,6 +47,8 @@ services:
     environment:
       - PORT=80
     command: npm start
+#    deploy:
+#      replicas: 4
 
   signatures:
     image: node:alpine
@@ -50,6 +58,8 @@ services:
     environment:
       - PORT=80
     command: npm start
+#    deploy:
+#      replicas: 4
 
   gateway:
     image: node:alpine
