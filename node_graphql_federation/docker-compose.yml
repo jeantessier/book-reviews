@@ -16,6 +16,8 @@ services:
     command: npm start
 #    deploy:
 #      replicas: 4
+    depends_on:
+      - kafka
 
   reviews:
     image: node:alpine
@@ -27,6 +29,8 @@ services:
     command: npm start
 #    deploy:
 #      replicas: 4
+    depends_on:
+      - kafka
 
   users:
     image: node:alpine
@@ -38,6 +42,8 @@ services:
     command: npm start
 #    deploy:
 #      replicas: 4
+    depends_on:
+      - kafka
 
   search:
     image: node:alpine
@@ -49,6 +55,8 @@ services:
     command: npm start
 #    deploy:
 #      replicas: 4
+    depends_on:
+      - kafka
 
   signatures:
     image: node:alpine
@@ -60,6 +68,8 @@ services:
     command: npm start
 #    deploy:
 #      replicas: 4
+    depends_on:
+      - kafka
 
   gateway:
     image: node:alpine
@@ -80,3 +90,16 @@ services:
       - users
       - search
       - signatures
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    expose:
+      - 2181
+
+  kafka:
+    image: wurstmeister/kafka
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
