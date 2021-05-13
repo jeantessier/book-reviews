@@ -100,8 +100,10 @@ services:
     image: wurstmeister/kafka
     environment:
       KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_CREATE_TOPICS: book-reviews.books:4:1,book-reviews.reviews:4:1,book-reviews.users:4:1,book-reviews.searches:4:1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-    deploy:
-      replicas: 4
+#    deploy:
+#      replicas: 4 # We cannot do multiple brokers because of collisions on KAFKA_ADVERTISED_HOST_NAME
     depends_on:
       - zookeeper
