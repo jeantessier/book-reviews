@@ -13,7 +13,9 @@
   "dependencies": {
     "@apollo/federation": "*",
     "apollo-server": "*",
+    "dotenv": "*",
     "graphql": "*",
+    "kafkajs": "*",
     "uuid": "*"
   }
 }

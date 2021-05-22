@@ -2,6 +2,10 @@ const { ApolloServer, gql } = require('apollo-server');
 const { buildFederatedSchema } = require('@apollo/federation');
 const { v4: uuidv4 } = require('uuid');
 
+require('dotenv').config();
+
+const { sendMessage } = require('./kafka');
+
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
 // your data.
@@ -52,6 +56,15 @@ const addReview = async (_, { review }) => {
   review.reviewer = { __typename: 'User', id: review.reviewerId };
   review.book = { __typename: 'Book', id: review.bookId };
   reviews.push(review);
+
+  sendMessage(
+      'book-reviews.reviews',
+      {
+        type: 'addReview',
+        ...review,
+      }
+  );
+
   return review;
 };
 

@@ -12,6 +12,7 @@ services:
     volumes:
       - ./books:/home/node/app
     environment:
+      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
     command: npm start
 #    deploy:
@@ -25,6 +26,7 @@ services:
     volumes:
       - ./reviews:/home/node/app
     environment:
+      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
     command: npm start
 #    deploy:
@@ -38,6 +40,7 @@ services:
     volumes:
       - ./users:/home/node/app
     environment:
+      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
     command: npm start
 #    deploy:
@@ -51,6 +54,7 @@ services:
     volumes:
       - ./search:/home/node/app
     environment:
+      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
     command: npm start
 #    deploy:
@@ -98,9 +102,12 @@ services:
 
   kafka:
     image: wurstmeister/kafka
+    expose:
+      - 9092
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_BROKER_ID: 1000
       KAFKA_CREATE_TOPICS: book-reviews.books:4:1,book-reviews.reviews:4:1,book-reviews.users:4:1,book-reviews.searches:4:1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 #    deploy:
