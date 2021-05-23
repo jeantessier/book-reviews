@@ -60,7 +60,7 @@ communicate with each one.  For example, the books service lives at
 It is much easier to run Kafka using Docker Compose.
 
 ```bash
-docker compose --file docker-compose.yml --file docker-compose.kafka-override.yml up -d
+docker compose --file docker-compose.yml --file docker-compose.kafka-override.yml up -d kafka
 ```
 
 > NOTE: Switching Docker Compose files will reset the Kafka broker and you will
