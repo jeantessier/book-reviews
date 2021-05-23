@@ -158,8 +158,9 @@ If you call the same query with the variables:
 }
 ```
 
-It will return the user Jean Tessier and all four reviews, because they were
-written by Jean Tessier.
+It will return the user Jean Tessier.  To get to the four reviews that were
+written by Jean Tessier, simply follow the `reviews` association from the
+GraphQL schema.
 
 If you use the variables:
 
@@ -169,8 +170,8 @@ If you use the variables:
 }
 ```
 
-It will return both users and all the books and reviews, because each one is
-related to at least one of these words.
+It will return both users and all the books, because each one is related to at
+least one of these words.
 
 #### Looking Up a Specific Entity
 
