@@ -143,12 +143,19 @@ const search = async (_, { q }) => {
   const resultsCollector = new Map();
 
   q.toLowerCase().split(/\s+/).forEach(word => {
-    if (indices.has(word)) {
-      indices.get(word).forEach((match, id) => resultsCollector.set(id, match))
-    }
+      const weightIncrement = word.length;
+      if (indices.has(word)) {
+          indices.get(word).forEach((match, id) => {
+              if (resultsCollector.has(id)) {
+                  resultsCollector.get(id).weight += weightIncrement;
+              } else {
+                  resultsCollector.set(id, { weight: weightIncrement, ...match })
+              }
+          })
+      }
   });
 
-  const results = [...resultsCollector].map(([_, match]) => match);
+  const results = [...resultsCollector].map(([_, match]) => match).sort((match1, match2) => match2.weight - match1.weight);
 
   sendMessage(
       'book-reviews.searches',
