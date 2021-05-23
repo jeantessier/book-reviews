@@ -4,7 +4,31 @@ const { v4: uuidv4 } = require('uuid');
 
 require('dotenv').config();
 
-const { sendMessage } = require('./kafka');
+const { groupId, sendMessage, startConsumer } = require('./kafka');
+
+const reviews = new Map();
+const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`));
+
+const topicName = 'book-reviews.reviews';
+startConsumer(
+    groupId,
+    topicName,
+    async ({ topic, partition, message }) => {
+      console.log(`====================   ${new Date().toJSON()}   ====================`);
+      console.log("Received message!");
+      console.log(`    topic: ${topic}`);
+      console.log(`    partition: ${partition}`);
+      console.log(`    offset: ${message.offset}`);
+      const key = message.key?.toString()
+      const { type, ...review } = JSON.parse(message.value.toString())
+      reviews.set(key, review);
+      console.log(`    ${type} ${JSON.stringify(review)}`);
+      console.log("    reviews:");
+      dump(reviews);
+    }
+).then(() => {
+  console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
+})
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -49,30 +73,29 @@ const typeDefs = gql`
   }
 `;
 
-const reviews = [];
-
 const addReview = async (_, { review }) => {
-  review.id = uuidv4();
-  review.reviewer = { __typename: 'User', id: review.reviewerId };
-  review.book = { __typename: 'Book', id: review.bookId };
-  reviews.push(review);
+  const { reviewerId, bookId, ...addReviewMessage} = review;
+
+  addReviewMessage.id = uuidv4();
+  addReviewMessage.reviewer = { __typename: 'User', id: reviewerId };
+  addReviewMessage.book = { __typename: 'Book', id: bookId };
 
   sendMessage(
       'book-reviews.reviews',
       {
         type: 'addReview',
-        ...review,
+        ...addReviewMessage,
       }
   );
 
-  return review;
+  return addReviewMessage;
 };
 
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves reviews from the "reviews" array above.
 const resolvers = {
   Query: {
-    reviews: async (_, { forReviewer }) => forReviewer ? reviews.filter(r => r.reviewer.id === forReviewer) : reviews,
+    reviews: async (_, { forReviewer }) => forReviewer ? reviews.filter(r => r.reviewer.id === forReviewer) : reviews.values(),
     review: async (_, { id }) => fetchReviewById(id),
   },
   Mutation: {
@@ -96,9 +119,9 @@ const resolvers = {
   },
 };
 
-const fetchReviewById = id => reviews.find(review => id === review.id);
-const fetchReviewsByBookId = id => reviews.filter(review => id === review.book.id);
-const fetchReviewsByReviewerId = id => reviews.filter(review => id === review.reviewer.id);
+const fetchReviewById = id => reviews.get(id);
+const fetchReviewsByBookId = id => [...reviews].filter(([_, review]) => id === review.book.id).map(([_, review]) => review);
+const fetchReviewsByReviewerId = id => [...reviews].filter(([_, review]) => id === review.reviewer.id).map(([_, review]) => review);
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),
@@ -110,7 +133,8 @@ const server = new ApolloServer({
         console.log(`    query: ${requestContext.request.query}`);
         console.log(`    operationName: ${requestContext.request.operationName}`);
         console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`);
-        console.log(`    reviews: ${JSON.stringify(reviews)}`);
+        console.log("    reviews:");
+        dump(reviews);
       },
     },
   ],

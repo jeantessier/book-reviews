@@ -15,6 +15,7 @@
     "apollo-server": "*",
     "dotenv": "*",
     "graphql": "*",
-    "kafkajs": "*"
+    "kafkajs": "*",
+    "uuid": "*"
   }
 }

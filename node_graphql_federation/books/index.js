@@ -4,7 +4,31 @@ const { v4: uuidv4 } = require('uuid');
 
 require('dotenv').config();
 
-const { sendMessage } = require('./kafka');
+const { groupId, sendMessage, startConsumer } = require('./kafka');
+
+const books = new Map();
+const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`));
+
+const topicName = 'book-reviews.books';
+startConsumer(
+    groupId,
+    topicName,
+    async ({ topic, partition, message }) => {
+      console.log(`====================   ${new Date().toJSON()}   ====================`);
+      console.log("Received message!");
+      console.log(`    topic: ${topic}`);
+      console.log(`    partition: ${partition}`);
+      console.log(`    offset: ${message.offset}`);
+      const key = message.key?.toString()
+      const { type, ...book } = JSON.parse(message.value.toString())
+      books.set(key, book);
+      console.log(`    ${type} ${JSON.stringify(book)}`);
+      console.log("    books:");
+      dump(books);
+    }
+).then(() => {
+  console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
+})
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -48,11 +72,8 @@ const typeDefs = gql`
   }
 `;
 
-const books = [];
-
 const addBook = async (_, { book }) => {
   book.id = uuidv4();
-  books.push(book);
 
   sendMessage(
       'book-reviews.books',
@@ -69,7 +90,7 @@ const addBook = async (_, { book }) => {
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
-    books: async () => books,
+    books: async () => books.values(),
     book: async (_, { id }) => fetchBookById(id),
   },
   Mutation: {
@@ -86,7 +107,7 @@ const resolvers = {
   },
 };
 
-const fetchBookById = id => books.find(book => id === book.id);
+const fetchBookById = id => books.get(id);
 
 const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),
@@ -98,7 +119,8 @@ const server = new ApolloServer({
         console.log(`    query: ${requestContext.request.query}`);
         console.log(`    operationName: ${requestContext.request.operationName}`);
         console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`);
-        console.log(`    books: ${JSON.stringify(books)}`);
+        console.log("    books:");
+        dump(books);
       },
     },
   ],
