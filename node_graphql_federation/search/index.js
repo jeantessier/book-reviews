@@ -23,20 +23,31 @@ startConsumer(
       console.log(`    topic: ${topic}`);
       console.log(`    partition: ${partition}`);
       console.log(`    offset: ${message.offset}`);
+      const key = message.key?.toString();
+      console.log(`    key: ${key}`);
       const { type, ...body } = JSON.parse(message.value.toString())
       console.log(`    ${type} ${JSON.stringify(body)}`);
       switch (type) {
           case 'addBook':
               indexBook(body);
               break;
+          case 'removeBook':
+              scrubIndices('Book', key);
+              break;
           case 'addReview':
               indexReview(body);
+              break;
+          case 'removeReview':
+              scrubIndices('Review', key);
               break;
           case 'addUser':
               indexUser(body);
               break;
+          case 'removeUser':
+              scrubIndices('User', key);
+              break;
           default:
-              console.log("Don't know what to do!");
+              console.log("Skipping...");
               break;
       }
       console.log("    indices:");
@@ -81,7 +92,7 @@ const indexWords = (words, indexEntry) => {
 
 const indexWord = (word, indexEntry) => {
     if (!(indices.has(word))) {
-        console.log(`Creating index entry for "${word}"`);
+        console.log(`Creating index for "${word}"`);
         indices.set(word, new Map());
     }
     if (!(indices.get(word).has(indexEntry.id))) {
@@ -89,6 +100,19 @@ const indexWord = (word, indexEntry) => {
         indices.get(word).set(indexEntry.id, indexEntry);
     }
 };
+
+const scrubIndices = (typename, id) => {
+    indices.forEach((index, word) => {
+        if (index.get(id)?.__typename === typename) {
+            console.log(`Removing index entry for ${id} under "${word}"`);
+            index.delete(id);
+        }
+        if (indices.get(word).size === 0) {
+            console.log(`Removing empty index for "${word}"`);
+            indices.delete(word);
+        }
+    })
+}
 
 const normalize = text => text.replace(/[!?.&]/g, '');
 

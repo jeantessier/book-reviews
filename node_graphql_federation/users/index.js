@@ -19,10 +19,21 @@ startConsumer(
       console.log(`    topic: ${topic}`);
       console.log(`    partition: ${partition}`);
       console.log(`    offset: ${message.offset}`);
-      const key = message.key?.toString()
+      const key = message.key?.toString();
+      console.log(`    key: ${key}`);
       const { type, ...user } = JSON.parse(message.value.toString())
-      users.set(key, user);
       console.log(`    ${type} ${JSON.stringify(user)}`);
+      switch (type) {
+          case 'addUser':
+              users.set(key, user);
+              break;
+          case 'removeUser':
+              users.delete(key);
+              break;
+          default:
+              console.log("Skipping...");
+              break;
+      }
       console.log("    users:");
       dump(users);
     }
@@ -52,6 +63,7 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(user: UserInput): User
+    removeUser(id: ID!): Boolean!
   }
 `;
 
@@ -69,6 +81,22 @@ const addUser = async (_, { user }) => {
   return user;
 };
 
+const removeUser = async (_, { id }) => {
+    const found = fetchUserById(id) !== undefined;
+
+    if (found) {
+        sendMessage(
+            'book-reviews.users',
+            {
+                type: 'removeUser',
+                id,
+            }
+        );
+    }
+
+    return found;
+};
+
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves users from the "users" array above.
 const resolvers = {
@@ -78,6 +106,7 @@ const resolvers = {
   },
   Mutation: {
     addUser,
+    removeUser,
   },
   User: {
     __resolveReference: async user => {

@@ -9,7 +9,7 @@ const { groupId, sendMessage, startConsumer } = require('./kafka');
 const reviews = new Map();
 const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`));
 
-const topicName = 'book-reviews.reviews';
+const topicName = /book-reviews.(books|reviews|users)/;
 startConsumer(
     groupId,
     topicName,
@@ -19,10 +19,43 @@ startConsumer(
       console.log(`    topic: ${topic}`);
       console.log(`    partition: ${partition}`);
       console.log(`    offset: ${message.offset}`);
-      const key = message.key?.toString()
+      const key = message.key?.toString();
+      console.log(`    key: ${key}`);
       const { type, ...review } = JSON.parse(message.value.toString())
-      reviews.set(key, review);
       console.log(`    ${type} ${JSON.stringify(review)}`);
+      switch (type) {
+          case 'removeBook':
+              [...reviews].filter(([_, review]) => key === review.book.id).forEach(([id, _]) => {
+                 sendMessage(
+                     'book-reviews.reviews',
+                     {
+                         type: 'removeReview',
+                         id,
+                     }
+                 )
+              });
+              break;
+          case 'addReview':
+              reviews.set(key, review);
+              break;
+          case 'removeReview':
+              reviews.delete(key);
+              break;
+          case 'removeUser':
+              [...reviews].filter(([_, review]) => key === review.reviewer.id).forEach(([id, _]) => {
+                  sendMessage(
+                      'book-reviews.reviews',
+                      {
+                          type: 'removeReview',
+                          id,
+                      }
+                  )
+              });
+              break;
+          default:
+              console.log("Skipping...");
+              break;
+      }
       console.log("    reviews:");
       dump(reviews);
     }
@@ -70,6 +103,7 @@ const typeDefs = gql`
 
   type Mutation {
     addReview(review: ReviewInput): Review
+    removeReview(id: ID!): Boolean!
   }
 `;
 
@@ -91,6 +125,22 @@ const addReview = async (_, { review }) => {
   return addReviewMessage;
 };
 
+const removeReview = async (_, { id }) => {
+    const found = fetchReviewById(id) !== undefined;
+
+    if (found) {
+        sendMessage(
+            'book-reviews.reviews',
+            {
+                type: 'removeReview',
+                id,
+            }
+        );
+    }
+
+    return found;
+};
+
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves reviews from the "reviews" array above.
 const resolvers = {
@@ -99,7 +149,8 @@ const resolvers = {
     review: async (_, { id }) => fetchReviewById(id),
   },
   Mutation: {
-    addReview
+    addReview,
+    removeReview,
   },
   Review: {
     __resolveReference: async review => {

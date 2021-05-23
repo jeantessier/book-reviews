@@ -362,3 +362,63 @@ And structure the variables like this:
   }
 }
 ```
+
+### Removing Content
+
+#### Removing a Book
+
+You can use this query to remove an existing book entry:
+
+```graphql
+mutation RemoveBook($id: ID!) {
+    removeBook(id: $id)
+}
+```
+
+And structure the variables like this:
+
+```json
+{
+  "id": "<id of the book being removed goes here>"
+}
+```
+
+Removing a book will automatically remove all the reviews about that book.
+
+#### Removing a User
+
+You can use this query to remove an existing user:
+
+```graphql
+mutation RemoveUser($id: ID!) {
+    removeUser(id: $id)
+}
+```
+
+And structure the variables like this:
+
+```json
+{
+  "id": "<id of the user being removed goes here>"
+}
+```
+
+Removing a user will automatically remove all the reviews by that user.
+
+#### Removing a Review
+
+You can use this query to remove an existing review:
+
+```graphql
+mutation RemoveReview($id: ID!) {
+    removeReview(id: $id)
+}
+```
+
+And structure the variables like this:
+
+```json
+{
+  "id": "<id of the review being removed goes here>"
+}
+```

@@ -19,10 +19,21 @@ startConsumer(
       console.log(`    topic: ${topic}`);
       console.log(`    partition: ${partition}`);
       console.log(`    offset: ${message.offset}`);
-      const key = message.key?.toString()
+      const key = message.key?.toString();
+      console.log(`    key: ${key}`);
       const { type, ...book } = JSON.parse(message.value.toString())
-      books.set(key, book);
       console.log(`    ${type} ${JSON.stringify(book)}`);
+      switch (type) {
+          case 'addBook':
+              books.set(key, book);
+              break;
+          case 'removeBook':
+              books.delete(key);
+              break;
+          default:
+              console.log("Skipping...");
+              break;
+      }
       console.log("    books:");
       dump(books);
     }
@@ -78,6 +89,7 @@ const typeDefs = gql`
 
   type Mutation {
     addBook(book: BookInput): Book
+    removeBook(id: ID!): Boolean!
   }
 `;
 
@@ -95,6 +107,22 @@ const addBook = async (_, { book }) => {
   return book;
 };
 
+const removeBook = async (_, { id }) => {
+    const found = fetchBookById(id) !== undefined;
+
+    if (found) {
+        sendMessage(
+            'book-reviews.books',
+            {
+                type: 'removeBook',
+                id,
+            }
+        );
+    }
+
+    return found;
+};
+
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
@@ -103,7 +131,8 @@ const resolvers = {
     book: async (_, { id }) => fetchBookById(id),
   },
   Mutation: {
-    addBook
+    addBook,
+    removeBook,
   },
   Book: {
     __resolveReference: async book => {
