@@ -1,66 +1,66 @@
-const { ApolloServer, gql } = require('apollo-server');
-const { buildFederatedSchema } = require('@apollo/federation');
-const { v4: uuidv4 } = require('uuid');
+const { ApolloServer, gql } = require('apollo-server')
+const { buildFederatedSchema } = require('@apollo/federation')
+const { v4: uuidv4 } = require('uuid')
 
-require('dotenv').config();
+require('dotenv').config()
 
-const { groupId, sendMessage, startConsumer } = require('./kafka');
+const { groupId, sendMessage, startConsumer } = require('./kafka')
 
-const reviews = new Map();
-const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`));
+const reviews = new Map()
+const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`))
 
-const topicName = /book-reviews.(books|reviews|users)/;
+const topicName = /book-reviews.(books|reviews|users)/
 startConsumer(
     groupId,
     topicName,
     async ({ topic, partition, message }) => {
-      console.log(`====================   ${new Date().toJSON()}   ====================`);
-      console.log("Received message!");
-      console.log(`    topic: ${topic}`);
-      console.log(`    partition: ${partition}`);
-      console.log(`    offset: ${message.offset}`);
-      const key = message.key?.toString();
-      console.log(`    key: ${key}`);
-      const { type, ...review } = JSON.parse(message.value.toString())
-      console.log(`    ${type} ${JSON.stringify(review)}`);
-      switch (type) {
-          case 'removeBook':
-              [...reviews].filter(([_, review]) => key === review.book.id).forEach(([id, _]) => {
-                 sendMessage(
-                     'book-reviews.reviews',
-                     {
-                         type: 'removeReview',
-                         id,
-                     }
-                 )
-              });
-              break;
-          case 'addReview':
-              reviews.set(key, review);
-              break;
-          case 'removeReview':
-              reviews.delete(key);
-              break;
-          case 'removeUser':
-              [...reviews].filter(([_, review]) => key === review.reviewer.id).forEach(([id, _]) => {
-                  sendMessage(
-                      'book-reviews.reviews',
-                      {
-                          type: 'removeReview',
-                          id,
-                      }
-                  )
-              });
-              break;
-          default:
-              console.log("Skipping...");
-              break;
-      }
-      console.log("    reviews:");
-      dump(reviews);
+        console.log(`====================   ${new Date().toJSON()}   ====================`)
+        console.log("Received message!")
+        console.log(`    topic: ${topic}`)
+        console.log(`    partition: ${partition}`)
+        console.log(`    offset: ${message.offset}`)
+        const key = message.key?.toString()
+        console.log(`    key: ${key}`)
+        const { type, ...review } = JSON.parse(message.value.toString())
+        console.log(`    ${type} ${JSON.stringify(review)}`)
+        switch (type) {
+            case 'removeBook':
+                [ ...reviews ].filter(([ _, review ]) => key === review.book.id).forEach(([ id, _ ]) => {
+                    sendMessage(
+                        'book-reviews.reviews',
+                        {
+                            type: 'removeReview',
+                            id,
+                        }
+                    )
+                })
+                break
+            case 'addReview':
+                reviews.set(key, review)
+                break
+            case 'removeReview':
+                reviews.delete(key)
+                break
+            case 'removeUser':
+                [ ...reviews ].filter(([ _, review ]) => key === review.reviewer.id).forEach(([ id, _ ]) => {
+                    sendMessage(
+                        'book-reviews.reviews',
+                        {
+                            type: 'removeReview',
+                            id,
+                        }
+                    )
+                })
+                break
+            default:
+                console.log("Skipping...")
+                break
+        }
+        console.log("    reviews:")
+        dump(reviews)
     }
 ).then(() => {
-  console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
+    console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
 })
 
 // A schema is a collection of type definitions (hence "typeDefs")
@@ -105,28 +105,28 @@ const typeDefs = gql`
     addReview(review: ReviewInput): Review
     removeReview(id: ID!): Boolean!
   }
-`;
+`
 
 const addReview = async (_, { review }) => {
-  const { reviewerId, bookId, ...addReviewMessage} = review;
+    const { reviewerId, bookId, ...addReviewMessage } = review
 
-  addReviewMessage.id = uuidv4();
-  addReviewMessage.reviewer = { __typename: 'User', id: reviewerId };
-  addReviewMessage.book = { __typename: 'Book', id: bookId };
+    addReviewMessage.id = uuidv4()
+    addReviewMessage.reviewer = { __typename: 'User', id: reviewerId }
+    addReviewMessage.book = { __typename: 'Book', id: bookId }
 
-  await sendMessage(
-      'book-reviews.reviews',
-      {
-        type: 'addReview',
-        ...addReviewMessage,
-      }
-  );
+    await sendMessage(
+        'book-reviews.reviews',
+        {
+            type: 'addReview',
+            ...addReviewMessage,
+        }
+    )
 
-  return addReviewMessage;
-};
+    return addReviewMessage
+}
 
 const removeReview = async (_, { id }) => {
-    const found = fetchReviewById(id) !== undefined;
+    const found = fetchReviewById(id) !== undefined
 
     if (found) {
         await sendMessage(
@@ -135,65 +135,65 @@ const removeReview = async (_, { id }) => {
                 type: 'removeReview',
                 id,
             }
-        );
+        )
     }
 
-    return found;
-};
+    return found
+}
 
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves reviews from the "reviews" array above.
 const resolvers = {
-  Query: {
-    reviews: async (_, { forReviewer }) => forReviewer ? reviews.filter(r => r.reviewer.id === forReviewer) : reviews.values(),
-    review: async (_, { id }) => fetchReviewById(id),
-  },
-  Mutation: {
-    addReview,
-    removeReview,
-  },
-  Review: {
-    __resolveReference: async review => {
-      return {
-        ...review,
-        ...fetchReviewById(review.id),
-      };
+    Query: {
+        reviews: async (_, { forReviewer }) => forReviewer ? reviews.filter(r => r.reviewer.id === forReviewer) : reviews.values(),
+        review: async (_, { id }) => fetchReviewById(id),
     },
-  },
-  Book: {
-    reviews: async book => fetchReviewsByBookId(book.id),
-    reviewers: async book => fetchReviewsByBookId(book.id).map(review => review.reviewer),
-  },
-  User: {
-    reviews: async user => fetchReviewsByReviewerId(user.id),
-    books: async user => fetchReviewsByReviewerId(user.id).map(review => review.book),
-  },
-};
+    Mutation: {
+        addReview,
+        removeReview,
+    },
+    Review: {
+        __resolveReference: async review => {
+            return {
+                ...review,
+                ...fetchReviewById(review.id),
+            }
+        },
+    },
+    Book: {
+        reviews: async book => fetchReviewsByBookId(book.id),
+        reviewers: async book => fetchReviewsByBookId(book.id).map(review => review.reviewer),
+    },
+    User: {
+        reviews: async user => fetchReviewsByReviewerId(user.id),
+        books: async user => fetchReviewsByReviewerId(user.id).map(review => review.book),
+    },
+}
 
-const fetchReviewById = id => reviews.get(id);
-const fetchReviewsByBookId = id => [...reviews].filter(([_, review]) => id === review.book.id).map(([_, review]) => review);
-const fetchReviewsByReviewerId = id => [...reviews].filter(([_, review]) => id === review.reviewer.id).map(([_, review]) => review);
+const fetchReviewById = id => reviews.get(id)
+const fetchReviewsByBookId = id => [ ...reviews ].filter(([ _, review ]) => id === review.book.id).map(([ _, review ]) => review)
+const fetchReviewsByReviewerId = id => [ ...reviews ].filter(([ _, review ]) => id === review.reviewer.id).map(([ _, review ]) => review)
 
 const server = new ApolloServer({
-  schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-  plugins: [
-    {
-      requestDidStart(requestContext) {
-        console.log(`====================   ${new Date().toJSON()}   ====================`);
-        console.log("Request did start!");
-        console.log(`    query: ${requestContext.request.query}`);
-        console.log(`    operationName: ${requestContext.request.operationName}`);
-        console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`);
-        console.log("    reviews:");
-        dump(reviews);
-      },
-    },
-  ],
-});
+    schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
+    plugins: [
+        {
+            requestDidStart(requestContext) {
+                console.log(`====================   ${new Date().toJSON()}   ====================`)
+                console.log("Request did start!")
+                console.log(`    query: ${requestContext.request.query}`)
+                console.log(`    operationName: ${requestContext.request.operationName}`)
+                console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
+                console.log("    reviews:")
+                dump(reviews)
+            },
+        },
+    ],
+})
 
 const port = process.env.PORT || 4002
 
 // The `listen` method launches a web server.
 server.listen(port).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+    console.log(`🚀  Server ready at ${url}`)
+})

@@ -1,44 +1,44 @@
-const { ApolloServer, gql } = require('apollo-server');
-const { buildFederatedSchema } = require('@apollo/federation');
-const { v4: uuidv4 } = require('uuid');
+const { ApolloServer, gql } = require('apollo-server')
+const { buildFederatedSchema } = require('@apollo/federation')
+const { v4: uuidv4 } = require('uuid')
 
-require('dotenv').config();
+require('dotenv').config()
 
-const { groupId, sendMessage, startConsumer } = require('./kafka');
+const { groupId, sendMessage, startConsumer } = require('./kafka')
 
-const books = new Map();
-const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`));
+const books = new Map()
+const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`))
 
-const topicName = 'book-reviews.books';
+const topicName = 'book-reviews.books'
 startConsumer(
     groupId,
     topicName,
     async ({ topic, partition, message }) => {
-      console.log(`====================   ${new Date().toJSON()}   ====================`);
-      console.log("Received message!");
-      console.log(`    topic: ${topic}`);
-      console.log(`    partition: ${partition}`);
-      console.log(`    offset: ${message.offset}`);
-      const key = message.key?.toString();
-      console.log(`    key: ${key}`);
-      const { type, ...book } = JSON.parse(message.value.toString())
-      console.log(`    ${type} ${JSON.stringify(book)}`);
-      switch (type) {
-          case 'addBook':
-              books.set(key, book);
-              break;
-          case 'removeBook':
-              books.delete(key);
-              break;
-          default:
-              console.log("Skipping...");
-              break;
-      }
-      console.log("    books:");
-      dump(books);
+        console.log(`====================   ${new Date().toJSON()}   ====================`)
+        console.log("Received message!")
+        console.log(`    topic: ${topic}`)
+        console.log(`    partition: ${partition}`)
+        console.log(`    offset: ${message.offset}`)
+        const key = message.key?.toString()
+        console.log(`    key: ${key}`)
+        const { type, ...book } = JSON.parse(message.value.toString())
+        console.log(`    ${type} ${JSON.stringify(book)}`)
+        switch (type) {
+            case 'addBook':
+                books.set(key, book)
+                break
+            case 'removeBook':
+                books.delete(key)
+                break
+            default:
+                console.log("Skipping...")
+                break
+        }
+        console.log("    books:")
+        dump(books)
     }
 ).then(() => {
-  console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
+    console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
 })
 
 // A schema is a collection of type definitions (hence "typeDefs")
@@ -91,24 +91,24 @@ const typeDefs = gql`
     addBook(book: BookInput): Book
     removeBook(id: ID!): Boolean!
   }
-`;
+`
 
 const addBook = async (_, { book }) => {
-  book.id = uuidv4();
+    book.id = uuidv4()
 
-  await sendMessage(
-      'book-reviews.books',
-      {
-        type: 'addBook',
-      ...book,
-      }
-  );
+    await sendMessage(
+        'book-reviews.books',
+        {
+            type: 'addBook',
+            ...book,
+        }
+    )
 
-  return book;
-};
+    return book
+}
 
 const removeBook = async (_, { id }) => {
-    const found = fetchBookById(id) !== undefined;
+    const found = fetchBookById(id) !== undefined
 
     if (found) {
         await sendMessage(
@@ -117,56 +117,56 @@ const removeBook = async (_, { id }) => {
                 type: 'removeBook',
                 id,
             }
-        );
+        )
     }
 
-    return found;
-};
+    return found
+}
 
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
-  Query: {
-    books: async () => books.values(),
-    book: async (_, { id }) => fetchBookById(id),
-  },
-  Mutation: {
-    addBook,
-    removeBook,
-  },
-  Book: {
-    __resolveReference: async book => {
-      return {
-        ...book,
-        ...fetchBookById(book.id),
-      };
+    Query: {
+        books: async () => books.values(),
+        book: async (_, { id }) => fetchBookById(id),
     },
-    title: async book => fetchBookById(book.id)?.titles[0]?.title,
-  },
-};
+    Mutation: {
+        addBook,
+        removeBook,
+    },
+    Book: {
+        __resolveReference: async book => {
+            return {
+                ...book,
+                ...fetchBookById(book.id),
+            }
+        },
+        title: async book => fetchBookById(book.id)?.titles[0]?.title,
+    },
+}
 
-const fetchBookById = id => books.get(id);
+const fetchBookById = id => books.get(id)
 
 const server = new ApolloServer({
-  schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-  plugins: [
-    {
-      requestDidStart(requestContext) {
-        console.log(`====================   ${new Date().toJSON()}   ====================`);
-        console.log("Request did start!");
-        console.log(`    query: ${requestContext.request.query}`);
-        console.log(`    operationName: ${requestContext.request.operationName}`);
-        console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`);
-        console.log("    books:");
-        dump(books);
-      },
-    },
-  ],
-});
+    schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
+    plugins: [
+        {
+            requestDidStart(requestContext) {
+                console.log(`====================   ${new Date().toJSON()}   ====================`)
+                console.log("Request did start!")
+                console.log(`    query: ${requestContext.request.query}`)
+                console.log(`    operationName: ${requestContext.request.operationName}`)
+                console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
+                console.log("    books:")
+                dump(books)
+            },
+        },
+    ],
+})
 
 const port = process.env.PORT || 4001
 
 // The `listen` method launches a web server.
 server.listen(port).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+    console.log(`🚀  Server ready at ${url}`)
+})
