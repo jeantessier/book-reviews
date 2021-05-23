@@ -87,7 +87,15 @@ const indexUser = user => {
 }
 
 const indexWords = (words, indexEntry) => {
-  words.toLowerCase().split(/\s+/).forEach(word => indexWord(word, indexEntry));
+    const wordScores = new Map();
+    words.toLowerCase().split(/\s+/).forEach(word => {
+        if (!wordScores.has(word)) {
+            wordScores.set(word, 0);
+        }
+        wordScores.set(word, wordScores.get(word) + word.length);
+    })
+
+    wordScores.forEach((score, word) => indexWord(word, { score: score / words.length, ...indexEntry }));
 };
 
 const indexWord = (word, indexEntry) => {
@@ -96,7 +104,7 @@ const indexWord = (word, indexEntry) => {
         indices.set(word, new Map());
     }
     if (!(indices.get(word).has(indexEntry.id))) {
-        console.log(`Creating index entry for ${indexEntry.id} under "${word}"`);
+        console.log(`Creating index entry for ${indexEntry.id} under "${word} with score ${indexEntry.score}"`);
         indices.get(word).set(indexEntry.id, indexEntry);
     }
 };
@@ -145,11 +153,12 @@ const search = async (_, { q }) => {
   q.toLowerCase().split(/\s+/).forEach(word => {
       const weightIncrement = word.length;
       if (indices.has(word)) {
-          indices.get(word).forEach((match, id) => {
+          indices.get(word).forEach((indexEntry, id) => {
               if (resultsCollector.has(id)) {
-                  resultsCollector.get(id).weight += weightIncrement;
+                  resultsCollector.get(id).weight += indexEntry.score;
               } else {
-                  resultsCollector.set(id, { weight: weightIncrement, ...match })
+                  const { score, ...match } = indexEntry;
+                  resultsCollector.set(id, { weight: score, ...match })
               }
           })
       }
