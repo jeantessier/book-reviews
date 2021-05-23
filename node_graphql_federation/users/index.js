@@ -70,7 +70,7 @@ const typeDefs = gql`
 const addUser = async (_, { user }) => {
   user.id = uuidv4();
 
-  sendMessage(
+  await sendMessage(
       'book-reviews.users',
       {
         type: 'addUser',
@@ -85,7 +85,7 @@ const removeUser = async (_, { id }) => {
     const found = fetchUserById(id) !== undefined;
 
     if (found) {
-        sendMessage(
+        await sendMessage(
             'book-reviews.users',
             {
                 type: 'removeUser',

@@ -114,7 +114,7 @@ const addReview = async (_, { review }) => {
   addReviewMessage.reviewer = { __typename: 'User', id: reviewerId };
   addReviewMessage.book = { __typename: 'Book', id: bookId };
 
-  sendMessage(
+  await sendMessage(
       'book-reviews.reviews',
       {
         type: 'addReview',
@@ -129,7 +129,7 @@ const removeReview = async (_, { id }) => {
     const found = fetchReviewById(id) !== undefined;
 
     if (found) {
-        sendMessage(
+        await sendMessage(
             'book-reviews.reviews',
             {
                 type: 'removeReview',

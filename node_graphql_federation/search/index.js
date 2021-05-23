@@ -151,7 +151,6 @@ const search = async (_, { q }) => {
   const resultsCollector = new Map();
 
   q.toLowerCase().split(/\s+/).forEach(word => {
-      const weightIncrement = word.length;
       if (indices.has(word)) {
           indices.get(word).forEach((indexEntry, id) => {
               if (resultsCollector.has(id)) {
@@ -166,7 +165,7 @@ const search = async (_, { q }) => {
 
   const results = [...resultsCollector].map(([_, match]) => match).sort((match1, match2) => match2.weight - match1.weight);
 
-  sendMessage(
+  await sendMessage(
       'book-reviews.searches',
       {
         query: q,

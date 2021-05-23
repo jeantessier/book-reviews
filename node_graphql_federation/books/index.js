@@ -96,7 +96,7 @@ const typeDefs = gql`
 const addBook = async (_, { book }) => {
   book.id = uuidv4();
 
-  sendMessage(
+  await sendMessage(
       'book-reviews.books',
       {
         type: 'addBook',
@@ -111,7 +111,7 @@ const removeBook = async (_, { id }) => {
     const found = fetchBookById(id) !== undefined;
 
     if (found) {
-        sendMessage(
+        await sendMessage(
             'book-reviews.books',
             {
                 type: 'removeBook',
