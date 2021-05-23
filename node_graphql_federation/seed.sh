@@ -41,19 +41,6 @@ function addReview() {
   jq --raw-output ".data.addReview.id"
 }
 
-function addIndex() {
-  local typename=$1; shift
-  local id=$1; shift
-  local payload="$1"; shift
-
-  local indexCount=$(http $GRAPHQL_ENDPOINT \
-      query="mutation AddIndex(\$i: IndexInput!) {addIndex(index: \$i) {${payload}}}" \
-      variables:="{\"i\": {\"typename\": \"${typename}\", \"id\": \"${id}\", \"words\": \"$*\"}}" \
-      operationName=AddIndex | \
-  jq --raw-output ".data.addIndex | length")
-  echo "    is in ${indexCount} indices"
-}
-
 #
 # User: Jean Tessier
 #
@@ -62,8 +49,6 @@ jean_id=$(addUser "Jean Tessier" "jean@jeantessier.com")
 
 echo User $jean_id
 
-addIndex User $jean_id "... on User {name}" Jean Tessier
-
 #
 # User: Simon Tolkien
 #
@@ -71,8 +56,6 @@ addIndex User $jean_id "... on User {name}" Jean Tessier
 simon_id=$(addUser "Simon Tolkien" "simon@tolkien.com")
 
 echo User $simon_id
-
-addIndex User $simon_id "... on User {name}" Simon Tolkien
 
 #
 # Book: The Hobbit
@@ -84,23 +67,17 @@ book_id=$(addBook "The_Hobbit" "[{\"title\": \"The Hobbit\", \"link\": \"https:/
 
 echo Book $book_id
 
-addIndex Book $book_id "... on Book {name}" hobbit Bilbo Tolkien allen unwin 1937
-
 # Review
 
 review_id=$(addReview $jean_id $book_id "Awesome!" "2020-05-02" "2020-05-20")
 
 echo Review $review_id
 
-addIndex Review $review_id "... on Review {body}" Jean Tessier awesome
-
 # Review
 
 review_id=$(addReview $simon_id $book_id "Reminds me of when I was a kid." "2020-05-01" "2020-05-01")
 
 echo Review $review_id
-
-addIndex Review $review_id "... on Review {body}" Simon Tolkien Reminds me when I was kid
 
 #
 # Book: The Lord of the Rings
@@ -112,15 +89,11 @@ book_id=$(addBook "The_Lord_of_the_Rings" "[{\"title\": \"The Lord of the Rings\
 
 echo Book $book_id
 
-addIndex Book $book_id "... on Book {name}" lord ring Tolkien allen unwin 1954 1955
-
 # Review
 
 review_id=$(addReview $jean_id $book_id "Awesome!" "2020-05-02" "2020-05-20")
 
 echo Review $review_id
-
-addIndex Review $review_id "... on Review {body}" Jean Tessier awesome
 
 #
 # Book: The Fellowship of the Ring
@@ -132,15 +105,11 @@ book_id=$(addBook "The_Fellowship_of_the_Ring" "[{\"title\": \"The Fellowship of
 
 echo Book $book_id
 
-addIndex Book $book_id "... on Book {name}" fellowship ring Tolkien allen unwin 1954
-
 # Review
 
 review_id=$(addReview $jean_id $book_id "The Council of Elrond is a little long." "2020-05-02" "2020-05-05")
 
 echo Review $review_id
-
-addIndex Review $review_id "... on Review {body}" Jean Tessier council Elrond little long
 
 #
 # Book: The Two Towers
@@ -152,15 +121,11 @@ book_id=$(addBook "The_Two_Towers" "[{\"title\": \"The Two Towers\", \"link\": \
 
 echo Book $book_id
 
-addIndex Book $book_id "... on Book {name}" two tower Tolkien allen unwin 1955
-
 # Review
 
 review_id=$(addReview $jean_id $book_id "The Battle of Helm's Deep is a little long." "2020-05-06" "2020-05-10")
 
 echo Review $review_id
-
-addIndex Review $review_id "... on Review {body}" Jean Tessier battle Helm Deep little long
 
 #
 # Book: The Return of the King
@@ -172,15 +137,11 @@ book_id=$(addBook "The_Return_of_the_King" "[{\"title\": \"The Return of the Kin
 
 echo Book $book_id
 
-addIndex Book $book_id "... on Book {name}" return king Tolkien allen unwin 1955
-
 # Review
 
 review_id=$(addReview $jean_id $book_id "The ending is a little long." "2020-05-11" "2020-05-20")
 
 echo Review $review_id
-
-addIndex Review $review_id "... on Review {body}" Jean Tessier ending little long
 
 #
 # Book: The Silmarillion
@@ -192,20 +153,14 @@ book_id=$(addBook "The_Silmarillion" "[{\"title\": \"The Silmarillion\", \"link\
 
 echo Book $book_id
 
-addIndex Book $book_id "... on Book {name}" Silmarillion Christopher Tolkien allen unwin 1977
-
 # Review
 
 review_id=$(addReview $jean_id $book_id "Epic!" "2020-05-21" "2020-05-30")
 
 echo Review $review_id
 
-addIndex Review $review_id "... on Review {body}" Jean Tessier epic
-
 # Review
 
 review_id=$(addReview $simon_id $book_id "Bacon!" "2019-12-11" "2019-12-20")
 
 echo Review $review_id
-
-addIndex Review $review_id "... on Review {body}" Simon Tolkien bacon

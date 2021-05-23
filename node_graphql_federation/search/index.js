@@ -3,17 +3,94 @@ const { buildFederatedSchema } = require('@apollo/federation');
 
 require('dotenv').config();
 
-const { sendMessage } = require('./kafka');
+const { groupId, sendMessage, startConsumer } = require('./kafka');
 
 const indices = new Map();
 const dump = map => map.forEach((index, word) => {
   console.log(`        ${word}:`)
   index.forEach((object, id) => {
     console.log(`          ${id}: ${JSON.stringify(object)}`)
-
   })
 });
 
+const topicName = /book-reviews.(books|reviews|users)/;
+startConsumer(
+    groupId,
+    topicName,
+    async ({ topic, partition, message }) => {
+      console.log(`====================   ${new Date().toJSON()}   ====================`);
+      console.log("Received message!");
+      console.log(`    topic: ${topic}`);
+      console.log(`    partition: ${partition}`);
+      console.log(`    offset: ${message.offset}`);
+      const { type, ...body } = JSON.parse(message.value.toString())
+      console.log(`    ${type} ${JSON.stringify(body)}`);
+      switch (type) {
+          case 'addBook':
+              indexBook(body);
+              break;
+          case 'addReview':
+              indexReview(body);
+              break;
+          case 'addUser':
+              indexUser(body);
+              break;
+          default:
+              console.log("Don't know what to do!");
+              break;
+      }
+      console.log("    indices:");
+      dump(indices);
+    }
+).then(() => {
+  console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
+})
+
+const indexBook = book => {
+  const indexEntry = {
+    id: book.id,
+    __typename: 'Book',
+  };
+  // indexWords(book.name.replaceAll('_', ' '), indexEntry);
+  book.titles.forEach(title => indexWords(normalize(title.title), indexEntry))
+  book.authors.forEach(author => indexWords(normalize(author), indexEntry))
+  indexWords(normalize(book.publisher), indexEntry);
+  book.years.forEach(year => indexWords(year, indexEntry))
+}
+
+const indexReview = review => {
+  const indexEntry = {
+    id: review.id,
+    __typename: 'Review',
+  };
+  indexWords(normalize(review.body), indexEntry);
+}
+
+const indexUser = user => {
+    const indexEntry = {
+        id: user.id,
+        __typename: 'User',
+    };
+    indexWords(normalize(user.name), indexEntry);
+    indexWords(user.email, indexEntry);
+}
+
+const indexWords = (words, indexEntry) => {
+  words.toLowerCase().split(/\s+/).forEach(word => indexWord(word, indexEntry));
+};
+
+const indexWord = (word, indexEntry) => {
+    if (!(indices.has(word))) {
+        console.log(`Creating index entry for "${word}"`);
+        indices.set(word, new Map());
+    }
+    if (!(indices.get(word).has(indexEntry.id))) {
+        console.log(`Creating index entry for ${indexEntry.id} under "${word}"`);
+        indices.get(word).set(indexEntry.id, indexEntry);
+    }
+};
+
+const normalize = text => text.replace(/[!?.&]/g, '');
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -33,18 +110,8 @@ const typeDefs = gql`
 
   union SearchResult = Book | Review | User
 
-  input IndexInput {
-    words: String!
-    id: ID!
-    typename: String!
-  }
-
   type Query {
     search(q: String): [SearchResult!]!
-  }
-
-  type Mutation {
-    addIndex(index: IndexInput): [SearchResult!]!
   }
 `;
 
@@ -70,45 +137,12 @@ const search = async (_, { q }) => {
   return results;
 };
 
-const addIndex = async (_, { index }) => {
-  const results = [];
-
-  indexWord(index.id, index, i => results.push(i));
-
-  index.words.toLowerCase().split(/\s+/).forEach(word => {
-    indexWord(word, index, i => results.push(i));
-  });
-
-  return results;
-};
-
-const indexWord = (word, index, addedIndexCallback) => {
-  if (!(indices.has(word))) {
-    console.log(`Creating index entry for "${word}"`);
-    indices.set(word, new Map());
-  }
-  if (!(indices.get(word).has(index.id))) {
-    console.log(`Creating index entry for ${index.id} under "${word}"`);
-    indices.get(word).set(
-        index.id,
-        {
-          __typename: index.typename,
-          id: index.id,
-        }
-    )
-    addedIndexCallback(indices.get(word).get(index.id));
-  }
-};
-
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves search results from the "indices"
 // structure above.
 const resolvers = {
   Query: {
     search,
-  },
-  Mutation: {
-    addIndex,
   },
 };
 
