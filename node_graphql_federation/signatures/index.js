@@ -9,6 +9,10 @@ const typeDefs = gql`
     id: ID! @external
     name: String! @external
     email: String! @external
+    
+    """
+    an elegant custom signature
+    """
     signature: String! @requires(fields: "name email")
   }
 `;

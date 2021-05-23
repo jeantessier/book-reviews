@@ -36,8 +36,17 @@ startConsumer(
 const typeDefs = gql`
   type Book @key(fields: "id") {
     id: ID!
+
+    """
+    a unique, URL-friendly name for the book for use in permalinks
+    """
     name: String!
+
+    """
+    a shortcut to the first title in titles
+    """
     title: String
+
     titles: [Title!]!
     authors: [String!]!
     publisher: String!
