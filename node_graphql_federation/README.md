@@ -36,7 +36,7 @@ done
 ### Using Docker Compose
 
 ```bash
-docker compose --file docker-compose.yml --file docker-compose.override.yml up -d
+docker compose up -d
 ```
 
 This will run each federated service nicely hidden inside a Docker network,
@@ -54,6 +54,17 @@ If you are not using Docker Compose, each application runs directly on the host
 machine.  Since they will share the IP address, we use different port numbers to
 communicate with each one.  For example, the books service lives at
 `http://localhost:4001`.
+
+#### Starting Kafka
+
+It is much easier to run Kafka using Docker Compose.
+
+```bash
+docker compose --file docker-compose.yml --file docker-compose.kafka-override.yml up -d
+```
+
+> NOTE: Switching Docker Compose files will reset the Kafka broker and you will
+> lose all data recorded so far.
 
 #### Starting the Federated Services
 
@@ -98,9 +109,7 @@ It creates four books:
 - The Two Towers
 - The Return of the King
 
-With matching reviews by the Jean Tessier user.
-
-All of these entities are indexed in the `search` service.
+With a sampling of reviews by the two users.
 
 ## Sample Queries
 
@@ -233,6 +242,35 @@ If you call it the ID of an entity:
 The search will return a single entry, either a `Book`, `User`, or `Review`, as
 the case may be.
 
+Alternatively, since you already know it's a book, you can go straight to the
+`books` microservice with this query:
+
+```graphql
+query MyBook($id: ID!) {
+    book(id: $id) {
+        titles {
+            title
+        }
+        authors
+        reviews {
+            id
+            reviewer {
+                id
+                signature
+            }
+        }
+    }
+}
+```
+
+And, you call it the ID of the book:
+
+```json
+{
+  "id": "53d01334-37f9-45bc-85fc-06b3f8a9bbf4"
+}
+```
+
 ### Adding Content
 
 #### Adding a Book
@@ -270,36 +308,6 @@ And structure the variables like this:
 }
 ```
 
-#### Indexing a Book
-
-You use a separate mutation to add your new book to the search index:
-
-```graphql
-mutation AddIndex($i: IndexInput!) {
-    addIndex(index: $i) {
-        ... on Book {
-            titles {
-                title
-            }
-        }
-    }
-}
-```
-
-The mutation will need the `id` from the previous mutation.  You also decide
-under which words to index the book.  The words are case-insensitive and they
-are separated by whitespaces.
-
-```json
-{
-  "i": {
-    "typename": "Book",
-    "id": "<book's id goes here>",
-    "words": "Silmarillion silmaril saga Christopher Chris Tolkien allen unwin"
-  }
-}
-```
-
 #### Adding a User
 
 You can use this query to register a new user:
@@ -320,34 +328,6 @@ And structure the variables like this:
   "u": {
     "name": "Christopher Tolkien",
     "email": "chris@tolkien.com"
-  }
-}
-```
-
-#### Indexing a User
-
-You use a separate mutation to add your new user to the search index:
-
-```graphql
-mutation AddIndex($i: IndexInput!) {
-    addIndex(index: $i) {
-        ... on User {
-            name
-        }
-    }
-}
-```
-
-The mutation will need the `id` from the previous mutation.  You also decide
-under which words to index the user.  The words are case-insensitive and they
-are separated by whitespaces.
-
-```json
-{
-  "i": {
-    "typename": "User",
-    "id": "<user's id goes here>",
-    "words": "Christopher Chris Tolkien"
   }
 }
 ```
@@ -379,34 +359,6 @@ And structure the variables like this:
     "bookId": "<id of the book being reviewed goes here>",
     "body": "This book is quite fascinating, so far.",
     "start": "2020-05-21"
-  }
-}
-```
-
-#### Indexing a Review
-
-You use a separate mutation to add your new review to the search index:
-
-```graphql
-mutation AddIndex($i: IndexInput!) {
-    addIndex(index: $i) {
-        ... on Review {
-            body
-        }
-    }
-}
-```
-
-The mutation will need the `id` from the previous mutation.  You also decide
-under which words to index the review.  The words are case-insensitive and they
-are separated by whitespaces.
-
-```json
-{
-  "i": {
-    "typename": "Review",
-    "id": "<review's id goes here>",
-    "words": "Bob Reviewer book fascinating far"
   }
 }
 ```
