@@ -86,6 +86,9 @@ const indexWord = (word, indexEntry) => {
     if (!(indices.get(word).has(indexEntry.id))) {
         console.log(`Creating index entry for ${indexEntry.id} under "${word} with score ${indexEntry.score}"`)
         indices.get(word).set(indexEntry.id, indexEntry)
+    } else if (indices.get(word).get(indexEntry.id).score < indexEntry.score) {
+        console.log(`Replacing index entry for ${indexEntry.id} under "${word} with score ${indexEntry.score}"`)
+        indices.get(word).set(indexEntry.id, indexEntry)
     }
 }
 
