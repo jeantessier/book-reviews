@@ -38,7 +38,8 @@ const indexBook = book => {
         id: book.id,
         __typename: 'Book',
     }
-    // indexWords(book.name.replaceAll('_', ' '), indexEntry)
+    indexWords(book.id, indexEntry)
+    // indexWords(book.name.replace(/_/g, ' '), indexEntry)
     book.titles.forEach(title => indexWords(normalize(title.title), indexEntry))
     book.authors.forEach(author => indexWords(normalize(author), indexEntry))
     indexWords(normalize(book.publisher), indexEntry)
@@ -50,6 +51,7 @@ const indexReview = review => {
         id: review.id,
         __typename: 'Review',
     }
+    indexWords(review.id, indexEntry)
     indexWords(normalize(review.body), indexEntry)
 }
 
@@ -58,8 +60,10 @@ const indexUser = user => {
         id: user.id,
         __typename: 'User',
     }
+    indexWords(user.id, indexEntry)
     indexWords(normalize(user.name), indexEntry)
     indexWords(user.email, indexEntry)
+    indexWords(user.email.replace(/@/, ' '), indexEntry)
 }
 
 const indexWords = (words, indexEntry) => {
