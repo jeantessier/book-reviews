@@ -13,49 +13,33 @@ const topicName = /book-reviews.(books|reviews|users)/
 startConsumer(
     groupId,
     topicName,
-    async ({ topic, partition, message }) => {
-        console.log(`====================   ${new Date().toJSON()}   ====================`)
-        console.log("Received message!")
-        console.log(`    topic: ${topic}`)
-        console.log(`    partition: ${partition}`)
-        console.log(`    offset: ${message.offset}`)
-        const key = message.key?.toString()
-        console.log(`    key: ${key}`)
-        const { type, ...review } = JSON.parse(message.value.toString())
-        console.log(`    ${type} ${JSON.stringify(review)}`)
-        switch (type) {
-            case 'removeBook':
-                [ ...reviews ].filter(([ _, review ]) => key === review.book.id).forEach(([ id, _ ]) => {
-                    sendMessage(
-                        'book-reviews.reviews',
-                        {
-                            type: 'removeReview',
-                            id,
-                        }
-                    )
-                })
-                break
-            case 'addReview':
-                reviews.set(key, review)
-                break
-            case 'removeReview':
-                reviews.delete(key)
-                break
-            case 'removeUser':
-                [ ...reviews ].filter(([ _, review ]) => key === review.reviewer.id).forEach(([ id, _ ]) => {
-                    sendMessage(
-                        'book-reviews.reviews',
-                        {
-                            type: 'removeReview',
-                            id,
-                        }
-                    )
-                })
-                break
-            default:
-                console.log("Skipping...")
-                break
+    {
+        removeBook: key => {
+            [ ...reviews ].filter(([ _, review ]) => key === review.book.id).forEach(([ id, _ ]) => {
+                sendMessage(
+                    'book-reviews.reviews',
+                    {
+                        type: 'removeReview',
+                        id,
+                    }
+                )
+            })
+        },
+        addReview: (key, review) => reviews.set(key, review),
+        removeReview: key => reviews.delete(key),
+        removeUser: key => {
+            [ ...reviews ].filter(([ _, review ]) => key === review.reviewer.id).forEach(([ id, _ ]) => {
+                sendMessage(
+                    'book-reviews.reviews',
+                    {
+                        type: 'removeReview',
+                        id,
+                    }
+                )
+            })
         }
+    },
+    () => {
         console.log("    reviews:")
         dump(reviews)
     }

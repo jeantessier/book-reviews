@@ -17,39 +17,15 @@ const topicName = /book-reviews.(books|reviews|users)/
 startConsumer(
     groupId,
     topicName,
-    async ({ topic, partition, message }) => {
-        console.log(`====================   ${new Date().toJSON()}   ====================`)
-        console.log("Received message!")
-        console.log(`    topic: ${topic}`)
-        console.log(`    partition: ${partition}`)
-        console.log(`    offset: ${message.offset}`)
-        const key = message.key?.toString()
-        console.log(`    key: ${key}`)
-        const { type, ...body } = JSON.parse(message.value.toString())
-        console.log(`    ${type} ${JSON.stringify(body)}`)
-        switch (type) {
-            case 'addBook':
-                indexBook(body)
-                break
-            case 'removeBook':
-                scrubIndices('Book', key)
-                break
-            case 'addReview':
-                indexReview(body)
-                break
-            case 'removeReview':
-                scrubIndices('Review', key)
-                break
-            case 'addUser':
-                indexUser(body)
-                break
-            case 'removeUser':
-                scrubIndices('User', key)
-                break
-            default:
-                console.log("Skipping...")
-                break
-        }
+    {
+        addBook: (_, book) => indexBook(book),
+        removeBook: key => scrubIndices('Book', key),
+        addReview: (_, review) => indexReview(review),
+        removeReview: key => scrubIndices('Review', key),
+        addUser: (_, user) => indexUser(user),
+        removeUser: key => scrubIndices('User', key),
+    },
+    () => {
         console.log("    indices:")
         dump(indices)
     }

@@ -13,27 +13,11 @@ const topicName = 'book-reviews.users'
 startConsumer(
     groupId,
     topicName,
-    async ({ topic, partition, message }) => {
-        console.log(`====================   ${new Date().toJSON()}   ====================`)
-        console.log("Received message!")
-        console.log(`    topic: ${topic}`)
-        console.log(`    partition: ${partition}`)
-        console.log(`    offset: ${message.offset}`)
-        const key = message.key?.toString()
-        console.log(`    key: ${key}`)
-        const { type, ...user } = JSON.parse(message.value.toString())
-        console.log(`    ${type} ${JSON.stringify(user)}`)
-        switch (type) {
-            case 'addUser':
-                users.set(key, user)
-                break
-            case 'removeUser':
-                users.delete(key)
-                break
-            default:
-                console.log("Skipping...")
-                break
-        }
+    {
+        addUser: (key, user) => users.set(key, user),
+        removeUser: key => users.delete(key),
+    },
+    () => {
         console.log("    users:")
         dump(users)
     }
