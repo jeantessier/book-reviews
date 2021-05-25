@@ -4,4 +4,8 @@ class Book < ApplicationRecord
   has_many :titles, class_name: BookTitle.to_s, dependent: :destroy, inverse_of: :book
   has_many :reviews, dependent: :destroy, inverse_of: :book
   has_many :reviewers, through: :reviews
+
+  def title
+    titles.first.title
+  end
 end
