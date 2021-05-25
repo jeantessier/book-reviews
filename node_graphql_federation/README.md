@@ -102,12 +102,14 @@ It creates two users:
 - Jean Tessier
 - Simon Tolkien
 
-It creates four books:
+It creates six books:
 
+- The Hobbit
 - The Lord of the Rings
 - The Fellowship of the Ring
 - The Two Towers
 - The Return of the King
+- The Silmarillion
 
 With a sampling of reviews by the two users.
 
