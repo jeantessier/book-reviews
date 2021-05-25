@@ -39,7 +39,7 @@ const indexBook = book => {
         __typename: 'Book',
     }
     indexWords(book.id, indexEntry)
-    // indexWords(book.name.replace(/_/g, ' '), indexEntry)
+    indexWords(book.name, indexEntry)
     book.titles.forEach(title => indexWords(normalize(title.title), indexEntry))
     book.authors.forEach(author => indexWords(normalize(author), indexEntry))
     indexWords(normalize(book.publisher), indexEntry)
