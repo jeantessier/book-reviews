@@ -53,6 +53,12 @@ const indexReview = review => {
     }
     indexWords(review.id, indexEntry)
     indexWords(normalize(review.body), indexEntry)
+    if (review.start) {
+        indexWords(normalize(review.start), indexEntry)
+    }
+    if (review.stop) {
+        indexWords(normalize(review.stop), indexEntry)
+    }
 }
 
 const indexUser = user => {
