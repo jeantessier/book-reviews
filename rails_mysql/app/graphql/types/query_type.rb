@@ -91,7 +91,7 @@ module Types
     private
 
     def search_books(q)
-      Book.joins([:titles, :authors, :years]).where('publisher LIKE :q OR book_titles.title LIKE :q OR book_titles.link LIKE :q OR book_authors.author LIKE :q OR book_years.year LIKE :q', {q: "%#{q}%"}).distinct
+      Book.joins([:titles, :authors, :years]).where('name LIKE :q OR publisher LIKE :q OR book_titles.title LIKE :q OR book_titles.link LIKE :q OR book_authors.author LIKE :q OR book_years.year LIKE :q', {q: "%#{q}%"}).distinct
     end
 
     def search_reviews(q)
