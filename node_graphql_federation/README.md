@@ -425,3 +425,17 @@ And structure the variables like this:
   "id": "<id of the review being removed goes here>"
 }
 ```
+
+## Extracting the Schema
+
+You can extract the federated shema from services that you started manually.
+
+> NOTE: You will need Apollo's `rover` tool to
+> [extract the GraphQL schema](https://www.apollographql.com/docs/federation/quickstart/).
+> ```bash
+> npm install -g @apollo/rover
+> ```
+
+```bash
+extract_schema.sh
+```

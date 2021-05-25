@@ -1,0 +1,21 @@
+subgraphs:
+  books:
+    routing_url: http://localhost:4001
+    schema:
+      file: ./books/subgraph.graphql
+  reviews:
+    routing_url: http://localhost:4002
+    schema:
+      file: ./reviews/subgraph.graphql
+  users:
+    routing_url: http://localhost:4003
+    schema:
+      file: ./users/subgraph.graphql
+  search:
+    routing_url: http://localhost:4004
+    schema:
+      file: ./search/subgraph.graphql
+  signatures:
+    routing_url: http://localhost:4005
+    schema:
+      file: ./signatures/subgraph.graphql
