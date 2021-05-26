@@ -437,5 +437,5 @@ You can extract the federated shema from services that you started manually.
 > ```
 
 ```bash
-extract_schema.sh
+extract_schema.zsh
 ```
