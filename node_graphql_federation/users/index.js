@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { UserInputError } = require('apollo-server-errors')
 const { buildFederatedSchema } = require('@apollo/federation')
 const { v4: uuidv4 } = require('uuid')
 
@@ -60,6 +61,11 @@ const typeDefs = gql`
 `
 
 const addUser = async (_, { user }) => {
+    const userForEmail = fetchUserByEmail(user.email)
+    if (userForEmail) {
+        throw new UserInputError(`Email "${user.email}" is already taken.`)
+    }
+
     user.id = uuidv4()
 
     await sendMessage(
@@ -75,6 +81,17 @@ const addUser = async (_, { user }) => {
 
 const updateUser = async (_, { update }) => {
     const user = fetchUserById(update.id)
+    if (!user) {
+        throw new UserInputError(`No user with ID "${update.id}".`)
+    }
+
+    if (update.email) {
+        const userForEmail = fetchUserByEmail(update.email)
+        if (userForEmail && userForEmail.id !== user.id) {
+            throw new UserInputError(`Email "${update.email}" is already taken.`)
+        }
+    }
+
     const userUpdatedMessage = {
         ...user,
         ...update,
@@ -92,19 +109,20 @@ const updateUser = async (_, { update }) => {
 }
 
 const removeUser = async (_, { id }) => {
-    const found = fetchUserById(id) !== undefined
-
-    if (found) {
-        await sendMessage(
-            'book-reviews.users',
-            {
-                type: 'userRemoved',
-                id,
-            }
-        )
+    const user = fetchUserById(id)
+    if (!user) {
+        throw new UserInputError(`No user with ID "${id}".`)
     }
 
-    return found
+    await sendMessage(
+        'book-reviews.users',
+        {
+            type: 'userRemoved',
+            id,
+        }
+    )
+
+    return true
 }
 
 // Resolvers define the technique for fetching the types defined in the
@@ -130,6 +148,10 @@ const resolvers = {
 }
 
 const fetchUserById = id => users.get(id)
+const fetchUserByEmail = email => {
+    const userEntry = Array.from(users.entries()).find(([_, user]) => user.email === email)
+    return userEntry ? userEntry[1] : undefined
+}
 
 const server = new ApolloServer({
     schema: buildFederatedSchema([ { typeDefs, resolvers } ]),

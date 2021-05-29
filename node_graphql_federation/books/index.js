@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { UserInputError } = require('apollo-server-errors')
 const { buildFederatedSchema } = require('@apollo/federation')
 const { v4: uuidv4 } = require('uuid')
 
@@ -89,6 +90,11 @@ const typeDefs = gql`
 `
 
 const addBook = async (_, { book }) => {
+    const bookForName = fetchBookByName(book.name)
+    if (bookForName) {
+        throw new UserInputError(`Name "${book.name}" is already taken.`)
+    }
+
     book.id = uuidv4()
 
     await sendMessage(
@@ -104,6 +110,17 @@ const addBook = async (_, { book }) => {
 
 const updateBook = async (_, { update }) => {
     const book = fetchBookById(update.id)
+    if (!book) {
+        throw new UserInputError(`No book with ID "${update.id}".`)
+    }
+
+    if (update.name) {
+        const bookForName = fetchBookByName(update.name)
+        if (bookForName && bookForName.id !== book.id) {
+            throw new UserInputError(`Name "${update.name}" is already taken.`)
+        }
+    }
+
     const bookUpdatedMessage = {
         ...book,
         ...update,
@@ -121,19 +138,20 @@ const updateBook = async (_, { update }) => {
 }
 
 const removeBook = async (_, { id }) => {
-    const found = fetchBookById(id) !== undefined
-
-    if (found) {
-        await sendMessage(
-            'book-reviews.books',
-            {
-                type: 'bookRemoved',
-                id,
-            }
-        )
+    const book = fetchBookById(id)
+    if (!book) {
+        throw new UserInputError(`No book with ID "${id}".`)
     }
 
-    return found
+    await sendMessage(
+        'book-reviews.books',
+        {
+            type: 'bookRemoved',
+            id,
+        }
+    )
+
+    return true
 }
 
 // Resolvers define the technique for fetching the types defined in the
@@ -160,6 +178,10 @@ const resolvers = {
 }
 
 const fetchBookById = id => books.get(id)
+const fetchBookByName = name => {
+    const bookEntry = Array.from(books.entries()).find(([_, book]) => book.name === name)
+    return bookEntry ? bookEntry[1] : undefined
+}
 
 const server = new ApolloServer({
     schema: buildFederatedSchema([ { typeDefs, resolvers } ]),

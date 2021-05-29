@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { UserInputError } = require('apollo-server-errors')
 const { buildFederatedSchema } = require('@apollo/federation')
 const { v4: uuidv4 } = require('uuid')
 
@@ -120,6 +121,10 @@ const addReview = async (_, { review }) => {
 
 const updateReview = async (_, { update }) => {
     const review = fetchReviewById(update.id)
+    if (!review) {
+        throw new UserInputError(`No review with ID "${update.id}".`)
+    }
+
     const reviewUpdatedMessage = {
         ...review,
         ...update,
@@ -137,19 +142,20 @@ const updateReview = async (_, { update }) => {
 }
 
 const removeReview = async (_, { id }) => {
-    const found = fetchReviewById(id) !== undefined
-
-    if (found) {
-        await sendMessage(
-            'book-reviews.reviews',
-            {
-                type: 'reviewRemoved',
-                id,
-            }
-        )
+    const review = fetchReviewById(update.id)
+    if (!review) {
+        throw new UserInputError(`No review with ID "${update.id}".`)
     }
 
-    return found
+    await sendMessage(
+        'book-reviews.reviews',
+        {
+            type: 'reviewRemoved',
+            id,
+        }
+    )
+
+    return true
 }
 
 // Resolvers define the technique for fetching the types defined in the
