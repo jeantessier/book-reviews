@@ -14,7 +14,7 @@ startConsumer(
     groupId,
     topicName,
     {
-        removeBook: key => {
+        bookRemoved: key => {
             [ ...reviews ].filter(([ _, review ]) => key === review.book.id).forEach(([ id, _ ]) => {
                 sendMessage(
                     'book-reviews.reviews',
@@ -25,10 +25,10 @@ startConsumer(
                 )
             })
         },
-        addReview: (key, review) => reviews.set(key, review),
-        updateReview: (key, review) => reviews.set(key, review),
-        removeReview: key => reviews.delete(key),
-        removeUser: key => {
+        reviewAdded: (key, review) => reviews.set(key, review),
+        reviewUpdated: (key, review) => reviews.set(key, review),
+        reviewRemoved: key => reviews.delete(key),
+        userRemoved: key => {
             [ ...reviews ].filter(([ _, review ]) => key === review.reviewer.id).forEach(([ id, _ ]) => {
                 sendMessage(
                     'book-reviews.reviews',
@@ -101,26 +101,26 @@ const typeDefs = gql`
 `
 
 const addReview = async (_, { review }) => {
-    const { reviewerId, bookId, ...addReviewMessage } = review
+    const { reviewerId, bookId, ...reviewAddedMessage } = review
 
-    addReviewMessage.id = uuidv4()
-    addReviewMessage.reviewer = { __typename: 'User', id: reviewerId }
-    addReviewMessage.book = { __typename: 'Book', id: bookId }
+    reviewAddedMessage.id = uuidv4()
+    reviewAddedMessage.reviewer = { __typename: 'User', id: reviewerId }
+    reviewAddedMessage.book = { __typename: 'Book', id: bookId }
 
     await sendMessage(
         'book-reviews.reviews',
         {
-            type: 'addReview',
-            ...addReviewMessage,
+            type: 'reviewAdded',
+            ...reviewAddedMessage,
         }
     )
 
-    return addReviewMessage
+    return reviewAddedMessage
 }
 
 const updateReview = async (_, { update }) => {
     const review = fetchReviewById(update.id)
-    const updateReviewMessage = {
+    const reviewUpdatedMessage = {
         ...review,
         ...update,
     }
@@ -128,12 +128,12 @@ const updateReview = async (_, { update }) => {
     await sendMessage(
         'book-reviews.reviews',
         {
-            type: 'updateReview',
-            ...updateReviewMessage,
+            type: 'reviewUpdated',
+            ...reviewUpdatedMessage,
         }
     )
 
-    return updateReviewMessage
+    return reviewUpdatedMessage
 }
 
 const removeReview = async (_, { id }) => {
@@ -143,7 +143,7 @@ const removeReview = async (_, { id }) => {
         await sendMessage(
             'book-reviews.reviews',
             {
-                type: 'removeReview',
+                type: 'reviewRemoved',
                 id,
             }
         )

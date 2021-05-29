@@ -14,9 +14,9 @@ startConsumer(
     groupId,
     topicName,
     {
-        addBook: (key, book) => books.set(key, book),
-        updateBook: (key, book) => books.set(key, book),
-        removeBook: key => books.delete(key),
+        bookAdded: (key, book) => books.set(key, book),
+        bookUpdated: (key, book) => books.set(key, book),
+        bookRemoved: key => books.delete(key),
     },
     () => {
         console.log("    books:")
@@ -94,7 +94,7 @@ const addBook = async (_, { book }) => {
     await sendMessage(
         'book-reviews.books',
         {
-            type: 'addBook',
+            type: 'bookAdded',
             ...book,
         }
     )
@@ -104,7 +104,7 @@ const addBook = async (_, { book }) => {
 
 const updateBook = async (_, { update }) => {
     const book = fetchBookById(update.id)
-    const updateBookMessage = {
+    const bookUpdatedMessage = {
         ...book,
         ...update,
     }
@@ -112,12 +112,12 @@ const updateBook = async (_, { update }) => {
     await sendMessage(
         'book-reviews.books',
         {
-            type: 'updateBook',
-            ...updateBookMessage,
+            type: 'bookUpdated',
+            ...bookUpdatedMessage,
         }
     )
 
-    return updateBookMessage
+    return bookUpdatedMessage
 }
 
 const removeBook = async (_, { id }) => {
@@ -127,7 +127,7 @@ const removeBook = async (_, { id }) => {
         await sendMessage(
             'book-reviews.books',
             {
-                type: 'removeBook',
+                type: 'bookRemoved',
                 id,
             }
         )
