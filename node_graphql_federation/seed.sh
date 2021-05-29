@@ -7,7 +7,7 @@ function addUser() {
   local email=$1; shift
 
   http $GRAPHQL_ENDPOINT \
-    query='mutation AddUser($u: UserInput!) {addUser(user: $u) {id}}' \
+    query='mutation AddUser($u: AddUserInput!) {addUser(user: $u) {id}}' \
     variables:="{\"u\": {\"name\": \"${name}\", \"email\": \"${email}\"}}" \
     operationName=AddUser | \
   jq --raw-output ".data.addUser.id"
@@ -21,7 +21,7 @@ function addBook() {
   local years=$1; shift
 
   http $GRAPHQL_ENDPOINT \
-    query='mutation AddBook($b: BookInput!) {addBook(book: $b) {id}}' \
+    query='mutation AddBook($b: AddBookInput!) {addBook(book: $b) {id}}' \
     variables:="{\"b\": {\"name\": \"${name}\", \"titles\": ${titles}, \"publisher\": \"${publisher}\", \"authors\": ${authors}, \"years\": ${years}}}" \
     operationName=AddBook | \
   jq --raw-output ".data.addBook.id"
@@ -35,7 +35,7 @@ function addReview() {
   local stop=$1; shift
 
   http $GRAPHQL_ENDPOINT \
-    query='mutation AddReview($r: ReviewInput!) {addReview(review: $r) {id}}' \
+    query='mutation AddReview($r: AddReviewInput!) {addReview(review: $r) {id}}' \
     variables:="{\"r\": {\"reviewerId\": \"${reviewer_id}\", \"bookId\": \"${book_id}\", \"body\": \"${body}\", \"start\": \"${start}\", \"stop\": \"${stop}\"}}" \
     operationName=AddReview | \
   jq --raw-output ".data.addReview.id"

@@ -281,7 +281,7 @@ And, you call it the ID of the book:
 You can use this query to create a new book entry:
 
 ```graphql
-mutation AddBook($b: BookInput!) {
+mutation AddBook($b: AddBookInput!) {
     addBook(book: $b) {
         id
         name
@@ -316,7 +316,7 @@ And structure the variables like this:
 You can use this query to register a new user:
 
 ```graphql
-mutation AddUser($u: UserInput!) {
+mutation AddUser($u: AddUserInput!) {
     addUser(user: $u) {
         id
         name
@@ -340,7 +340,7 @@ And structure the variables like this:
 You can use this query to add a new review:
 
 ```graphql
-mutation AddReview($r: ReviewInput!) {
+mutation AddReview($r: AddReviewInput!) {
     addReview(review: $r) {
         id
         book {
