@@ -19,10 +19,13 @@ startConsumer(
     topicName,
     {
         addBook: (_, book) => indexBook(book),
+        updateBook: (_, book) => indexBook(book),
         removeBook: key => scrubIndices(key),
         addReview: (_, review) => indexReview(review),
+        updateReview: (_, review) => indexReview(review),
         removeReview: key => scrubIndices(key),
         addUser: (_, user) => indexUser(user),
+        updateUser: (_, user) => indexUser(user),
         removeUser: key => scrubIndices(key),
     },
     () => {

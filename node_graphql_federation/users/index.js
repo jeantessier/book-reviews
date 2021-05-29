@@ -15,6 +15,7 @@ startConsumer(
     topicName,
     {
         addUser: (key, user) => users.set(key, user),
+        updateUser: (key, user) => users.set(key, user),
         removeUser: key => users.delete(key),
     },
     () => {
@@ -35,9 +36,15 @@ const typeDefs = gql`
     email: String!
   }
 
-  input UserInput {
+  input AddUserInput {
     name: String!
     email: String!
+  }
+
+  input UpdateUserInput {
+      id: ID!
+      name: String
+      email: String
   }
 
   type Query {
@@ -46,7 +53,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addUser(user: UserInput): User
+    addUser(user: AddUserInput): User
+    updateUser(update: UpdateUserInput): User
     removeUser(id: ID!): Boolean!
   }
 `
@@ -63,6 +71,24 @@ const addUser = async (_, { user }) => {
     )
 
     return user
+}
+
+const updateUser = async (_, { update }) => {
+    const user = fetchUserById(update.id)
+    const updateUserMessage = {
+        ...user,
+        ...update,
+    }
+
+    await sendMessage(
+        'book-reviews.users',
+        {
+            type: 'updateUser',
+            ...updateUserMessage,
+        }
+    )
+
+    return updateUserMessage
 }
 
 const removeUser = async (_, { id }) => {
@@ -90,6 +116,7 @@ const resolvers = {
     },
     Mutation: {
         addUser,
+        updateUser,
         removeUser,
     },
     User: {

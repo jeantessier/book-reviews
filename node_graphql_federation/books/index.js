@@ -15,6 +15,7 @@ startConsumer(
     topicName,
     {
         addBook: (key, book) => books.set(key, book),
+        updateBook: (key, book) => books.set(key, book),
         removeBook: key => books.delete(key),
     },
     () => {
@@ -53,12 +54,21 @@ const typeDefs = gql`
     link: String
   }
 
-  input BookInput {
+  input AddBookInput {
     name: String!
     titles: [TitleInput!]!
     authors: [String!]!
     publisher: String!
     years: [String!]!
+  }
+
+  input UpdateBookInput {
+      id: ID!
+      name: String
+      titles: [TitleInput!]
+      authors: [String!]
+      publisher: String
+      years: [String!]
   }
 
   input TitleInput {
@@ -72,7 +82,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addBook(book: BookInput): Book
+    addBook(book: AddBookInput): Book
+    updateBook(update: UpdateBookInput): Book
     removeBook(id: ID!): Boolean!
   }
 `
@@ -89,6 +100,24 @@ const addBook = async (_, { book }) => {
     )
 
     return book
+}
+
+const updateBook = async (_, { update }) => {
+    const book = fetchBookById(update.id)
+    const updateBookMessage = {
+        ...book,
+        ...update,
+    }
+
+    await sendMessage(
+        'book-reviews.books',
+        {
+            type: 'updateBook',
+            ...updateBookMessage,
+        }
+    )
+
+    return updateBookMessage
 }
 
 const removeBook = async (_, { id }) => {
@@ -116,6 +145,7 @@ const resolvers = {
     },
     Mutation: {
         addBook,
+        updateBook,
         removeBook,
     },
     Book: {

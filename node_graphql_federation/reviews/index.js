@@ -26,6 +26,7 @@ startConsumer(
             })
         },
         addReview: (key, review) => reviews.set(key, review),
+        updateReview: (key, review) => reviews.set(key, review),
         removeReview: key => reviews.delete(key),
         removeUser: key => {
             [ ...reviews ].filter(([ _, review ]) => key === review.reviewer.id).forEach(([ id, _ ]) => {
@@ -60,10 +61,17 @@ const typeDefs = gql`
     stop: String
   }
 
-  input ReviewInput {
+  input AddReviewInput {
       reviewerId: ID!
       bookId: ID!
       body: String!
+      start: String
+      stop: String
+  }
+
+  input UpdateReviewInput {
+      id: ID!
+      body: String
       start: String
       stop: String
   }
@@ -86,7 +94,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addReview(review: ReviewInput): Review
+    addReview(review: AddReviewInput): Review
+    updateReview(update: UpdateReviewInput): Review
     removeReview(id: ID!): Boolean!
   }
 `
@@ -107,6 +116,24 @@ const addReview = async (_, { review }) => {
     )
 
     return addReviewMessage
+}
+
+const updateReview = async (_, { update }) => {
+    const review = fetchReviewById(update.id)
+    const updateReviewMessage = {
+        ...review,
+        ...update,
+    }
+
+    await sendMessage(
+        'book-reviews.reviews',
+        {
+            type: 'updateReview',
+            ...updateReviewMessage,
+        }
+    )
+
+    return updateReviewMessage
 }
 
 const removeReview = async (_, { id }) => {
@@ -134,6 +161,7 @@ const resolvers = {
     },
     Mutation: {
         addReview,
+        updateReview,
         removeReview,
     },
     Review: {
