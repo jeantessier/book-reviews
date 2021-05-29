@@ -19,11 +19,11 @@ startConsumer(
     topicName,
     {
         addBook: (_, book) => indexBook(book),
-        removeBook: key => scrubIndices('Book', key),
+        removeBook: key => scrubIndices(key),
         addReview: (_, review) => indexReview(review),
-        removeReview: key => scrubIndices('Review', key),
+        removeReview: key => scrubIndices(key),
         addUser: (_, user) => indexUser(user),
-        removeUser: key => scrubIndices('User', key),
+        removeUser: key => scrubIndices(key),
     },
     () => {
         console.log("    indices:")
@@ -34,54 +34,121 @@ startConsumer(
 })
 
 const indexBook = book => {
-    const indexEntry = {
-        id: book.id,
-        __typename: 'Book',
-    }
-    indexWords(book.id, indexEntry)
-    indexWords(book.name, indexEntry)
-    book.titles.forEach(title => indexWords(normalize(title.title), indexEntry))
-    book.authors.forEach(author => indexWords(normalize(author), indexEntry))
-    indexWords(normalize(book.publisher), indexEntry)
-    book.years.forEach(year => indexWords(year, indexEntry))
+    const corpus = [
+        book.id,
+        book.name,
+        book.titles.map(title => normalize(title.title)),
+        book.authors.map(author => normalize(author)),
+        normalize(book.publisher),
+        book.years,
+    ].flat()
+    updateIndex(
+        corpus,
+        {
+            id: book.id,
+            __typename: 'Book',
+        }
+    )
 }
 
 const indexReview = review => {
-    const indexEntry = {
-        id: review.id,
-        __typename: 'Review',
-    }
-    indexWords(review.id, indexEntry)
-    indexWords(normalize(review.body), indexEntry)
+    const corpus = [
+        review.id,
+        normalize(review.body)
+    ]
     if (review.start) {
-        indexWords(normalize(review.start), indexEntry)
+        corpus.push(normalize(review.start))
     }
     if (review.stop) {
-        indexWords(normalize(review.stop), indexEntry)
+        corpus.push(normalize(review.stop))
     }
+    updateIndex(
+        corpus,
+        {
+            id: review.id,
+            __typename: 'Review',
+        }
+    )
 }
 
 const indexUser = user => {
-    const indexEntry = {
-        id: user.id,
-        __typename: 'User',
-    }
-    indexWords(user.id, indexEntry)
-    indexWords(normalize(user.name), indexEntry)
-    indexWords(user.email, indexEntry)
-    indexWords(user.email.replace(/@/, ' '), indexEntry)
+    const corpus = [
+        user.id,
+        normalize(user.name),
+        user.email,
+        user.email.replace(/@/, ' '),
+    ]
+    updateIndex(
+        corpus,
+        {
+            id: user.id,
+            __typename: 'User',
+        }
+    )
 }
 
-const indexWords = (words, indexEntry) => {
-    const wordScores = new Map()
-    words.toLowerCase().split(/\s+/).forEach(word => {
-        if (!wordScores.has(word)) {
-            wordScores.set(word, 0)
+const scrubIndices = id => {
+    updateIndex(
+        [],
+        {
+            id,
         }
-        wordScores.set(word, wordScores.get(word) + word.length)
+    )
+}
+
+const updateIndex = (corpus, indexEntry) => {
+    const oldIndexEntries = findCurrentIndexEntries(indexEntry.id)
+    console.log('oldIndexEntries')
+    oldIndexEntries.forEach((entry, word) => console.log(`    ${word}: ${JSON.stringify(entry)}`))
+
+    const newIndexEntries = computeNewIndexEntries(corpus, indexEntry)
+    console.log('newIndexEntries')
+    newIndexEntries.forEach((entry, word) => console.log(`    ${word}: ${JSON.stringify(entry)}`))
+
+    Array
+        .from(oldIndexEntries.keys())
+        .filter(word => !newIndexEntries.has(word))
+        .forEach(word => scrubIndex(word, indexEntry.id))
+
+    newIndexEntries.forEach((scoredIndexEntry, word) => indexWord(word, scoredIndexEntry))
+}
+
+const findCurrentIndexEntries = id => {
+    indexEntries = new Map()
+    indices.forEach((index, word) => {
+        if (index.has(id)) {
+            indexEntries.set(word, index.get(id))
+        }
+    })
+    return indexEntries
+}
+
+const computeNewIndexEntries = (corpus, indexEntry) => {
+    indexEntries = new Map()
+
+    const wordScores = new Map()
+    corpus.forEach(words => {
+        computeScoresForWords(words).forEach((score, word) => {
+            wordScores.set(word, score + (wordScores.has(word) ? wordScores.get(word) : 0))
+        })
     })
 
-    wordScores.forEach((score, word) => indexWord(word, { score: score / words.length, ...indexEntry }))
+    wordScores.forEach((score, word) => indexEntries.set(word, {score, ...indexEntry}))
+
+    return indexEntries
+}
+
+const computeScoresForWords = words => {
+    scores = new Map()
+
+    const wordScores = new Map()
+    words.toLowerCase().split(/\s+/).forEach(word => {
+        wordScores.set(word, word.length + (wordScores.has(word) ? wordScores.get(word) : 0))
+    })
+
+    wordScores.forEach((score, word) => scores.set(word, score / words.length))
+
+    return scores
 }
 
 const indexWord = (word, indexEntry) => {
@@ -92,23 +159,19 @@ const indexWord = (word, indexEntry) => {
     if (!(indices.get(word).has(indexEntry.id))) {
         console.log(`Creating index entry for ${indexEntry.id} under "${word} with score ${indexEntry.score}"`)
         indices.get(word).set(indexEntry.id, indexEntry)
-    } else if (indices.get(word).get(indexEntry.id).score < indexEntry.score) {
-        console.log(`Replacing index entry for ${indexEntry.id} under "${word} with score ${indexEntry.score}"`)
+    } else if (indices.get(word).get(indexEntry.id).score !== indexEntry.score) {
+        console.log(`Updating index entry for ${indexEntry.id} under "${word}, score was ${indices.get(word).get(indexEntry.id).score} and is now ${indexEntry.score}"`)
         indices.get(word).set(indexEntry.id, indexEntry)
     }
 }
 
-const scrubIndices = (typename, id) => {
-    indices.forEach((index, word) => {
-        if (index.get(id)?.__typename === typename) {
-            console.log(`Removing index entry for ${id} under "${word}"`)
-            index.delete(id)
-        }
-        if (indices.get(word).size === 0) {
-            console.log(`Removing empty index for "${word}"`)
-            indices.delete(word)
-        }
-    })
+const scrubIndex = (word, id) => {
+    console.log(`Removing index entry for ${id} under "${word}"`)
+    indices.get(word).delete(id)
+    if (indices.get(word).size === 0) {
+        console.log(`Removing empty index for "${word}"`)
+        indices.delete(word)
+    }
 }
 
 const normalize = text => text.replace(/[!?.&]/g, '')
