@@ -198,7 +198,7 @@ const typeDefs = gql`
   union SearchResult = Book | Review | User
 
   type Query {
-    search(q: String): [SearchResult!]!
+    search(q: String!): [SearchResult!]!
   }
 `
 
