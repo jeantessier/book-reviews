@@ -42,8 +42,10 @@ startConsumer(
         }
     },
     () => {
-        console.log("    reviews:")
-        dump(reviews)
+        if (process.env.DEBUG) {
+            console.log("    reviews:")
+            dump(reviews)
+        }
     }
 ).then(() => {
     console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
@@ -202,8 +204,10 @@ const server = new ApolloServer({
                 console.log(`    query: ${requestContext.request.query}`)
                 console.log(`    operationName: ${requestContext.request.operationName}`)
                 console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
-                console.log("    reviews:")
-                dump(reviews)
+                if (process.env.DEBUG) {
+                    console.log("    reviews:")
+                    dump(reviews)
+                }
             },
         },
     ],

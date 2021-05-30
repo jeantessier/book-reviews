@@ -76,6 +76,9 @@ do
 done
 ```
 
+If you define the `DEBUG` environment variable, the services will output extra
+information about their internal state as they process requests and messages.
+
 #### Starting the Gateway
 
 ```bash

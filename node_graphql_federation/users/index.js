@@ -20,8 +20,10 @@ startConsumer(
         userRemoved: key => users.delete(key),
     },
     () => {
-        console.log("    users:")
-        dump(users)
+        if (process.env.DEBUG) {
+            console.log("    users:")
+            dump(users)
+        }
     }
 ).then(() => {
     console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
@@ -163,8 +165,10 @@ const server = new ApolloServer({
                 console.log(`    query: ${requestContext.request.query}`)
                 console.log(`    operationName: ${requestContext.request.operationName}`)
                 console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
-                console.log("    users:")
-                dump(users)
+                if (process.env.DEBUG) {
+                    console.log("    users:")
+                    dump(users)
+                }
             },
         },
     ],

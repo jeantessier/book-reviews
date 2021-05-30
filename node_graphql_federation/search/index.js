@@ -29,8 +29,10 @@ startConsumer(
         userRemoved: key => scrubIndices(key),
     },
     () => {
-        console.log("    indices:")
-        dump(indices)
+        if (process.env.DEBUG) {
+            console.log("    indices:")
+            dump(indices)
+        }
     }
 ).then(() => {
     console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
@@ -101,12 +103,16 @@ const scrubIndices = id => {
 
 const updateIndex = (corpus, indexEntry) => {
     const oldIndexEntries = findCurrentIndexEntries(indexEntry.id)
-    console.log('oldIndexEntries')
-    oldIndexEntries.forEach((entry, word) => console.log(`    ${word}: ${JSON.stringify(entry)}`))
+    if (process.env.DEBUG) {
+        console.log('oldIndexEntries')
+        oldIndexEntries.forEach((entry, word) => console.log(`    ${word}: ${JSON.stringify(entry)}`))
+    }
 
     const newIndexEntries = computeNewIndexEntries(corpus, indexEntry)
-    console.log('newIndexEntries')
-    newIndexEntries.forEach((entry, word) => console.log(`    ${word}: ${JSON.stringify(entry)}`))
+    if (process.env.DEBUG) {
+        console.log('newIndexEntries')
+        newIndexEntries.forEach((entry, word) => console.log(`    ${word}: ${JSON.stringify(entry)}`))
+    }
 
     Array
         .from(oldIndexEntries.keys())
@@ -156,23 +162,33 @@ const computeScoresForWords = words => {
 
 const indexWord = (word, indexEntry) => {
     if (!(indices.has(word))) {
-        console.log(`Creating index for "${word}"`)
+        if (process.env.DEBUG) {
+            console.log(`Creating index for "${word}"`)
+        }
         indices.set(word, new Map())
     }
     if (!(indices.get(word).has(indexEntry.id))) {
-        console.log(`Creating index entry for ${indexEntry.id} under "${word}" with score ${indexEntry.score}`)
+        if (process.env.DEBUG) {
+            console.log(`Creating index entry for ${indexEntry.id} under "${word}" with score ${indexEntry.score}`)
+        }
         indices.get(word).set(indexEntry.id, indexEntry)
     } else if (indices.get(word).get(indexEntry.id).score !== indexEntry.score) {
-        console.log(`Updating index entry for ${indexEntry.id} under "${word}", score was ${indices.get(word).get(indexEntry.id).score} and is now ${indexEntry.score}`)
+        if (process.env.DEBUG) {
+            console.log(`Updating index entry for ${indexEntry.id} under "${word}", score was ${indices.get(word).get(indexEntry.id).score} and is now ${indexEntry.score}`)
+        }
         indices.get(word).set(indexEntry.id, indexEntry)
     }
 }
 
 const scrubIndex = (word, id) => {
-    console.log(`Removing index entry for ${id} under "${word}"`)
+    if (process.env.DEBUG) {
+        console.log(`Removing index entry for ${id} under "${word}"`)
+    }
     indices.get(word).delete(id)
     if (indices.get(word).size === 0) {
-        console.log(`Removing empty index for "${word}"`)
+        if (process.env.DEBUG) {
+            console.log(`Removing empty index for "${word}"`)
+        }
         indices.delete(word)
     }
 }
@@ -250,8 +266,10 @@ const server = new ApolloServer({
                 console.log(`    query: ${requestContext.request.query}`)
                 console.log(`    operationName: ${requestContext.request.operationName}`)
                 console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
-                console.log("    indices:")
-                dump(indices)
+                if (process.env.DEBUG) {
+                    console.log("    indices:")
+                    dump(indices)
+                }
             },
         },
     ],
