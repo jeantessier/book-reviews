@@ -113,6 +113,20 @@ It creates six books:
 
 With a sampling of reviews by the two users.
 
+### Real Data
+
+You can reset Kafka with this command:
+
+```bash
+docker compose --file docker-compose.yml --file docker-compose.kafka-override.yml up -d --force-recreate kafka
+```
+
+This command will add data derived from `../data/Books_????-??-??*.md`.
+
+```bash
+$ ./Books_node_graphql_federation.pl | bash
+```
+
 ## Sample Queries
 
 You can access [`Playground`](http://localhost:4000) and copy the sample queries
