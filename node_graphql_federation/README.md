@@ -138,7 +138,7 @@ and their variables to the UI to call them easily.
 ### Searching
 
 Here is a sample `search` query.  It shows the titles of matching books, the
-bodies of macthing reviews, and the names of matching users.
+bodies of matching reviews, and the names of matching users.
 
 ```graphql
 query MySearch($q: String!) {
@@ -191,6 +191,49 @@ If you use the variables:
 
 It will return both users and all the books, because each one is related to at
 least one of these words.
+
+#### Query Plan
+
+If you need to know how the `search` chose and rank the results to a query, you
+can ask it to show its work with the `queryPlan` top-level GraphQL field.
+
+```graphql
+query MySearch($q: String!) {
+    queryPlan(q: $q) {
+        words
+        indices {
+            word
+            entries {
+                score
+                id
+                type
+            }
+        }
+        results {
+            totalWeight
+            weights {word weight}
+            id
+            type
+        }
+    }
+}
+```
+
+With the same variables as the `search` query.  For example:
+
+```json
+{
+  "q": "jean tolkien"
+}
+```
+
+The `words` section of the plan shows how the `search` service parsed the query.
+
+The `indices` section shows the internal indices of the `search` service that
+were relevant to the query.
+
+The `results` section shows how the `search` service computed the search
+results.
 
 #### Looking Up a Specific Entity
 

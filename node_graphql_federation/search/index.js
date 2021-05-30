@@ -213,10 +213,73 @@ const typeDefs = gql`
 
   union SearchResult = Book | Review | User
 
+  type QueryPlan {
+      words: [String!]!
+      indices: [MatchingIndex!]!
+      results: [MatchingResult!]!
+  }
+
+  type MatchingIndex {
+      word: String!
+      entries: [IndexEntry!]!
+  }
+  
+  type IndexEntry {
+      score: Float!
+      id: ID!
+      type: String!
+  }
+  
+  type MatchingResult {
+      weights: [MatchingResultWeight!]!
+      totalWeight: Float!
+      id: ID!
+      type: String!
+  }
+  
+  type MatchingResultWeight {
+      word: String!
+      weight: Float!
+  }
+  
   type Query {
+    queryPlan(q: String!): QueryPlan!
     search(q: String!): [SearchResult!]!
   }
 `
+
+const queryPlan = async (_, { q }) => {
+    const plan = {
+        words: q.toLowerCase().split(/\s+/),
+        indices: [],
+        results: [],
+    }
+
+    const resultsCollector = new Map()
+
+    plan.words.forEach(word => {
+        if (indices.has(word)) {
+            plan.indices.push({
+                word,
+                entries: [ ...indices.get(word).values() ].map(indexEntry => {
+                    return { type: indexEntry.__typename, ...indexEntry }
+                }),
+            })
+            indices.get(word).forEach((indexEntry, id) => {
+                if (resultsCollector.has(id)) {
+                    resultsCollector.get(id).weights.push({ word, weight: indexEntry.score })
+                    resultsCollector.get(id).totalWeight += indexEntry.score
+                } else {
+                    resultsCollector.set(id, { weights: [ { word, weight: indexEntry.score } ], totalWeight: indexEntry.score, id: indexEntry.id, type: indexEntry.__typename })
+                }
+            })
+        }
+    })
+
+    plan.results = [ ...resultsCollector.values() ].sort((match1, match2) => match2.totalWeight - match1.totalWeight)
+
+    return plan
+}
 
 const search = async (_, { q }) => {
     const resultsCollector = new Map()
@@ -234,7 +297,7 @@ const search = async (_, { q }) => {
         }
     })
 
-    const results = [ ...resultsCollector ].map(([ _, match ]) => match).sort((match1, match2) => match2.weight - match1.weight)
+    const results = [ ...resultsCollector.values() ].sort((match1, match2) => match2.weight - match1.weight)
 
     await sendMessage(
         'book-reviews.searches',
@@ -253,6 +316,7 @@ const search = async (_, { q }) => {
 const resolvers = {
     Query: {
         search,
+        queryPlan,
     },
 }
 
