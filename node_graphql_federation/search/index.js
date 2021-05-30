@@ -160,10 +160,10 @@ const indexWord = (word, indexEntry) => {
         indices.set(word, new Map())
     }
     if (!(indices.get(word).has(indexEntry.id))) {
-        console.log(`Creating index entry for ${indexEntry.id} under "${word} with score ${indexEntry.score}"`)
+        console.log(`Creating index entry for ${indexEntry.id} under "${word}" with score ${indexEntry.score}`)
         indices.get(word).set(indexEntry.id, indexEntry)
     } else if (indices.get(word).get(indexEntry.id).score !== indexEntry.score) {
-        console.log(`Updating index entry for ${indexEntry.id} under "${word}, score was ${indices.get(word).get(indexEntry.id).score} and is now ${indexEntry.score}"`)
+        console.log(`Updating index entry for ${indexEntry.id} under "${word}", score was ${indices.get(word).get(indexEntry.id).score} and is now ${indexEntry.score}`)
         indices.get(word).set(indexEntry.id, indexEntry)
     }
 }
