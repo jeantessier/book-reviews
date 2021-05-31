@@ -20,7 +20,7 @@ startConsumer(
                 sendMessage(
                     'book-reviews.reviews',
                     {
-                        type: 'removeReview',
+                        type: 'reviewRemoved',
                         id,
                     }
                 )
@@ -34,7 +34,7 @@ startConsumer(
                 sendMessage(
                     'book-reviews.reviews',
                     {
-                        type: 'removeReview',
+                        type: 'reviewRemoved',
                         id,
                     }
                 )
