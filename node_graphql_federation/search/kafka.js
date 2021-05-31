@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid')
 
 const {
     KAFKA_BOOTSTRAP_SERVER: bootstrapServer,
+    KAFKA_CLIENT_ID: clientId,
     KAFKA_USERNAME: username,
     KAFKA_PASSWORD: password,
 } = process.env
@@ -18,7 +19,7 @@ const groupId = process.env.KAFKA_CONSUMER_GROUP_ID ? process.env.KAFKA_CONSUMER
 // This creates a client instance that is configured to connect to the Kafka broker provided by
 // the environment variable KAFKA_BOOTSTRAP_SERVER
 const kafka = new Kafka({
-    clientId: '',
+    clientId: clientId || '',
     brokers: [ bootstrapServer ],
     ssl,
     sasl
