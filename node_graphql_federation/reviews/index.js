@@ -10,10 +10,29 @@ const { groupId, sendMessage, startConsumer } = require('./kafka')
 const reviews = new Map()
 const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`))
 
-const topicName = /book-reviews.(books|reviews|users)/
+const reviewsTopicName = 'book-reviews.reviews'
 startConsumer(
     groupId,
-    topicName,
+    reviewsTopicName,
+    {
+        reviewAdded: (key, review) => reviews.set(key, review),
+        reviewUpdated: (key, review) => reviews.set(key, review),
+        reviewRemoved: key => reviews.delete(key),
+    },
+    () => {
+        if (process.env.DEBUG) {
+            console.log("    reviews:")
+            dump(reviews)
+        }
+    }
+).then(() => {
+    console.log(`Listening for "${reviewsTopicName}" messages as consumer group "${groupId}".`)
+})
+
+const booksAndUsersTopicName = /book-reviews.(books|users)/;
+startConsumer(
+    'reviews',
+    booksAndUsersTopicName,
     {
         bookRemoved: key => {
             [ ...reviews ].filter(([ _, review ]) => key === review.book.id).forEach(([ id, _ ]) => {
@@ -26,9 +45,6 @@ startConsumer(
                 )
             })
         },
-        reviewAdded: (key, review) => reviews.set(key, review),
-        reviewUpdated: (key, review) => reviews.set(key, review),
-        reviewRemoved: key => reviews.delete(key),
         userRemoved: key => {
             [ ...reviews ].filter(([ _, review ]) => key === review.reviewer.id).forEach(([ id, _ ]) => {
                 sendMessage(
@@ -48,7 +64,7 @@ startConsumer(
         }
     }
 ).then(() => {
-    console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
+    console.log(`Listening for "${booksAndUsersTopicName}" messages as consumer group "reviews".`)
 })
 
 // A schema is a collection of type definitions (hence "typeDefs")

@@ -35,7 +35,7 @@ startConsumer(
         }
     }
 ).then(() => {
-    console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
+    console.log(`Listening for "${topicName}" messages as consumer group "${groupId}".`)
 })
 
 const indexBook = book => {

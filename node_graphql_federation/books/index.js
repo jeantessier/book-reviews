@@ -26,7 +26,7 @@ startConsumer(
         }
     }
 ).then(() => {
-    console.log(`Listening for "${topicName}" messages as consumer group ${groupId}.`)
+    console.log(`Listening for "${topicName}" messages as consumer group "${groupId}".`)
 })
 
 // A schema is a collection of type definitions (hence "typeDefs")
