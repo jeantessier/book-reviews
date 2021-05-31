@@ -53,6 +53,7 @@ const typeDefs = gql`
   type Query {
     users: [User!]!
     user(id: ID!): User
+    userByEmail(email: String!): User
   }
 
   type Mutation {
@@ -133,6 +134,7 @@ const resolvers = {
     Query: {
         users: async () => users.values(),
         user: async (_, { id }) => fetchUserById(id),
+        userByEmail: async (_, { email }) => fetchUserByEmail(email),
     },
     Mutation: {
         addUser,
