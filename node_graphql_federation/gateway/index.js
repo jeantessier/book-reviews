@@ -8,6 +8,7 @@ const reviews_service = process.env.REVIEWS_SERVICE || 'http://localhost:4002'
 const users_service = process.env.USERS_SERVICE || 'http://localhost:4003'
 const search_service = process.env.SEARCH_SERVICE || 'http://localhost:4004'
 const signatures_service = process.env.SIGNATURES_SERVICE || 'http://localhost:4005'
+const jwts_service = process.env.SIGNATURES_SERVICE || 'http://localhost:4006'
 
 const gateway = new ApolloGateway({
     serviceList: [
@@ -16,6 +17,7 @@ const gateway = new ApolloGateway({
         { name: 'users', url: users_service },
         { name: 'search', url: search_service },
         { name: 'signatures', url: signatures_service },
+        { name: 'jwts', url: jwts_service },
     ]
 })
 

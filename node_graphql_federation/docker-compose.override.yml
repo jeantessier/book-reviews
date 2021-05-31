@@ -6,6 +6,10 @@ version: '3.7'
 
 services:
 
+  jwts:
+    environment:
+      - JWT_SECRET=thisIsSecret
+
   gateway:
     ports:
       - 4000:80

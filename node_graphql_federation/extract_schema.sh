@@ -6,6 +6,7 @@ readonly SERVICES=(
     users:4003
     search:4004
     signatures:4005
+    jwts:4006
 )
 
 for service in ${SERVICES[*]}

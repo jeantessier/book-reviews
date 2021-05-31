@@ -72,8 +72,17 @@ services:
     command: npm start
     deploy:
       replicas: 4
-    depends_on:
-      - kafka
+
+  jwts:
+    image: node:alpine
+    working_dir: /home/node/app
+    volumes:
+      - ./jwts:/home/node/app
+    environment:
+      - PORT=80
+    command: npm start
+    deploy:
+      replicas: 4
 
   gateway:
     image: node:alpine
@@ -87,6 +96,7 @@ services:
       - USERS_SERVICE=http://users
       - SEARCH_SERVICE=http://search
       - SIGNATURES_SERVICE=http://signatures
+      - JWTS_SERVICE=http://jwts
     command: npm start
     depends_on:
       - books
@@ -94,6 +104,7 @@ services:
       - users
       - search
       - signatures
+      - jwts
 
   zookeeper:
     image: wurstmeister/zookeeper

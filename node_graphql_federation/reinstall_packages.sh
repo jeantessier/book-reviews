@@ -6,6 +6,7 @@ readonly SERVICES=(
     users
     search
     signatures
+    jwts
     gateway
 )
 

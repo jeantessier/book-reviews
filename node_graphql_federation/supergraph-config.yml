@@ -19,3 +19,7 @@ subgraphs:
     routing_url: http://localhost:4005
     schema:
       file: ./signatures/subgraph.graphql
+  jwts:
+    routing_url: http://localhost:4006
+    schema:
+      file: ./jwts/subgraph.graphql
