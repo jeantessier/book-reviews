@@ -29,13 +29,13 @@ And point your browser to http://localhost:3000.
 You can use Docker Compose to run the database and the server together.  This
 way, you don't need to install MongoDB explicitly.
 
-    $ docker-compose up -d
+    $ docker compose up -d book_reviews
 
 It does make initializing the database a little more difficult.
 
     $ ./Books_mongo.pl > book_reviews.js
     $ docker cp book_reviews.js node_mongo_mongo_1:/tmp/book_reviews.js
-    $ docker-compose exec mongo mongo node_mongo_book_reviews /tmp/book_reviews.js
+    $ docker compose exec mongo mongo node_mongo_book_reviews /tmp/book_reviews.js
 
 ## Sample Commands
 
@@ -69,7 +69,7 @@ manually in MongoDB.
 > If you are using the experimental setup with Docker Compose to run the server,
 > you can get into the database with:
 > 
->     $ docker-compose exec mongo mongo node_mongo_book_reviews
+>     $ docker compose exec mongo mongo node_mongo_book_reviews
 > 
 > You do need the double "mongo" in the command above. The first one is the name
 > of the database container under Docker Compose.  The second one is the MongoDB
