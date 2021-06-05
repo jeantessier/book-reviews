@@ -1,5 +1,5 @@
 const { ApolloServer } = require('apollo-server')
-const { ApolloGateway } = require("@apollo/gateway")
+const { ApolloGateway, RemoteGraphQLDataSource } = require("@apollo/gateway")
 
 require('dotenv').config()
 
@@ -18,7 +18,14 @@ const gateway = new ApolloGateway({
         { name: 'search', url: search_service },
         { name: 'signatures', url: signatures_service },
         { name: 'jwts', url: jwts_service },
-    ]
+    ],
+    buildService: ({ url, name }) => {
+        return new(class extends RemoteGraphQLDataSource {
+            willSendRequest({ request, context }) {
+                request.http.headers.set('Authorization', context.token)
+            }
+        })({ url, name})
+    }
 })
 
 // Pass the ApolloGateway to the ApolloServer constructor
@@ -27,6 +34,10 @@ const server = new ApolloServer({
 
     // Disable subscriptions (not currently supported with ApolloGateway)
     subscriptions: false,
+    context: ({ req }) => {
+        const token = req.headers.authorization || ''
+        return { token }
+    },
     plugins: [
         {
             requestDidStart(requestContext) {

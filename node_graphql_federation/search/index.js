@@ -1,5 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { buildFederatedSchema } = require('@apollo/federation')
+const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
 
@@ -281,7 +282,7 @@ const queryPlan = async (_, { q }) => {
     return plan
 }
 
-const search = async (_, { q }) => {
+const search = async (_, { q }, context) => {
     const resultsCollector = new Map()
 
     q.toLowerCase().split(/\s+/).forEach(word => {
@@ -302,6 +303,8 @@ const search = async (_, { q }) => {
     await sendMessage(
         'book-reviews.searches',
         {
+            id: context.sub,
+            user: context.sub,
             query: q,
             results,
         }
@@ -322,6 +325,17 @@ const resolvers = {
 
 const server = new ApolloServer({
     schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
+    context: ({ req }) => {
+        const authHeader = req.headers.authorization || ''
+        if (!authHeader) return {}
+
+        const authHeaderParts = authHeader.split(' ')
+        if (authHeaderParts.length < 2 || authHeaderParts[0].toLowerCase() !== 'bearer') return {}
+
+        const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
+
+        return jwtPayload
+    },
     plugins: [
         {
             requestDidStart(requestContext) {

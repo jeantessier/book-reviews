@@ -2,6 +2,7 @@ const { ApolloServer, gql } = require('apollo-server')
 const { UserInputError } = require('apollo-server-errors')
 const { buildFederatedSchema } = require('@apollo/federation')
 const { v4: uuidv4 } = require('uuid')
+const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
 
@@ -51,6 +52,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    me: User
     users: [User!]!
     user(id: ID!): User
     userByEmail(email: String!): User
@@ -132,6 +134,7 @@ const removeUser = async (_, { id }) => {
 // schema. This resolver retrieves users from the "users" array above.
 const resolvers = {
     Query: {
+        me: async (_, {}, context) => fetchUserById(context.sub),
         users: async () => users.values(),
         user: async (_, { id }) => fetchUserById(id),
         userByEmail: async (_, { email }) => fetchUserByEmail(email),
@@ -159,6 +162,17 @@ const fetchUserByEmail = email => {
 
 const server = new ApolloServer({
     schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
+    context: ({ req }) => {
+        const authHeader = req.headers.authorization || ''
+        if (!authHeader) return {}
+
+        const authHeaderParts = authHeader.split(' ')
+        if (authHeaderParts.length < 2 || authHeaderParts[0].toLowerCase() !== 'bearer') return {}
+
+        const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
+
+        return jwtPayload
+    },
     plugins: [
         {
             requestDidStart(requestContext) {
