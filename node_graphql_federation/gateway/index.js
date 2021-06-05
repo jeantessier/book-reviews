@@ -22,7 +22,9 @@ const gateway = new ApolloGateway({
     buildService: ({ url, name }) => {
         return new(class extends RemoteGraphQLDataSource {
             willSendRequest({ request, context }) {
-                request.http.headers.set('Authorization', context.token)
+                if (context.authHeader) {
+                    request.http.headers.set('Authorization', context.authHeader)
+                }
             }
         })({ url, name})
     }
@@ -35,8 +37,10 @@ const server = new ApolloServer({
     // Disable subscriptions (not currently supported with ApolloGateway)
     subscriptions: false,
     context: ({ req }) => {
-        const token = req.headers.authorization || ''
-        return { token }
+        const authHeader = req.headers.authorization || ''
+        if (!authHeader) return {}
+
+        return { authHeader }
     },
     plugins: [
         {
