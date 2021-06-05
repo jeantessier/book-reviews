@@ -15,6 +15,7 @@
     "apollo-server": "*",
     "dotenv": "*",
     "graphql": "*",
-    "jsonwebtoken": "*"
+    "jsonwebtoken": "*",
+    "kafkajs": "*"
   }
 }

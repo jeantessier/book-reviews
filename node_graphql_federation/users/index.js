@@ -43,12 +43,14 @@ const typeDefs = gql`
   input AddUserInput {
     name: String!
     email: String!
+    password: String!
   }
 
   input UpdateUserInput {
-      id: ID!
-      name: String
-      email: String
+    id: ID!
+    name: String
+    email: String
+    password: String
   }
 
   type Query {

@@ -1,30 +1,73 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { UserInputError } = require('apollo-server-errors')
 const { buildFederatedSchema } = require('@apollo/federation')
 const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
 
+const { groupId, startConsumer } = require('./kafka')
+
+const users = new Map()
+const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`))
+
+const topicName = 'book-reviews.users'
+startConsumer(
+    groupId,
+    topicName,
+    {
+        userAdded: (key, user) => users.set(key, user),
+        userUpdated: (key, user) => users.set(key, user),
+        userRemoved: key => users.delete(key),
+    },
+    () => {
+        if (process.env.DEBUG) {
+            console.log("    users:")
+            dump(users)
+        }
+    }
+).then(() => {
+    console.log(`Listening for "${topicName}" messages as consumer group "${groupId}".`)
+})
+
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
-  extend type User @key(fields: "id") {
-    id: ID! @external
-    name: String! @external
-    email: String! @external
-
+  input LoginInput {
+    email: String!
+    password: String!
+  }
+  
+  type LoginPayload {
     """
-    a signed JWT for this user
+    a signed JWT for the user with matching email and password
     """
-    jwt: String! @requires(fields: "name email")
+    jwt: String
+  }
+  
+  type Mutation {
+    login(input: LoginInput!): LoginPayload
   }
 `
+
+const login = async (_, { input }) => {
+    const user = fetchUserByEmail(input.email)
+    if (!user) {
+        throw new UserInputError(`No user with email "${input.email}".`)
+    }
+
+    if (input.password !== user.password) {
+        throw new UserInputError(`Password for ${input.email} does not match.`)
+    }
+
+    return { jwt: generateJwt(user) }
+}
 
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves reviews from the "reviews" array above.
 const resolvers = {
-    User: {
-        jwt: async user => generateJwt(user),
+    Mutation: {
+        login,
     },
 }
 
@@ -39,6 +82,11 @@ const generateJwt = user => {
         subject: user.id,
     };
     return jwt.sign(payload, process.env.JWT_SECRET, options)
+}
+
+const fetchUserByEmail = email => {
+    const userEntry = Array.from(users.entries()).find(([_, user]) => user.email === email)
+    return userEntry ? userEntry[1] : undefined
 }
 
 const server = new ApolloServer({
@@ -62,6 +110,10 @@ const server = new ApolloServer({
                 console.log(`    query: ${requestContext.request.query}`)
                 console.log(`    operationName: ${requestContext.request.operationName}`)
                 console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
+                if (process.env.DEBUG) {
+                    console.log("    users:")
+                    dump(users)
+                }
             },
         },
     ],

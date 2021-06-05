@@ -13,10 +13,11 @@ readonly GRAPHQL_ENDPOINT=:4000
 function addUser() {
   local name=$1; shift
   local email=$1; shift
+  local password=$1; shift
 
   http --ignore-stdin $GRAPHQL_ENDPOINT \
     query='mutation AddUser($u: AddUserInput!) {addUser(user: $u) {id}}' \
-    variables:="{\"u\": {\"name\": \"${name}\", \"email\": \"${email}\"}}" \
+    variables:="{\"u\": {\"name\": \"${name}\", \"email\": \"${email}\"}, \"password\": \"${password}\"}" \
     operationName=AddUser | \
   jq --raw-output ".data.addUser.id"
 }
