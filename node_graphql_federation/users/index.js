@@ -218,15 +218,20 @@ const fetchUserByEmail = email => {
 const server = new ApolloServer({
     schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
     context: ({ req }) => {
-        const authHeader = req.headers.authorization || ''
-        if (!authHeader) return {}
+        try {
+            const authHeader = req.headers.authorization || ''
+            if (!authHeader) return {}
 
-        const authHeaderParts = authHeader.split(' ')
-        if (authHeaderParts.length < 2 || authHeaderParts[0].toLowerCase() !== 'bearer') return {}
+            const authHeaderParts = authHeader.split(' ')
+            if (authHeaderParts.length < 2 || authHeaderParts[0].toLowerCase() !== 'bearer') return {}
 
-        const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
+            const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
 
-        return { currentUser: { id: jwtPayload.sub, ...jwtPayload } }
+            return { currentUser: { id: jwtPayload.sub, ...jwtPayload } }
+        } catch (e) {
+            console.warn(e)
+            return {}
+        }
     },
     plugins: [
         {
