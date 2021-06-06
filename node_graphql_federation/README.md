@@ -127,7 +127,7 @@ docker compose --file docker-compose.yml --file docker-compose.kafka-override.ym
 This command will add data derived from `../data/Books_????-??-??*.md`.
 
 ```bash
-$ ./Books_node_graphql_federation.pl | bash
+./Books_node_graphql_federation.pl | bash
 ```
 
 ## Sample Queries
@@ -371,9 +371,35 @@ And structure the variables like this:
 }
 ```
 
+> You need admin privileges to add books.
+
 #### Adding a User
 
-You can use this query to register a new user:
+You can use this query to sign up as a new user:
+
+```graphql
+mutation SignUp($u: SignUpInput!) {
+    signUp(user: $u) {
+        id
+        name
+    }
+}
+```
+
+And structure the variables like this:
+
+```json
+{
+  "u": {
+    "name": "Christopher Tolkien",
+    "email": "chris@tolkien.com",
+    "password": "abcd1234"
+  }
+}
+```
+
+If you have admin privileges, you can use this other query to register a new
+user:
 
 ```graphql
 mutation AddUser($u: AddUserInput!) {
@@ -390,7 +416,9 @@ And structure the variables like this:
 {
   "u": {
     "name": "Christopher Tolkien",
-    "email": "chris@tolkien.com"
+    "email": "chris@tolkien.com",
+    "password": "abcd1234",
+    "roles": [ "ROLE_USER" ]
   }
 }
 ```
@@ -426,9 +454,14 @@ And structure the variables like this:
 }
 ```
 
+If you are signed in, you can omit `reviewerId` from the variables and the
+system will use your user credentials when creating the review.
+
 ### Removing Content
 
 #### Removing a Book
+
+> You need admin privileges to remove books.
 
 You can use this query to remove an existing book entry:
 
@@ -450,6 +483,8 @@ Removing a book will automatically remove all the reviews about that book.
 
 #### Removing a User
 
+> You need admin privileges to remove other users.
+
 You can use this query to remove an existing user:
 
 ```graphql
@@ -470,6 +505,8 @@ Removing a user will automatically remove all the reviews by that user.
 
 #### Removing a Review
 
+> You need admin privileges to remove other users' reviews.
+
 You can use this query to remove an existing review:
 
 ```graphql
@@ -483,6 +520,66 @@ And structure the variables like this:
 ```json
 {
   "id": "<id of the review being removed goes here>"
+}
+```
+
+### Making Authenticated GraphQL Calls
+
+Use this mutation to sign in and get a JWT:
+
+```graphql
+mutation Login($loginInput: LoginInput!) {
+  login(input: $loginInput) {
+    jwt
+  }
+}
+```
+
+With the following variables:
+
+```json
+{
+  "loginInput": {
+    "email": "jean@jeantessier.com",
+    "password": "abcd1234"
+  }
+}
+```
+
+The response will look like:
+
+```json
+{
+  "data": {
+    "login": {
+      "jwt": "eyJ0...P9Pk"
+    }
+  }
+}
+```
+
+> Handy one-liner:
+> ```bash
+> export JWT_AUTH_TOKEN=$(http :4000 query='mutation Login($loginInput: LoginInput!) {login(input: $loginInput) {jwt}}' variables:='{"loginInput": {"email": "jean@jeantessier.com", "password": "abcd1234"}}' | jq --raw-output '.data.login.jwt')
+> ```
+
+If the authentication fails, whether it's because the email address is unknown
+or because the password doesn't match, you will get an error that will look like
+this:
+
+```json
+{
+    "data": {
+        "login": null
+    },
+    "errors": [
+        {
+            "message": "No user with email jean@jeantessier.com",
+            "path": [
+                "signIn"
+            ]
+        }
+    ]
 }
 ```
 
