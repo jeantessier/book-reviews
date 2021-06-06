@@ -21,7 +21,7 @@ function addUser() {
 
   http --ignore-stdin --auth-type jwt $GRAPHQL_ENDPOINT \
     query='mutation AddUser($u: AddUserInput!) {addUser(user: $u) {id}}' \
-    variables:="{\"u\": {\"name\": \"${name}\", \"email\": \"${email}\"}, \"password\": \"${password}\", \"roles\": [${roles}]}}" \
+    variables:="{\"u\": {\"name\": \"${name}\", \"email\": \"${email}\", \"password\": \"${password}\", \"roles\": [${roles}]}}" \
     operationName=AddUser | \
   jq --raw-output ".data.addUser.id"
 }
