@@ -1,8 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { buildFederatedSchema } = require('@apollo/federation')
-const jwt = require('jsonwebtoken');
-
-require('dotenv').config()
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -30,17 +27,6 @@ const resolvers = {
 
 const server = new ApolloServer({
     schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
-    context: ({ req }) => {
-        const authHeader = req.headers.authorization || ''
-        if (!authHeader) return {}
-
-        const authHeaderParts = authHeader.split(' ')
-        if (authHeaderParts.length < 2 || authHeaderParts[0].toLowerCase() !== 'bearer') return {}
-
-        const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
-
-        return jwtPayload
-    },
     plugins: [
         {
             requestDidStart(requestContext) {

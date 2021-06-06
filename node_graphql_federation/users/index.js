@@ -1,5 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
-const { UserInputError } = require('apollo-server-errors')
+const { AuthenticationError, ForbiddenError, UserInputError } = require('apollo-server-errors')
 const { buildFederatedSchema } = require('@apollo/federation')
 const { v4: uuidv4 } = require('uuid')
 const jwt = require('jsonwebtoken');
@@ -38,12 +38,20 @@ const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
+    roles: [String!]!
   }
 
+  input SignUpInput {
+      name: String!
+      email: String!
+      password: String!
+  }
+  
   input AddUserInput {
     name: String!
     email: String!
     password: String!
+    roles: [String!]!
   }
 
   input UpdateUserInput {
@@ -51,23 +59,51 @@ const typeDefs = gql`
     name: String
     email: String
     password: String
+    roles: [String!]
   }
 
   type Query {
     me: User
     users: [User!]!
     user(id: ID!): User
-    userByEmail(email: String!): User
   }
 
   type Mutation {
+    signUp(user: SignUpInput): User
     addUser(user: AddUserInput): User
     updateUser(update: UpdateUserInput): User
     removeUser(id: ID!): Boolean!
   }
 `
 
-const addUser = async (_, { user }) => {
+const signUp = async (_, { user }) => {
+    const userForEmail = fetchUserByEmail(user.email)
+    if (userForEmail) {
+        throw new UserInputError(`Email "${user.email}" is already taken.`)
+    }
+
+    user.id = uuidv4()
+    user.roles = [ "ROLE_USER" ]
+
+    await sendMessage(
+        'book-reviews.users',
+        {
+            type: 'userAdded',
+            ...user,
+        }
+    )
+
+    return user
+}
+
+const addUser = async (_, { user }, context, info) => {
+    if (!context.currentUser) {
+        throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
+    }
+    if (!context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation`)
+    }
+
     const userForEmail = fetchUserByEmail(user.email)
     if (userForEmail) {
         throw new UserInputError(`Email "${user.email}" is already taken.`)
@@ -86,7 +122,17 @@ const addUser = async (_, { user }) => {
     return user
 }
 
-const updateUser = async (_, { update }) => {
+const updateUser = async (_, { update }, context, info) => {
+    if (!context.currentUser) {
+        throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
+    }
+    if (update.id !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on another user.`)
+    }
+    if (update.roles && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to change roles on a user.`)
+    }
+
     const user = fetchUserById(update.id)
     if (!user) {
         throw new UserInputError(`No user with ID "${update.id}".`)
@@ -115,7 +161,14 @@ const updateUser = async (_, { update }) => {
     return userUpdatedMessage
 }
 
-const removeUser = async (_, { id }) => {
+const removeUser = async (_, { id }, context, info) => {
+    if (!context.currentUser) {
+        throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
+    }
+    if (update.id !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on another user.`)
+    }
+
     const user = fetchUserById(id)
     if (!user) {
         throw new UserInputError(`No user with ID "${id}".`)
@@ -139,9 +192,9 @@ const resolvers = {
         me: async (_, {}, context) => fetchUserById(context.sub),
         users: async () => users.values(),
         user: async (_, { id }) => fetchUserById(id),
-        userByEmail: async (_, { email }) => fetchUserByEmail(email),
     },
     Mutation: {
+        signUp,
         addUser,
         updateUser,
         removeUser,
@@ -173,7 +226,7 @@ const server = new ApolloServer({
 
         const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
 
-        return jwtPayload
+        return { currentUser: { id: jwtPayload.sub, ...jwtPayload } }
     },
     plugins: [
         {

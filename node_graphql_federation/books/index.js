@@ -92,7 +92,14 @@ const typeDefs = gql`
   }
 `
 
-const addBook = async (_, { book }) => {
+const addBook = async (_, { book }, context, info) => {
+    if (!context.currentUser) {
+        throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
+    }
+    if (!context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation`)
+    }
+
     const bookForName = fetchBookByName(book.name)
     if (bookForName) {
         throw new UserInputError(`Name "${book.name}" is already taken.`)
@@ -111,7 +118,14 @@ const addBook = async (_, { book }) => {
     return book
 }
 
-const updateBook = async (_, { update }) => {
+const updateBook = async (_, { update }, context, info) => {
+    if (!context.currentUser) {
+        throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
+    }
+    if (!context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation`)
+    }
+
     const book = fetchBookById(update.id)
     if (!book) {
         throw new UserInputError(`No book with ID "${update.id}".`)
@@ -140,7 +154,14 @@ const updateBook = async (_, { update }) => {
     return bookUpdatedMessage
 }
 
-const removeBook = async (_, { id }) => {
+const removeBook = async (_, { id }, context, info) => {
+    if (!context.currentUser) {
+        throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
+    }
+    if (!context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation`)
+    }
+
     const book = fetchBookById(id)
     if (!book) {
         throw new UserInputError(`No book with ID "${id}".`)
@@ -197,7 +218,7 @@ const server = new ApolloServer({
 
         const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
 
-        return jwtPayload
+        return { currentUser: { id: jwtPayload.sub, ...jwtPayload } }
     },
     plugins: [
         {

@@ -74,7 +74,8 @@ const resolvers = {
 const generateJwt = user => {
     const payload = {
         name: user.name,
-        email: user.email
+        email: user.email,
+        roles: user.roles,
     }
     const options = {
         expiresIn: 3 * 24 * 60 *  60, // 3 days in seconds
@@ -91,17 +92,6 @@ const fetchUserByEmail = email => {
 
 const server = new ApolloServer({
     schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
-    context: ({ req }) => {
-        const authHeader = req.headers.authorization || ''
-        if (!authHeader) return {}
-
-        const authHeaderParts = authHeader.split(' ')
-        if (authHeaderParts.length < 2 || authHeaderParts[0].toLowerCase() !== 'bearer') return {}
-
-        const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
-
-        return jwtPayload
-    },
     plugins: [
         {
             requestDidStart(requestContext) {

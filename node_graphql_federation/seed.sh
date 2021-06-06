@@ -2,14 +2,18 @@
 
 readonly GRAPHQL_ENDPOINT=:4000
 
+# Forged admin credentials: { "roles": ["ROLE_ADMIN"] }
+export JWT_AUTH_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl19.PSTChvPnRFYmQZtBPHX0rzusrYa6ori9z1d1n0LsF8g
+
 function addUser() {
   local name=$1; shift
   local email=$1; shift
   local password=$1; shift
+  local roles=$1; shift
 
-  http $GRAPHQL_ENDPOINT \
+  http --auth-type jwt $GRAPHQL_ENDPOINT \
     query='mutation AddUser($u: AddUserInput!) {addUser(user: $u) {id}}' \
-    variables:="{\"u\": {\"name\": \"${name}\", \"email\": \"${email}\", \"password\": \"${password}\"}}" \
+    variables:="{\"u\": {\"name\": \"${name}\", \"email\": \"${email}\", \"password\": \"${password}\", \"roles\": [${roles}]}}" \
     operationName=AddUser | \
   jq --raw-output ".data.addUser.id"
 }
@@ -21,7 +25,7 @@ function addBook() {
   local authors=$1; shift
   local years=$1; shift
 
-  http $GRAPHQL_ENDPOINT \
+  http --auth-type jwt $GRAPHQL_ENDPOINT \
     query='mutation AddBook($b: AddBookInput!) {addBook(book: $b) {id}}' \
     variables:="{\"b\": {\"name\": \"${name}\", \"titles\": ${titles}, \"publisher\": \"${publisher}\", \"authors\": ${authors}, \"years\": ${years}}}" \
     operationName=AddBook | \
@@ -35,7 +39,7 @@ function addReview() {
   local start=$1; shift
   local stop=$1; shift
 
-  http $GRAPHQL_ENDPOINT \
+  http --auth-type jwt $GRAPHQL_ENDPOINT \
     query='mutation AddReview($r: AddReviewInput!) {addReview(review: $r) {id}}' \
     variables:="{\"r\": {\"reviewerId\": \"${reviewer_id}\", \"bookId\": \"${book_id}\", \"body\": \"${body}\", \"start\": \"${start}\", \"stop\": \"${stop}\"}}" \
     operationName=AddReview | \
@@ -43,10 +47,17 @@ function addReview() {
 }
 
 #
+# User: Administrator
+#
+
+admin_id=$(addUser "Administrator" "admin@bookreviews.com" "abcd1234" '"ROLE_ADMIN", "ROLE_USER"')
+echo User $admin_id
+
+#
 # User: Jean Tessier
 #
 
-jean_id=$(addUser "Jean Tessier" "jean@jeantessier.com" "abcd1234")
+jean_id=$(addUser "Jean Tessier" "jean@jeantessier.com" "abcd1234" '"ROLE_USER"')
 
 echo User $jean_id
 
@@ -54,7 +65,7 @@ echo User $jean_id
 # User: Simon Tolkien
 #
 
-simon_id=$(addUser "Simon Tolkien" "simon@tolkien.com" "abcd1234")
+simon_id=$(addUser "Simon Tolkien" "simon@tolkien.com" "abcd1234" '"ROLE_USER"')
 
 echo User $simon_id
 

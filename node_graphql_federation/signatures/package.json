@@ -13,8 +13,6 @@
   "dependencies": {
     "@apollo/federation": "*",
     "apollo-server": "*",
-    "dotenv": "*",
-    "graphql": "*",
-    "jsonwebtoken": "*"
+    "graphql": "*"
   }
 }

@@ -82,7 +82,7 @@ const typeDefs = gql`
   }
 
   input AddReviewInput {
-      reviewerId: ID!
+      reviewerId: ID
       bookId: ID!
       body: String!
       start: String
@@ -120,11 +120,18 @@ const typeDefs = gql`
   }
 `
 
-const addReview = async (_, { review }) => {
+const addReview = async (_, { review }, context, info) => {
+    if (!context.currentUser) {
+        throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
+    }
+
     const { reviewerId, bookId, ...reviewAddedMessage } = review
+    if (reviewerId && reviewerId !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on behalf of another user.`)
+    }
 
     reviewAddedMessage.id = uuidv4()
-    reviewAddedMessage.reviewer = { __typename: 'User', id: reviewerId }
+    reviewAddedMessage.reviewer = { __typename: 'User', id: reviewerId ? reviewerId : context.currentUser.id }
     reviewAddedMessage.book = { __typename: 'Book', id: bookId }
 
     await sendMessage(
@@ -138,10 +145,17 @@ const addReview = async (_, { review }) => {
     return reviewAddedMessage
 }
 
-const updateReview = async (_, { update }) => {
+const updateReview = async (_, { update }, context, info) => {
+    if (!context.currentUser) {
+        throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
+    }
+
     const review = fetchReviewById(update.id)
     if (!review) {
         throw new UserInputError(`No review with ID "${update.id}".`)
+    }
+    if (review.reviewer.id !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on behalf of another user.`)
     }
 
     const reviewUpdatedMessage = {
@@ -160,10 +174,17 @@ const updateReview = async (_, { update }) => {
     return reviewUpdatedMessage
 }
 
-const removeReview = async (_, { id }) => {
+const removeReview = async (_, { id }, context, info) => {
+    if (!context.currentUser) {
+        throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
+    }
+
     const review = fetchReviewById(update.id)
     if (!review) {
         throw new UserInputError(`No review with ID "${update.id}".`)
+    }
+    if (review.reviewer.id !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
+        throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on behalf of another user.`)
     }
 
     await sendMessage(
@@ -222,7 +243,7 @@ const server = new ApolloServer({
 
         const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
 
-        return jwtPayload
+        return { currentUser: { id: jwtPayload.sub, ...jwtPayload } }
     },
     plugins: [
         {

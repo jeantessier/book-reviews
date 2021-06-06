@@ -303,8 +303,8 @@ const search = async (_, { q }, context) => {
     await sendMessage(
         'book-reviews.searches',
         {
-            id: context.sub,
-            user: context.sub,
+            id: context.currentUser.id,
+            user: context.currentUser.id,
             query: q,
             results,
         }
@@ -334,7 +334,7 @@ const server = new ApolloServer({
 
         const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
 
-        return jwtPayload
+        return { currentUser: { id: jwtPayload.sub, ...jwtPayload } }
     },
     plugins: [
         {
