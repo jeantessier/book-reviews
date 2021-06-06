@@ -303,8 +303,8 @@ const search = async (_, { q }, context) => {
     await sendMessage(
         'book-reviews.searches',
         {
-            id: context.currentUser.id,
-            user: context.currentUser.id,
+            id: context.currentUser?.id,
+            user: context.currentUser?.id,
             query: q,
             results,
         }

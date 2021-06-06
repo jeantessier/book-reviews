@@ -189,7 +189,7 @@ const removeUser = async (_, { id }, context, info) => {
 // schema. This resolver retrieves users from the "users" array above.
 const resolvers = {
     Query: {
-        me: async (_, {}, context) => fetchUserById(context.sub),
+        me: async (_, {}, context) => fetchUserById(context.currentUser?.id),
         users: async () => users.values(),
         user: async (_, { id }) => fetchUserById(id),
     },
