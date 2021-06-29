@@ -79,10 +79,13 @@ services:
     volumes:
       - ./jwts:/home/node/app
     environment:
+      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
     command: npm start
     deploy:
       replicas: 4
+    depends_on:
+      - kafka
 
   gateway:
     image: node:alpine
