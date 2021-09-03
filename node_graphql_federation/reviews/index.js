@@ -179,9 +179,9 @@ const removeReview = async (_, { id }, context, info) => {
         throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
     }
 
-    const review = fetchReviewById(update.id)
+    const review = fetchReviewById(id)
     if (!review) {
-        throw new UserInputError(`No review with ID "${update.id}".`)
+        throw new UserInputError(`No review with ID "${id}".`)
     }
     if (review.reviewer.id !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
         throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on behalf of another user.`)

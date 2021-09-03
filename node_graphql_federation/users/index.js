@@ -165,7 +165,7 @@ const removeUser = async (_, { id }, context, info) => {
     if (!context.currentUser) {
         throw new AuthenticationError(`You need to be signed in to use the ${info.fieldName} mutation.`)
     }
-    if (update.id !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
+    if (id !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
         throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on another user.`)
     }
 
