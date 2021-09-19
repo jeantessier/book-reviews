@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const dbURI = process.env.MONGODB_URI;
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.connection.on("connected", () => {
     console.log("Mongoose connected to " + dbURI);
