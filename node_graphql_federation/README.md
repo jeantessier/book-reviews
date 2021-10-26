@@ -194,8 +194,8 @@ least one of these words.
 
 #### Query Plan
 
-If you need to know how the `search` chose and rank the results to a query, you
-can ask it to show its work with the `queryPlan` top-level GraphQL field.
+If you need to know how the `search` chose and ranked the results to a query,
+you can ask it to show its work with the `queryPlan` top-level GraphQL field.
 
 ```graphql
 query MySearch($q: String!) {
@@ -326,7 +326,7 @@ query MyBook($id: ID!) {
 }
 ```
 
-And, you call it the ID of the book:
+And call it the ID of the book:
 
 ```json
 {
