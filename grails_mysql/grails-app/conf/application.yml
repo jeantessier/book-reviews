@@ -116,16 +116,16 @@ environments:
             dbCreate: none
             driverClassName: com.mysql.cj.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-            url: jdbc:mysql://localhost/grails_mysql_book_reviews?useUnicode=true&character_set_server=utf8mb4&serverTimezone=PST8PDT
+            url: jdbc:mysql://localhost/grails_mysql_book_reviews?useUnicode=true&character_set_server=utf8mb4&serverTimezone=PST8PDT&useSSL=false
             username: root
     test:
         dataSource:
             dbCreate: update
-            url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            url: jdbc:h2:mem:testDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     production:
         dataSource:
             dbCreate: update
-            url: jdbc:h2:./prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            url: jdbc:h2:./prodDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
             properties:
                 jmxEnabled: true
                 initialSize: 5
