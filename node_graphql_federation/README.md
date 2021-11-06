@@ -294,7 +294,7 @@ query MySearch($q: String!) {
 }
 ```
 
-If you call it the ID of an entity:
+If you call it with the ID of an entity:
 
 ```json
 {
@@ -326,7 +326,7 @@ query MyBook($id: ID!) {
 }
 ```
 
-And call it the ID of the book:
+And call it with the ID of the book:
 
 ```json
 {
