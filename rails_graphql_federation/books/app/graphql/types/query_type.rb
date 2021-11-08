@@ -13,5 +13,24 @@ module Types
     def test_field
       "Hello World!"
     end
+
+    field :books,
+      [Types::BookType],
+      null: false,
+      description: "Returns all the books in the system."
+
+    field :book,
+      Types::BookType,
+      null: true,
+      description: "Returns a specific book by its ID." do
+      argument :book_id, ID, required: true
+    end
+
+    def books
+      []
+    end
+
+    def book(book_id:)
+    end
   end
 end
