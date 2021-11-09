@@ -7,11 +7,25 @@ module Types
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 
-    # TODO: remove me
-    field :test_field, String, null: false,
-      description: "An example field added by the generator"
-    def test_field
-      "Hello World!"
+    field :reviews,
+      [Types::ReviewType],
+      null: false,
+      description: "Returns all the reviews in the system, possibly filtered for a specific reviewer." do
+        argument :for_reviewer, ID, required: false
+      end
+
+    field :review,
+      Types::ReviewType,
+      null: true,
+      description: "Returns a specific review by its ID." do
+        argument :review_id, ID, required: true
+      end
+
+    def reviews(forReviewer: nil)
+      []
+    end
+
+    def review(review_id:)
     end
   end
 end
