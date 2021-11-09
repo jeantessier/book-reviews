@@ -6,5 +6,9 @@ module Types
     field :roles, [String], null: false
 
     key fields: 'id'
+
+    def self.resolve_reference(reference, _context)
+      UserRepository.find_by_id(reference[:id])
+    end
   end
 end

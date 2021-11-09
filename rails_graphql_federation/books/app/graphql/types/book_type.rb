@@ -13,5 +13,9 @@ module Types
     def title
       object[:titles].first[:title]
     end
+
+    def self.resolve_reference(reference, _context)
+      BookRepository.find_by_id(reference[:id])
+    end
   end
 end

@@ -9,11 +9,11 @@ module Types
     key fields: 'id'
 
     def reviews
-      []
+      ReviewRepository.find_all_by_book(object[:id])
     end
 
     def reviewers
-      []
+      reviews.map { |r| r[:reviewer] }
     end
   end
 end
