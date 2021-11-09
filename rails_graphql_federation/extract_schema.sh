@@ -4,6 +4,7 @@ readonly SERVICES=(
     books:3001
     reviews:3002
     users:3003
+    search:3004
     signatures:3005
 )
 

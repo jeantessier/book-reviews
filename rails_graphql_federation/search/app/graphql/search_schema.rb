@@ -1,7 +1,6 @@
 class SearchSchema < GraphQL::Schema
   include ApolloFederation::Schema
 
-  mutation(Types::MutationType)
   query(Types::QueryType)
 
   # Union and Interface Resolution

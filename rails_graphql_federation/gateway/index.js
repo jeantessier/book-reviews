@@ -6,6 +6,7 @@ require('dotenv').config()
 const books_service = process.env.BOOKS_SERVICE || 'http://localhost:3001/graphql'
 const reviews_service = process.env.REVIEWS_SERVICE || 'http://localhost:3002/graphql'
 const users_service = process.env.USERS_SERVICE || 'http://localhost:3003/graphql'
+const search_service = process.env.SEARCH_SERVICE || 'http://localhost:3004/graphql'
 const signatures_service = process.env.SIGNATURES_SERVICE || 'http://localhost:3005/graphql'
 
 const gateway = new ApolloGateway({
@@ -13,6 +14,7 @@ const gateway = new ApolloGateway({
         { name: 'books', url: books_service },
         { name: 'reviews', url: reviews_service },
         { name: 'users', url: users_service },
+        { name: 'search', url: search_service },
         { name: 'signatures', url: signatures_service },
     ],
     buildService: ({ url, name }) => {
