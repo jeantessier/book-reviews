@@ -51,6 +51,7 @@ function addReview() {
 #
 
 admin_id=$(addUser "Administrator" "admin@bookreviews.com" "abcd1234" '"ROLE_ADMIN", "ROLE_USER"')
+
 echo User $admin_id
 
 #
