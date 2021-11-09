@@ -2,6 +2,7 @@
 
 readonly SERVICES=(
     books:3001
+    users:3003
 )
 
 for service in ${SERVICES[*]}

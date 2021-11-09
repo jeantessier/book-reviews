@@ -4,10 +4,12 @@ const { ApolloGateway, RemoteGraphQLDataSource } = require("@apollo/gateway")
 require('dotenv').config()
 
 const books_service = process.env.BOOKS_SERVICE || 'http://localhost:3001/graphql'
+const users_service = process.env.USERS_SERVICE || 'http://localhost:3003/graphql'
 
 const gateway = new ApolloGateway({
     serviceList: [
         { name: 'books', url: books_service },
+        { name: 'users', url: users_service },
     ],
     buildService: ({ url, name }) => {
         return new (class extends RemoteGraphQLDataSource {
