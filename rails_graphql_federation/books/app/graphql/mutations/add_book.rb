@@ -20,7 +20,20 @@ module Mutations
         years: years,
       }
 
-      BookRepository.save(book)
+      payload = { type: 'addBook' }.merge(book).to_json
+
+      Rails.logger.info <<-MSG
+        Sending message ...
+          topic: #{KAFKA_TOPIC}
+          key: #{book[:id]}
+          payload: #{payload}
+      MSG
+
+      producer.publish(
+        topic: KAFKA_TOPIC,
+        key: book[:id],
+        payload: payload,
+      )
 
       { book: book }
     end

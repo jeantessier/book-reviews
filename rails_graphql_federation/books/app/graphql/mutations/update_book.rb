@@ -10,7 +10,7 @@ module Mutations
     field :book, Types::BookType, null: true
 
     def resolve(id:, name: nil, titles: nil, authors: nil, publisher: nil, years: nil)
-      book = BookRepository.find_by_id(id)
+      book = BookRepository.find_by_id(id).dup
       raise "No book with ID #{id}" if book.nil?
 
       book_by_name = BookRepository.find_by_name(name)
@@ -21,6 +21,21 @@ module Mutations
       book[:authors] = authors unless authors.nil?
       book[:publisher] = publisher unless publisher.nil?
       book[:years] = years unless years.nil?
+
+      payload = { type: 'updateBook' }.merge(book).to_json
+
+      Rails.logger.info <<-MSG
+        Sending message ...
+          topic: #{KAFKA_TOPIC}
+          key: #{id}
+          payload: #{payload}
+      MSG
+
+      producer.publish(
+        topic: KAFKA_TOPIC,
+        key: id,
+        payload: payload,
+      )
 
       { book: book }
     end
