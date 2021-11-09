@@ -60,6 +60,9 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
+    apollo-federation (1.1.5)
+      google-protobuf (~> 3.7)
+      graphql (>= 1.9.8)
     bootsnap (1.9.1)
       msgpack (~> 1.0)
     builder (3.2.4)
@@ -70,6 +73,7 @@ GEM
     ffi (1.15.4)
     globalid (0.5.2)
       activesupport (>= 5.0)
+    google-protobuf (3.19.1-x86_64-darwin)
     graphql (1.12.19)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
@@ -146,6 +150,7 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
+  apollo-federation
   bootsnap (>= 1.4.4)
   byebug
   graphql
