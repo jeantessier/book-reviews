@@ -1,0 +1,28 @@
+version: '3.7'
+
+#
+# docker compose up -d
+#
+
+services:
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    expose:
+      - 2181
+
+  kafka:
+    image: wurstmeister/kafka
+    expose:
+      - 9092
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_BROKER_ID: 1000
+      KAFKA_CREATE_TOPICS: book-reviews.books:4:1,book-reviews.reviews:4:1,book-reviews.users:4:1,book-reviews.searches:4:1
+      KAFKA_LOG_RETENTION_MS: -1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#    deploy:
+#      replicas: 4 # We cannot do multiple brokers because of collisions on KAFKA_ADVERTISED_HOST_NAME
+    depends_on:
+      - zookeeper
