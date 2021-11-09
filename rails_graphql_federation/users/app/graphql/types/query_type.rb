@@ -16,15 +16,15 @@ module Types
       Types::UserType,
       null: true,
       description: "Returns a specific user by its ID." do
-        argument :user_id, ID, required: true
+        argument :id, ID, required: true
       end
 
     def users
       UserRepository.all
     end
 
-    def user(user_id:)
-      UserRepository.find_by_id(user_id)
+    def user(id:)
+      UserRepository.find_by_id(id)
     end
   end
 end

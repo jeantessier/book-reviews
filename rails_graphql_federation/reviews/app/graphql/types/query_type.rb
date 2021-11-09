@@ -18,15 +18,15 @@ module Types
       Types::ReviewType,
       null: true,
       description: "Returns a specific review by its ID." do
-        argument :review_id, ID, required: true
+        argument :id, ID, required: true
       end
 
     def reviews(for_reviewer: nil)
       for_reviewer.nil? ? ReviewRepository.all : ReviewRepository.all.find_all { |r| r[:reviewer][:id] == for_reviewer }
     end
 
-    def review(review_id:)
-      ReviewRepository.find_by_id(review_id)
+    def review(id:)
+      ReviewRepository.find_by_id(id)
     end
   end
 end

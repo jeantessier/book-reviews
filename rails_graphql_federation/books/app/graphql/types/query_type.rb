@@ -16,15 +16,15 @@ module Types
       Types::BookType,
       null: true,
       description: "Returns a specific book by its ID." do
-        argument :book_id, ID, required: true
+        argument :id, ID, required: true
       end
 
     def books
       BookRepository.all
     end
 
-    def book(book_id:)
-      BookRepository.find_by_id(book_id)
+    def book(id:)
+      BookRepository.find_by_id(id)
     end
   end
 end
