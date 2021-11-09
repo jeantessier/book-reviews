@@ -21,11 +21,12 @@ module Types
         argument :review_id, ID, required: true
       end
 
-    def reviews(forReviewer: nil)
-      []
+    def reviews(for_reviewer: nil)
+      for_reviewer.nil? ? ReviewRepository.all : ReviewRepository.all.find_all { |r| r[:reviewer][:id] == for_reviewer }
     end
 
     def review(review_id:)
+      ReviewRepository.find_by_id(review_id)
     end
   end
 end
