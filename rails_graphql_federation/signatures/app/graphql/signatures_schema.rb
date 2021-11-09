@@ -1,8 +1,7 @@
 class SignaturesSchema < GraphQL::Schema
   include ApolloFederation::Schema
 
-  mutation(Types::MutationType)
-  query(Types::QueryType)
+  orphan_types Types::UserType
 
   # Union and Interface Resolution
   def self.resolve_type(abstract_type, obj, ctx)

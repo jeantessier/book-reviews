@@ -11,3 +11,7 @@ subgraphs:
     routing_url: http://localhost:3003/graphql
     schema:
       file: ./users/subgraph.graphql
+  signatures:
+    routing_url: http://localhost:3005/graphql
+    schema:
+      file: ./signatures/subgraph.graphql
