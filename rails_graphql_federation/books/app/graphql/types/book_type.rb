@@ -9,5 +9,9 @@ module Types
     field :publisher, String, null: false
 
     key fields: 'id'
+
+    def title
+      object[:titles].first[:title]
+    end
   end
 end
