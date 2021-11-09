@@ -7,13 +7,6 @@ module Types
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 
-    # TODO: remove me
-    field :test_field, String, null: false,
-      description: "An example field added by the generator"
-    def test_field
-      "Hello World!"
-    end
-
     field :books,
       [Types::BookType],
       null: false,
@@ -23,14 +16,15 @@ module Types
       Types::BookType,
       null: true,
       description: "Returns a specific book by its ID." do
-      argument :book_id, ID, required: true
-    end
+        argument :book_id, ID, required: true
+      end
 
     def books
-      []
+      BookRepository.all
     end
 
     def book(book_id:)
+      BookRepository.find_by_id(book_id)
     end
   end
 end
