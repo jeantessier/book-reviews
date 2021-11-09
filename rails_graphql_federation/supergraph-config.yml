@@ -3,6 +3,10 @@ subgraphs:
     routing_url: http://localhost:3001/graphql
     schema:
       file: ./books/subgraph.graphql
+  reviews:
+    routing_url: http://localhost:3002/graphql
+    schema:
+      file: ./reviews/subgraph.graphql
   users:
     routing_url: http://localhost:3003/graphql
     schema:
