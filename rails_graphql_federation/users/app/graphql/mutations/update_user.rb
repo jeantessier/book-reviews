@@ -9,7 +9,7 @@ module Mutations
     field :user, Types::UserType, null: true
 
     def resolve(id:, name: nil, email: nil, password: nil, roles: nil)
-      user = UserRepository.find_by_id(id)
+      user = UserRepository.find_by_id(id).dup
       raise "No user with ID #{id}" if user.nil?
 
       user_by_email = UserRepository.find_by_email(email)
@@ -19,6 +19,21 @@ module Mutations
       user[:email] = email unless email.nil?
       user[:password] = password unless password.nil?
       user[:roles] = roles unless roles.nil?
+
+      payload = { type: 'updateUser' }.merge(user).to_json
+
+      Rails.logger.info <<-MSG
+        Sending message ...
+          topic: #{KAFKA_TOPIC}
+          key: #{id}
+          payload: #{payload}
+      MSG
+
+      producer.publish(
+        topic: KAFKA_TOPIC,
+        key: id,
+        payload: payload,
+      )
 
       { user: user }
     end

@@ -18,7 +18,20 @@ module Mutations
         roles: roles,
       }
 
-      UserRepository.save(user)
+      payload = { type: 'addUser' }.merge(user).to_json
+
+      Rails.logger.info <<-MSG
+        Sending message ...
+          topic: #{KAFKA_TOPIC}
+          key: #{user[:id]}
+          payload: #{payload}
+      MSG
+
+      producer.publish(
+        topic: KAFKA_TOPIC,
+        key: user[:id],
+        payload: payload,
+      )
 
       { user: user }
     end

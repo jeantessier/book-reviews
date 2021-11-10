@@ -5,7 +5,28 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(id:)
-      { success: UserRepository.remove(id) }
+      user = UserRepository.find_by_id(id)
+      return { success: false } if user.nil?
+
+      payload = {
+        type: 'removeUser',
+        id: id,
+      }.to_json
+
+      Rails.logger.info <<-MSG
+        Sending message ...
+          topic: #{KAFKA_TOPIC}
+          key: #{id}
+          payload: #{payload}
+      MSG
+
+      producer.publish(
+        topic: KAFKA_TOPIC,
+        key: id,
+        payload: payload,
+      )
+
+      { success: true }
     end
   end
 end
