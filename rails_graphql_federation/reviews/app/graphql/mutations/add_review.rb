@@ -24,7 +24,20 @@ module Mutations
         stop: stop,
       }
 
-      ReviewRepository.save(review)
+      payload = { type: 'addReview' }.merge(review).to_json
+
+      Rails.logger.info <<-MSG
+        Sending message ...
+          topic: #{KAFKA_TOPIC}
+          key: #{review[:id]}
+          payload: #{payload}
+      MSG
+
+      producer.publish(
+        topic: KAFKA_TOPIC,
+        key: review[:id],
+        payload: payload,
+      )
 
       { review: review }
     end

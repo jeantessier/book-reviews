@@ -8,12 +8,27 @@ module Mutations
     field :review, Types::ReviewType, null: true
 
     def resolve(id:, body: nil, start: nil, stop: nil)
-      review = ReviewRepository.find_by_id(id)
+      review = ReviewRepository.find_by_id(id).dup
       raise "No review with ID #{id}" if review.nil?
 
       review[:body] = body unless body.nil?
       review[:start] = start unless start.nil?
-      review[:stop] = name unless stop.nil?
+      review[:stop] = stop unless stop.nil?
+
+      payload = { type: 'updateReview' }.merge(review).to_json
+
+      Rails.logger.info <<-MSG
+        Sending message ...
+          topic: #{KAFKA_TOPIC}
+          key: #{id}
+          payload: #{payload}
+      MSG
+
+      producer.publish(
+        topic: KAFKA_TOPIC,
+        key: id,
+        payload: payload,
+      )
 
       { review: review }
     end
