@@ -20,7 +20,7 @@ module Mutations
       user[:password] = password unless password.nil?
       user[:roles] = roles unless roles.nil?
 
-      payload = { type: 'updateUser' }.merge(user).to_json
+      payload = { type: 'userUpdated' }.merge(user).to_json
 
       Rails.logger.info <<-MSG
         Sending message ...

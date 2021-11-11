@@ -24,7 +24,7 @@ module Mutations
         stop: stop,
       }
 
-      payload = { type: 'addReview' }.merge(review).to_json
+      payload = { type: 'reviewAdded' }.merge(review).to_json
 
       Rails.logger.info <<-MSG
         Sending message ...

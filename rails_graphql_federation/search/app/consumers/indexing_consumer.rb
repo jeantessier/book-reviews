@@ -10,23 +10,23 @@ class IndexingConsumer
     Rails.logger.info "#{message_type} #{json_message}"
 
     case message_type
-    when 'addBook'
+    when 'bookAdded'
       SearchService.index_book json_message
-    when 'updateBook'
+    when 'bookUpdated'
       SearchService.index_book json_message
-    when 'removeBook'
+    when 'bookRemoved'
       SearchService.scrub_indices json_message
-    when 'addReview'
+    when 'reviewAdded'
       SearchService.index_review json_message
-    when 'updateReview'
+    when 'reviewUpdated'
       SearchService.index_review json_message
-    when 'removeReview'
+    when 'reviewRemoved'
       SearchService.scrub_indices json_message
-    when 'addUser'
+    when 'userAdded'
       SearchService.index_user json_message
-    when 'updateUser'
+    when 'userUpdated'
       SearchService.index_user json_message
-    when 'removeUser'
+    when 'userRemoved'
       SearchService.scrub_indices json_message
     else
       Rails.logger.info "Skipping ..."

@@ -10,11 +10,11 @@ class BookConsumer
     Rails.logger.info "#{message_type} #{json_message}"
 
     case message_type
-    when 'addBook'
+    when 'bookAdded'
       add_book json_message
-    when 'updateBook'
+    when 'bookUpdated'
       update_book json_message
-    when 'removeBook'
+    when 'bookRemoved'
       remove_book json_message
     else
       Rails.logger.info "Skipping ..."

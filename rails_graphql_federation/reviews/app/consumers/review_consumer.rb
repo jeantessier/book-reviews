@@ -10,11 +10,11 @@ class ReviewConsumer
     Rails.logger.info "#{message_type} #{json_message}"
 
     case message_type
-    when 'addReview'
+    when 'reviewAdded'
       add_review json_message
-    when 'updateReview'
+    when 'reviewUpdated'
       update_review json_message
-    when 'removeReview'
+    when 'reviewRemoved'
       remove_review json_message
     else
       Rails.logger.info "Skipping ..."

@@ -15,7 +15,7 @@ module Mutations
       review[:start] = start unless start.nil?
       review[:stop] = stop unless stop.nil?
 
-      payload = { type: 'updateReview' }.merge(review).to_json
+      payload = { type: 'reviewUpdated' }.merge(review).to_json
 
       Rails.logger.info <<-MSG
         Sending message ...

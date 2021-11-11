@@ -20,7 +20,7 @@ module Mutations
         years: years,
       }
 
-      payload = { type: 'addBook' }.merge(book).to_json
+      payload = { type: 'bookAdded' }.merge(book).to_json
 
       Rails.logger.info <<-MSG
         Sending message ...

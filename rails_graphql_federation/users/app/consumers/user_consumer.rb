@@ -10,11 +10,11 @@ class UserConsumer
     Rails.logger.info "#{message_type} #{json_message}"
 
     case message_type
-    when 'addUser'
+    when 'userAdded'
       add_user json_message
-  when 'updateUser'
+    when 'userUpdated'
       update_user json_message
-  when 'removeUser'
+    when 'userRemoved'
       remove_user json_message
     else
       Rails.logger.info "Skipping ..."

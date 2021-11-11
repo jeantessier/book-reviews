@@ -9,7 +9,7 @@ module Mutations
       return { success: false } if book.nil?
 
       payload = {
-        type: 'removeBook',
+        type: 'bookRemoved',
         id: id,
       }.to_json
 

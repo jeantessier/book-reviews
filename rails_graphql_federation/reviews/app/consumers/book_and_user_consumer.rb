@@ -13,9 +13,9 @@ class BookAndUserConsumer
     Rails.logger.info "#{message_type} #{json_message}"
 
     case message_type
-    when 'removeBook'
+    when 'bookRemoved'
       remove_book json_message
-    when 'removeUser'
+    when 'userRemoved'
       remove_user json_message
     else
       Rails.logger.info "Skipping ..."
@@ -35,7 +35,7 @@ class BookAndUserConsumer
   def remove_all(reviews)
     reviews.each do |review|
       payload = {
-        type: 'removeReview',
+        type: 'reviewRemoved',
         id: review[:id],
       }.to_json
 

@@ -22,7 +22,7 @@ module Mutations
       book[:publisher] = publisher unless publisher.nil?
       book[:years] = years unless years.nil?
 
-      payload = { type: 'updateBook' }.merge(book).to_json
+      payload = { type: 'bookUpdated' }.merge(book).to_json
 
       Rails.logger.info <<-MSG
         Sending message ...

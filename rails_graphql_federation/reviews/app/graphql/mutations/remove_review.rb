@@ -9,7 +9,7 @@ module Mutations
       return { success: false } if review.nil?
 
       payload = {
-        type: 'removeReview',
+        type: 'reviewRemoved',
         id: id,
       }.to_json
 

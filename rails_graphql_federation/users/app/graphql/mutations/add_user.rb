@@ -18,7 +18,7 @@ module Mutations
         roles: roles,
       }
 
-      payload = { type: 'addUser' }.merge(user).to_json
+      payload = { type: 'userAdded' }.merge(user).to_json
 
       Rails.logger.info <<-MSG
         Sending message ...
