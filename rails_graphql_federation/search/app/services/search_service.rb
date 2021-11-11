@@ -63,7 +63,9 @@ class SearchService
       )
     end
 
-    def search(q)
+    def search(q, current_user)
+      user = current_user&.has_key?('sub') ? current_user['sub'] : nil
+
       results_collector = {}
 
       q.downcase.split(/\s+/).each do |word|
@@ -81,8 +83,8 @@ class SearchService
       results = results_collector.values.sort { |a, b| b[:weight] <=> a[:weight] }
 
       payload = {
-        id: nil,
-        user: nil,
+        id: user,
+        user: user,
         query: q,
         results: results,
       }
