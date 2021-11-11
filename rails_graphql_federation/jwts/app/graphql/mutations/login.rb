@@ -21,13 +21,12 @@ module Mutations
         name: user[:name],
         email: user[:email],
         roles: user[:roles],
+        iss: 'book-reviews',
+        sub: user[:id],
+        iat: Time.now.to_i,
+        exp: Time.now.to_i + 3 * 24 * 60 *  60, # 3 days in seconds
       }
-      options = {
-        expiresIn: 3 * 24 * 60 *  60, # 3 days in seconds
-        issuer: 'book-reviews',
-        subject: user[:id],
-      }
-      payload.merge(options).to_json
+      JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
     end
   end
 end

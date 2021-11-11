@@ -42,3 +42,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'graphql'
 gem 'apollo-federation'
 gem 'phobos'
+gem 'jwt'
+gem 'dotenv-rails'
