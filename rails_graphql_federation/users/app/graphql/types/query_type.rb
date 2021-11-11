@@ -7,6 +7,11 @@ module Types
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 
+    field :me,
+      Types::UserType,
+      null: true,
+      description: "Returns the currently logged in user"
+
     field :users,
       [Types::UserType],
       null: false,
@@ -18,6 +23,10 @@ module Types
       description: "Returns a specific user by its ID." do
         argument :id, ID, required: true
       end
+
+    def me
+      nil
+    end
 
     def users
       UserRepository.all
