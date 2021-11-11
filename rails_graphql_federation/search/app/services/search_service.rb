@@ -64,11 +64,41 @@ class SearchService
     end
 
     def query_plan(q)
-      {
-        words: [],
+      plan = {
+        words: q.downcase.split(/\s+/),
         indices: [],
         results: [],
       }
+
+      results_collector = {}
+
+      plan[:words].each do |word|
+        if indices.has_key?(word)
+          plan[:indices] << {
+            word: word,
+            entries: indices[word].values.map { |index_entry| { type: index_entry[:__typename],  }.merge(index_entry) }
+          }
+          indices[word].each do |id, index_entry|
+            if results_collector.has_key?(id)
+              results_collector[id][:weights] << { word: word, weight: index_entry[:score] }
+              results_collector[id][:total_weight] += index_entry[:score]
+            else
+              results_collector[id] = {
+                weights: [ { word: word, weight: index_entry[:score] } ],
+                total_weight: index_entry[:score],
+                id: index_entry[:id],
+                type: index_entry[:__typename],
+              }
+            end
+          end
+        end
+      end
+
+      plan[:results] = results_collector.values.sort { |a, b| b[:total_weight] <=> a[:total_weight] }
+
+      Rails.logger.info "plan: #{plan}"
+
+      plan
     end
 
     def log_indices
