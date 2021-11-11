@@ -60,7 +60,21 @@ class SearchService
     end
 
     def search(q)
-      []
+      results_collector = {}
+
+      q.downcase.split(/\s+/).each do |word|
+        if indices.has_key?(word)
+          indices[word].each do |id, index_entry|
+            if results_collector.has_key?(id)
+              results_collector[id][:weight] += index_entry[:score]
+            else
+              results_collector[id] = { weight: index_entry[:score] }.merge(index_entry)
+            end
+          end
+        end
+      end
+
+      results_collector.values.sort { |a, b| b[:weight] <=> a[:weight] }
     end
 
     def query_plan(q)
@@ -95,8 +109,6 @@ class SearchService
       end
 
       plan[:results] = results_collector.values.sort { |a, b| b[:total_weight] <=> a[:total_weight] }
-
-      Rails.logger.info "plan: #{plan}"
 
       plan
     end
