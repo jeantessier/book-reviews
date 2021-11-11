@@ -31,5 +31,7 @@ class IndexingConsumer
     else
       Rails.logger.info "Skipping ..."
     end
+
+    # SearchService.log_indices
   end
 end
