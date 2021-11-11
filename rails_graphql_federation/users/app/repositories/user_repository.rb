@@ -23,6 +23,6 @@ class UserRepository
   private
 
   def self.users
-    @@users ||= {}
+    @users ||= {}
   end
 end

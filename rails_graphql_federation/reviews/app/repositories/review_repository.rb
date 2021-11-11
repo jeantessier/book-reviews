@@ -27,6 +27,6 @@ class ReviewRepository
   private
 
   def self.reviews
-    @@reviews ||= {}
+    @reviews ||= {}
   end
 end

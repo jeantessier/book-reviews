@@ -23,6 +23,6 @@ class BookRepository
   private
 
   def self.books
-    @@books ||= {}
+    @books ||= {}
   end
 end
