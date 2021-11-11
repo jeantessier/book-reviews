@@ -16,15 +16,11 @@ module Types
     end
 
     def query_plan(q:)
-      {
-        words: [],
-        indices: [],
-        results: [],
-      }
+      SearchService.query_plan q
     end
 
     def search(q:)
-      []
+      SearchService.search q
     end
   end
 end
