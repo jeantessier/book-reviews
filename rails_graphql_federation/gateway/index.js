@@ -8,6 +8,7 @@ const reviews_service = process.env.REVIEWS_SERVICE || 'http://localhost:3002/gr
 const users_service = process.env.USERS_SERVICE || 'http://localhost:3003/graphql'
 const search_service = process.env.SEARCH_SERVICE || 'http://localhost:3004/graphql'
 const signatures_service = process.env.SIGNATURES_SERVICE || 'http://localhost:3005/graphql'
+const jwts_service = process.env.JWTS_SERVICE || 'http://localhost:3006/graphql'
 
 const gateway = new ApolloGateway({
     serviceList: [
@@ -16,6 +17,7 @@ const gateway = new ApolloGateway({
         { name: 'users', url: users_service },
         { name: 'search', url: search_service },
         { name: 'signatures', url: signatures_service },
+        { name: 'jwts', url: jwts_service },
     ],
     buildService: ({ url, name }) => {
         return new (class extends RemoteGraphQLDataSource {
