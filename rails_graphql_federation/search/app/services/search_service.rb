@@ -1,4 +1,8 @@
 class SearchService
+  include Phobos::Producer
+
+  KAFKA_TOPIC = 'book-reviews.searches'
+
   class << self
     def index_book(json_message)
       corpus = [
@@ -68,13 +72,35 @@ class SearchService
             if results_collector.has_key?(id)
               results_collector[id][:weight] += index_entry[:score]
             else
-              results_collector[id] = { weight: index_entry[:score] }.merge(index_entry)
+              results_collector[id] = index_entry.transform_keys { |k| k == :score ? :weight : k }
             end
           end
         end
       end
 
-      results_collector.values.sort { |a, b| b[:weight] <=> a[:weight] }
+      results = results_collector.values.sort { |a, b| b[:weight] <=> a[:weight] }
+
+      payload = {
+        id: nil,
+        user: nil,
+        query: q,
+        results: results,
+      }
+
+      Rails.logger.info <<-MSG
+        Sending message ...
+          topic: #{KAFKA_TOPIC}
+          key: #{payload[:id]}
+          payload: #{payload.to_json}
+      MSG
+
+      producer.publish(
+        topic: KAFKA_TOPIC,
+        key: payload[:id],
+        payload: payload.to_json,
+      )
+
+      results
     end
 
     def query_plan(q)
