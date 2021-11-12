@@ -13,7 +13,7 @@ class ApplicationController < ActionController::API
     return unless md
 
     begin
-      @current_user = JWT.decode(md[:token], ENV['JWT_SECRET'], true, { algorithm: 'HS256' }).first
+      @current_user = JWT.decode(md[:token], ENV['JWT_SECRET'], true, { algorithm: 'HS256' }).first.transform_keys(&:to_sym)
     rescue JWT::ExpiredSignature
       # Ignore
     end

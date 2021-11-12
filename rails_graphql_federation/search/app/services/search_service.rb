@@ -64,7 +64,7 @@ class SearchService
     end
 
     def search(q, current_user)
-      user = current_user&.has_key?('sub') ? current_user['sub'] : nil
+      user = current_user&.has_key?(:sub) ? current_user[:sub] : nil
 
       results_collector = {}
 

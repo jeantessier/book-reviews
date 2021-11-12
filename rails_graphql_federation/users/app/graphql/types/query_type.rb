@@ -26,7 +26,7 @@ module Types
 
     def me
       Rails.logger.info "current_user: #{context[:current_user]}"
-      UserRepository.find_by_id(context[:current_user]['sub']) unless context[:current_user].nil?
+      UserRepository.find_by_id(context[:current_user][:sub]) unless context[:current_user].nil?
     end
 
     def users
