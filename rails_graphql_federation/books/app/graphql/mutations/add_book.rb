@@ -8,6 +8,13 @@ module Mutations
 
     field :book, Types::BookType, null: true
 
+    def ready?(name:, titles:, authors:, publisher:, years:)
+      raise 'You need to be signed in to use this mutation.' if context[:current_user].nil?
+      raise 'You need to have admin privileges to use this mutation.' unless context[:current_user][:roles]&.include?('ROLE_ADMIN')
+
+      true
+    end
+
     def resolve(name:, titles:, authors:, publisher:, years:)
       raise "Duplicate name \"#{name}\"" unless BookRepository.find_by_name(name).nil?
 

@@ -9,6 +9,13 @@ module Mutations
 
     field :book, Types::BookType, null: true
 
+    def ready?(id:, name: nil, titles: nil, authors: nil, publisher: nil, years: nil)
+      raise 'You need to be signed in to use this mutation.' if context[:current_user].nil?
+      raise 'You need to have admin privileges to use this mutation.' unless context[:current_user][:roles]&.include?('ROLE_ADMIN')
+
+      true
+    end
+
     def resolve(id:, name: nil, titles: nil, authors: nil, publisher: nil, years: nil)
       book = BookRepository.find_by_id(id).dup
       raise "No book with ID #{id}" if book.nil?
