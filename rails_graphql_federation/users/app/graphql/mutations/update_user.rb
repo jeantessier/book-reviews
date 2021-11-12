@@ -8,6 +8,14 @@ module Mutations
 
     field :user, Types::UserType, null: true
 
+    def ready?(id:, name: nil, email: nil, password: nil, roles: nil)
+      raise 'You need to be signed in to use this mutation.' if context[:current_user].nil?
+      raise 'You need to have admin privileges to use this mutation on another user.' unless context[:current_user][:sub] == id || context[:current_user][:roles]&.include?('ROLE_ADMIN')
+      raise 'You need to have admin privileges to change roles on a user.' unless roles.nil? || context[:current_user][:roles]&.include?('ROLE_ADMIN')
+
+      true
+    end
+
     def resolve(id:, name: nil, email: nil, password: nil, roles: nil)
       user = UserRepository.find_by_id(id).dup
       raise "No user with ID #{id}" if user.nil?
