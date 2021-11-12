@@ -37,7 +37,7 @@ class UserConsumer
 
   def update_user(json_message)
     user = UserRepository.find_by_id(json_message['id'])
-    raise "No user with ID #{json_message['id']}" if book.nil?
+    raise "No user with ID #{json_message['id']}" if user.nil?
 
     user[:name] = json_message['name'] if json_message.include?('name')
     user[:email] = json_message['email'] if json_message.include?('email')
