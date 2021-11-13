@@ -82,18 +82,18 @@ const typeDefs = gql`
   }
 
   input AddReviewInput {
-      reviewerId: ID
-      bookId: ID!
-      body: String!
-      start: String
-      stop: String
+    reviewerId: ID
+    bookId: ID!
+    body: String!
+    start: String
+    stop: String
   }
 
   input UpdateReviewInput {
-      id: ID!
-      body: String
-      start: String
-      stop: String
+    id: ID!
+    body: String
+    start: String
+    stop: String
   }
 
   extend type User @key(fields: "id") {

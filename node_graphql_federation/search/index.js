@@ -215,32 +215,32 @@ const typeDefs = gql`
   union SearchResult = Book | Review | User
 
   type QueryPlan {
-      words: [String!]!
-      indices: [MatchingIndex!]!
-      results: [MatchingResult!]!
+    words: [String!]!
+    indices: [MatchingIndex!]!
+    results: [MatchingResult!]!
   }
 
   type MatchingIndex {
-      word: String!
-      entries: [IndexEntry!]!
+    word: String!
+    entries: [IndexEntry!]!
   }
   
   type IndexEntry {
-      score: Float!
-      id: ID!
-      type: String!
+    score: Float!
+    id: ID!
+    type: String!
   }
   
   type MatchingResult {
-      weights: [MatchingResultWeight!]!
-      totalWeight: Float!
-      id: ID!
-      type: String!
+    weights: [MatchingResultWeight!]!
+    totalWeight: Float!
+    id: ID!
+    type: String!
   }
   
   type MatchingResultWeight {
-      word: String!
-      weight: Float!
+    word: String!
+    weight: Float!
   }
   
   type Query {

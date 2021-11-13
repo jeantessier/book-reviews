@@ -42,9 +42,9 @@ const typeDefs = gql`
   }
 
   input SignUpInput {
-      name: String!
-      email: String!
-      password: String!
+    name: String!
+    email: String!
+    password: String!
   }
   
   input AddUserInput {

@@ -67,12 +67,12 @@ const typeDefs = gql`
   }
 
   input UpdateBookInput {
-      id: ID!
-      name: String
-      titles: [TitleInput!]
-      authors: [String!]
-      publisher: String
-      years: [String!]
+    id: ID!
+    name: String
+    titles: [TitleInput!]
+    authors: [String!]
+    publisher: String
+    years: [String!]
   }
 
   input TitleInput {
