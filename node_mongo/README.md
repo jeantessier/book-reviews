@@ -285,5 +285,5 @@ author of the review.
 
     $ http --auth-type jwt DELETE :3000/api/review
 
-Admins can delete **all** review.  Otherwise, the subject of the JWT will delete
-all of **their** own reviews.
+Admins will delete **all** reviews.  Otherwise, the subject of the JWT will
+delete all of **their** own reviews.
