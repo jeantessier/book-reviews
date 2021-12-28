@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Book = mongoose.model('Book');
+const Review = mongoose.model('Review');
 
 const sendJSONresponse = (res, status, content) => {
     res.status(status);
@@ -179,6 +180,7 @@ module.exports.deleteOne = async (req, res) => {
     try {
         const book = await Book.findOneAndDelete({ _id: req.params.id });
         if (book) {
+            await Review.deleteMany({ book: req.params.id });
             sendJSONresponse(res, 204, null);
         } else {
             sendJSONresponse(res, 404, {
@@ -200,6 +202,7 @@ module.exports.deleteAll = async (req, res) => {
 
     try {
         await Book.deleteMany();
+        await Review.deleteMany();
         sendJSONresponse(res, 204, null);
     } catch(err) {
         sendJSONresponse(res, 404, err);
