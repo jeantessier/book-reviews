@@ -10,7 +10,7 @@ const sendJSONresponse = (res, status, content) => {
 
 module.exports.readMe = async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.currentUser.sub });
+        const user = await User.findOne({ _id: req.currentUser.sub }).select("-salt -hash");
         if (user) {
             sendJSONresponse(res, 200, user);
         } else {

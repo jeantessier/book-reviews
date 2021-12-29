@@ -9,7 +9,7 @@ const sendJSONresponse = (res, status, content) => {
 
 module.exports.list = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find({}).select('-salt -hash');
         sendJSONresponse(res, 200, users);
     } catch(err) {
         sendJSONresponse(res, 400, err);
@@ -51,7 +51,7 @@ module.exports.create = async (req, res) => {
 
 module.exports.readOne = async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.params.id });
+        const user = await User.findOne({ _id: req.params.id }).select('-salt -hash');
         if (user) {
             sendJSONresponse(res, 200, user);
         } else {

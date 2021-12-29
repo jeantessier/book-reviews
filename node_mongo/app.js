@@ -16,6 +16,10 @@ const routesApi = require('./app_api/routes/index');
 
 const app = express();
 
+// Do not leak password-related parts of users
+const REDACTED_FIELDS = [ 'salt', 'hash' ];
+app.set('json replacer', (k, v) => REDACTED_FIELDS.includes(k) ? '[REDACTED]' : v)
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
