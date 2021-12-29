@@ -1,45 +1,42 @@
-const mongoose = require('mongoose');
-const Book = mongoose.model('Book');
-const Review = mongoose.model('Review');
+const mongoose = require('mongoose')
+const Book = mongoose.model('Book')
+const Review = mongoose.model('Review')
 
-const sendJSONresponse = (res, status, content) => {
-    res.status(status);
-    res.json(content);
-};
+const sendJSONresponse = (res, status, content) => res.status(status).json(content)
 
 module.exports.list = async (req, res) => {
     try {
-        const books = await Book.find();
-        sendJSONresponse(res, 200, books);
+        const books = await Book.find()
+        sendJSONresponse(res, 200, books)
     } catch(err) {
-        sendJSONresponse(res, 400, err);
+        sendJSONresponse(res, 400, err)
     }
-};
+}
 
 module.exports.create = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
-    const { name, titles, authors, publisher, years } = req.body;
+    const { name, titles, authors, publisher, years } = req.body
 
     if (!name) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
-        });
-        return;
+        })
+        return
     }
 
     try {
-        const namedBook = await Book.findOne({ name });
+        const namedBook = await Book.findOne({ name })
         if (namedBook) {
             sendJSONresponse(res, 409, {
                 "message": `There is already a book named ${name}`
-            });
-            return;
+            })
+            return
         }
 
         const book = new Book({
@@ -48,36 +45,36 @@ module.exports.create = async (req, res) => {
             authors: authors ? authors : [],
             publisher,
             years: years ? years : [],
-        });
+        })
 
-        await book.save();
-        sendJSONresponse(res, 201, book);
+        await book.save()
+        sendJSONresponse(res, 201, book)
     } catch(err) {
-        sendJSONresponse(res, 400, err);
+        sendJSONresponse(res, 400, err)
     }
-};
+}
 
 module.exports.readOne = async (req, res) => {
     try {
-        const book = await Book.findOne({ _id: req.params.id });
+        const book = await Book.findOne({ _id: req.params.id })
         if (book) {
-            sendJSONresponse(res, 200, book);
+            sendJSONresponse(res, 200, book)
         } else {
             sendJSONresponse(res, 404, {
                 "message": `No book with ID ${req.params.id}`
-            });
+            })
         }
     } catch(err) {
-        sendJSONresponse(res, 404, err);
+        sendJSONresponse(res, 404, err)
     }
-};
+}
 
 module.exports.updateOne = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
     try {
@@ -85,126 +82,126 @@ module.exports.updateOne = async (req, res) => {
         if (!book) {
             sendJSONresponse(res, 404, {
                 "message": `No book with ID ${req.params.id}`
-            });
-            return;
+            })
+            return
         }
 
-        const { name, titles, authors, publisher, years } = req.body;
+        const { name, titles, authors, publisher, years } = req.body
 
-        const namedBook = await Book.findOne({ name });
-        if (namedBook && namedBook != book) {
+        const namedBook = await Book.findOne({ name })
+        if (namedBook && namedBook !== book) {
             sendJSONresponse(res, 409, {
                 "message": `There is already a book named ${name}`
-            });
-            return;
+            })
+            return
         }
 
         if (name) {
-            book.name = name;
+            book.name = name
         }
         if (titles) {
-            book.titles = titles;
+            book.titles = titles
         }
         if (authors) {
-            book.authors = authors;
+            book.authors = authors
         }
         if (publisher) {
-            book.publisher = publisher;
+            book.publisher = publisher
         }
         if (years) {
-            book.years = years;
+            book.years = years
         }
 
         await book.save()
-        sendJSONresponse(res, 200, book);
+        sendJSONresponse(res, 200, book)
     } catch(err) {
-        sendJSONresponse(res, 400, err);
+        sendJSONresponse(res, 400, err)
     }
-};
+}
 
 module.exports.replaceOne = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
-    const { name, titles, authors, publisher, years } = req.body;
+    const { name, titles, authors, publisher, years } = req.body
 
     if (!name) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
-        });
-        return;
+        })
+        return
     }
 
     try {
-        const book = await Book.findOne({ _id: req.params.id });
+        const book = await Book.findOne({ _id: req.params.id })
         if (!book) {
             sendJSONresponse(res, 404, {
                 "message": `No book with ID ${req.params.id}`
-            });
-            return;
+            })
+            return
         }
 
-        const namedBook = await Book.findOne({ name });
-        if (namedBook && namedBook != book) {
+        const namedBook = await Book.findOne({ name })
+        if (namedBook && namedBook !== book) {
             sendJSONresponse(res, 409, {
                 "message": `There is already a book named ${name}`
-            });
-            return;
+            })
+            return
         }
 
-        book.name = name;
-        book.titles = titles ? titles : [];
-        book.authors = authors ? authors : [];
-        book.publisher = publisher;
-        book.years = years ? years : [];
+        book.name = name
+        book.titles = titles ? titles : []
+        book.authors = authors ? authors : []
+        book.publisher = publisher
+        book.years = years ? years : []
 
-        await book.save();
-        sendJSONresponse(res, 200, book);
+        await book.save()
+        sendJSONresponse(res, 200, book)
     } catch(err) {
-        sendJSONresponse(res, 400, err);
+        sendJSONresponse(res, 400, err)
     }
-};
+}
 
 module.exports.deleteOne = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
     try {
-        const book = await Book.findOneAndDelete({ _id: req.params.id });
+        const book = await Book.findOneAndDelete({ _id: req.params.id })
         if (book) {
-            await Review.deleteMany({ book: req.params.id });
-            sendJSONresponse(res, 204, null);
+            await Review.deleteMany({ book: req.params.id })
+            sendJSONresponse(res, 204, null)
         } else {
             sendJSONresponse(res, 404, {
                 "message": `No book with ID ${req.params.id}`
-            });
+            })
         }
     } catch(err) {
-        sendJSONresponse(res, 404, err);
+        sendJSONresponse(res, 404, err)
     }
-};
+}
 
 module.exports.deleteAll = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
     try {
-        await Book.deleteMany();
-        await Review.deleteMany();
-        sendJSONresponse(res, 204, null);
+        await Book.deleteMany()
+        await Review.deleteMany()
+        sendJSONresponse(res, 204, null)
     } catch(err) {
-        sendJSONresponse(res, 404, err);
+        sendJSONresponse(res, 404, err)
     }
-};
+}

@@ -81,7 +81,7 @@ manually in MongoDB.
 db.users.findOneAndUpdate(
     { "name": "Administrator" },
     { $addToSet: { roles: "ROLE_ADMIN" } }
-);
+)
 ```
 
 > If you are using the experimental setup with Docker Compose to run the server,

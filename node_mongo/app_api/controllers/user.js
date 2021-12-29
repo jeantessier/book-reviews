@@ -1,75 +1,72 @@
-const mongoose = require('mongoose');
-const Review = mongoose.model('Review');
-const User = mongoose.model('User');
+const mongoose = require('mongoose')
+const Review = mongoose.model('Review')
+const User = mongoose.model('User')
 
-const sendJSONresponse = (res, status, content) => {
-    res.status(status);
-    res.json(content);
-};
+const sendJSONresponse = (res, status, content) => res.status(status).json(content)
 
 module.exports.list = async (req, res) => {
     try {
-        const users = await User.find({}).select('-salt -hash');
-        sendJSONresponse(res, 200, users);
+        const users = await User.find({}).select('-salt -hash')
+        sendJSONresponse(res, 200, users)
     } catch(err) {
-        sendJSONresponse(res, 400, err);
+        sendJSONresponse(res, 400, err)
     }
-};
+}
 
 module.exports.create = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
-    const { name, email, password, roles } = req.body;
+    const { name, email, password, roles } = req.body
 
     if (!name || !email || !password) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
-        });
-        return;
+        })
+        return
     }
 
     const user = new User({
         name,
         email,
         roles: roles ? roles : ["ROLE_USER"],
-    });
+    })
 
-    user.setPassword(password);
+    user.setPassword(password)
 
     try {
-        await user.save();
-        sendJSONresponse(res, 201, user);
+        await user.save()
+        sendJSONresponse(res, 201, user)
     } catch(err) {
-        sendJSONresponse(res, 400, err);
+        sendJSONresponse(res, 400, err)
     }
-};
+}
 
 module.exports.readOne = async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.params.id }).select('-salt -hash');
+        const user = await User.findOne({ _id: req.params.id }).select('-salt -hash')
         if (user) {
-            sendJSONresponse(res, 200, user);
+            sendJSONresponse(res, 200, user)
         } else {
             sendJSONresponse(res, 404, {
                 "message": `No user with ID ${req.params.id}`
-            });
+            })
         }
     } catch(err) {
-        sendJSONresponse(res, 404, err);
+        sendJSONresponse(res, 404, err)
     }
-};
+}
 
 module.exports.updateOne = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
     try {
@@ -77,107 +74,107 @@ module.exports.updateOne = async (req, res) => {
         if (!user) {
             sendJSONresponse(res, 404, {
                 "message": `No user with ID ${req.params.id}`
-            });
-            return;
+            })
+            return
         }
 
-        const { name, email, password, roles } = req.body;
+        const { name, email, password, roles } = req.body
 
         if (name) {
-            user.name = name;
+            user.name = name
         }
         if (email) {
-            user.email = email;
+            user.email = email
         }
         if (roles) {
-            user.roles = roles;
+            user.roles = roles
         }
         if (password) {
-            user.setPassword(password);
+            user.setPassword(password)
         }
 
         await user.save()
-        sendJSONresponse(res, 200, user);
+        sendJSONresponse(res, 200, user)
     } catch(err) {
-        sendJSONresponse(res, 400, err);
+        sendJSONresponse(res, 400, err)
     }
-};
+}
 
 module.exports.replaceOne = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
-    const { name, email, password, roles } = req.body;
+    const { name, email, password, roles } = req.body
 
     if (!name || !email || !password) {
         sendJSONresponse(res, 400, {
             "message": "All fields required"
-        });
-        return;
+        })
+        return
     }
 
     try {
-        const user = await User.findOne({ _id: req.params.id });
+        const user = await User.findOne({ _id: req.params.id })
         if (!user) {
             sendJSONresponse(res, 404, {
                 "message": `No user with ID ${req.params.id}`
-            });
-            return;
+            })
+            return
         }
 
-        user.name = name;
-        user.email = email;
-        user.roles = roles ? roles : ["ROLE_USER"];
+        user.name = name
+        user.email = email
+        user.roles = roles ? roles : ["ROLE_USER"]
 
-        user.setPassword(password);
+        user.setPassword(password)
 
-        await user.save();
-        sendJSONresponse(res, 200, user);
+        await user.save()
+        sendJSONresponse(res, 200, user)
     } catch(err) {
-        sendJSONresponse(res, 400, err);
+        sendJSONresponse(res, 400, err)
     }
-};
+}
 
 module.exports.deleteOne = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
     try {
-        const user = await User.findOneAndDelete({ _id: req.params.id });
+        const user = await User.findOneAndDelete({ _id: req.params.id })
         if (user) {
-            await Review.deleteMany({ reviewer: req.params.id });
-            sendJSONresponse(res, 204, null);
+            await Review.deleteMany({ reviewer: req.params.id })
+            sendJSONresponse(res, 204, null)
         } else {
             sendJSONresponse(res, 404, {
                 "message": `No user with ID ${req.params.id}`
-            });
+            })
         }
     } catch(err) {
-        sendJSONresponse(res, 404, err);
+        sendJSONresponse(res, 404, err)
     }
-};
+}
 
 module.exports.deleteAll = async (req, res) => {
     if (!req.currentUser.admin) {
         sendJSONresponse(res, 403, {
             "message": "You need admin privileges for this operation"
-        });
-        return;
+        })
+        return
     }
 
     try {
-        await User.deleteMany();
-        await Review.deleteMany();
-        sendJSONresponse(res, 204, null);
+        await User.deleteMany()
+        await Review.deleteMany()
+        sendJSONresponse(res, 204, null)
     } catch(err) {
-        sendJSONresponse(res, 404, err);
+        sendJSONresponse(res, 404, err)
     }
-};
+}
