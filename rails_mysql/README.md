@@ -8,14 +8,14 @@ This command will create a new database named
 `rails_mysql_book_reviews_development` and populate it with seed data.
 
 ```bash
-$ bin/rails db:setup
+bin/rails db:setup
 ```
 
 This command will replace the seed data with data derived from
 `../data/Books_????-??-??*.md`.
 
 ```bash
-$ ./Books_rails_mysql.pl | mysql -u root
+./Books_rails_mysql.pl | mysql -u root
 ```
 
 ## Running the Tests
@@ -23,7 +23,7 @@ $ ./Books_rails_mysql.pl | mysql -u root
 You can run all the tests with:
 
 ```bash
-$ bin/rspec
+bin/rspec
 ```
 
 ## Running the Server
@@ -31,7 +31,7 @@ $ bin/rspec
 You can start the application with:
 
 ```bash
-$ bin/rails server
+bin/rails server
 ```
 
 And use the base URL http://localhost:3000.
@@ -44,13 +44,13 @@ And use the base URL http://localhost:3000.
 > it with:
 >
 > ```bash
-> $ pip install httpie
+> pip install httpie
 > ```
 >
 > It assumes HTTP and `localhost` by default, so a call can be as simple as:
 >
 > ```bash
-> $ http :3000
+> http :3000
 > ```
 
 ## Making REST Calls
@@ -58,7 +58,7 @@ And use the base URL http://localhost:3000.
 To get a single review:
 
 ```bash
-$ http :3000/reviews/1
+http :3000/reviews/1
 ```
 ```json
 {
@@ -76,7 +76,7 @@ $ http :3000/reviews/1
 Use its `book_id` attribute to fetch the book's details:
 
 ```bash
-$ http :3000/books/4
+http :3000/books/4
 ```
 ```json
 {
@@ -91,7 +91,7 @@ $ http :3000/books/4
 And the book's title(s):
 
 ```bash
-$ http :3000/books/1/titles
+http :3000/books/1/titles
 ```
 ```json
 [
@@ -108,7 +108,7 @@ $ http :3000/books/1/titles
 And the book's author(s):
 
 ```bash
-$ http :3000/books/1/authors
+http :3000/books/1/authors
 ```
 ```json
 [
@@ -130,7 +130,7 @@ $ http :3000/books/1/authors
 And the book's publication history:
 
 ```bash
-$ http :3000/books/1/years
+http :3000/books/1/years
 ```
 ```json
 [
@@ -146,7 +146,7 @@ $ http :3000/books/1/years
 Use the review's `reviewer_id` attribute to fetch the reviewer's details:
 
 ```bash
-$ http :3000/users/1
+http :3000/users/1
 ```
 ```json
 {
@@ -162,13 +162,13 @@ This implementation does not let you list all its users, but you can fetch
 information about individual users by ID.
 
 ```bash
-$ http :3000/users/1
+http :3000/users/1
 ```
 
 To get a list of books:
 
 ```bash
-$ http :3000/books
+http :3000/books
 ```
 
 ## Making Authenticated REST Calls
@@ -186,8 +186,9 @@ You will need to create a `User` and generate a JWT token for them.
 > For now, you can use the Rails console if you need to create additional users.
 >
 > ```bash
-> $ bin/rails console
+> bin/rails console
 > ```
+> 
 > ```ruby
 > User.create! name: "Jean Tessier", email: "jean@jeantessier.com", password: "abcd1234"
 > ```
@@ -195,7 +196,7 @@ You will need to create a `User` and generate a JWT token for them.
 Once you have a user, you can get the JWT token from the `/user_token` endpoint.
 
 ```bash
-$ http \
+http \
     POST \
     :3000/user_token \
     auth:='{"email": "jean@jeantessier.com", "password": "abcd1234"}'
@@ -214,9 +215,7 @@ You can use the JWT to call protected endpoints that require authentication.
 To create a book:
 
 ```bash
-$ http \
-    POST \
-    :3000/books \
+http :3000/books \
     Authentication:"Bearer eyJ0...P9Pk" \
     name=The_Hobbit \
     publisher="Houghton Mifflin"
@@ -226,9 +225,11 @@ Since putting the JWT on every command-line is tedious, you can tell Httpie to
 fetch it from your shell's environment.
 
 ```bash
-$ pip install httpie-jwt-auth
-$ export JWT_AUTH_TOKEN=eyJ0...P9Pk
-$ http --auth-type jwt POST :3000/books name=The_Hobbit publisher="Houghton Mifflin"
+pip install httpie-jwt-auth
+export JWT_AUTH_TOKEN=eyJ0...P9Pk
+http --auth-type jwt :3000/books \
+    name=The_Hobbit \
+    publisher="Houghton Mifflin"
 ```
 
 > Handy one-liner:
@@ -239,31 +240,31 @@ $ http --auth-type jwt POST :3000/books name=The_Hobbit publisher="Houghton Miff
 To update a book:
 
 ```bash
-$ http --auth-type jwt PATCH :3000/books/1 publisher="Allen & Unwin"
+http --auth-type jwt PATCH :3000/books/1 publisher="Allen & Unwin"
 ```
 
 To add a title:
 
 ```bash
-$ http --auth-type jwt POST :3000/books/1/titles title="The Hobbit"
+http --auth-type jwt :3000/books/1/titles title="The Hobbit"
 ```
 
 To add an author:
 
 ```bash
-$ http --auth-type jwt POST :3000/books/1/authors name="J.R.R. Tolkien"
+http --auth-type jwt :3000/books/1/authors name="J.R.R. Tolkien"
 ```
 
 To add a publication year:
 
 ```bash
-$ http --auth-type jwt POST :3000/books/1/years year=1937
+http --auth-type jwt :3000/books/1/years year=1937
 ```
 
 To add a review:
 
 ```bash
-$ http --auth-type jwt POST :3000/reviews reviewer_id:=1 book_id:=1 body="This book is amazing, so far." start=2019-11-10
+http --auth-type jwt :3000/reviews reviewer_id:=1 book_id:=1 body="This book is amazing, so far." start=2019-11-10
 ```
 
 > Right now, we have to pass in the reviewer's ID explicitly.  It will
@@ -274,7 +275,7 @@ $ http --auth-type jwt POST :3000/reviews reviewer_id:=1 book_id:=1 body="This b
 ### Sample Queries
 
 ```bash
-$ http :3000/graphql query="{me {name user {name email}}}" | jq '.data'
+http :3000/graphql query="{me {name user {name email}}}" | jq '.data'
 ```
 
 You can also issue GraphQL queries with http://localhost:3000/graphiql.
@@ -422,7 +423,7 @@ This will write the schema as
 GraphQL Schema Language to `app/graphql/rails_mysql_schema.graphql`.
 
 ```bash
-$ bin/rake graphql:schema:idl
+bin/rake graphql:schema:idl
 ```
 
 This will write the schema as
@@ -430,5 +431,5 @@ GraphQL Schema Language to `app/graphql/rails_mysql_schema.graphql`
 and as JSON to `app/graphql/rails_mysql_schema.json`.
 
 ```bash
-$ bin/rake graphql:schema:dump
+bin/rake graphql:schema:dump
 ```
