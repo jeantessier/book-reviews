@@ -4,10 +4,6 @@ class ApplicationController < ActionController::API
 
   protected
 
-  def set_book
-    @book = Book.find(params[:book_id])
-  end
-
   def current_user
     User.find_by(id: jwt_payload['sub']) if jwt_payload
   end

@@ -1,11 +1,9 @@
-class BookAuthorsController < ApplicationController
-  before_action :authenticate_user, only: [:create, :update, :destroy]
-  before_action :set_book
+class BookAuthorsController < BookPartController
   before_action :set_book_author, only: [:show, :update, :destroy]
 
   # GET /books/:book_id/book_authors
   def index
-    render json: @book.authors.sort
+    render json: book.authors.sort
   end
 
   # GET /books/:book_id/book_authors/1
@@ -15,8 +13,8 @@ class BookAuthorsController < ApplicationController
 
   # POST /books/:book_id/book_authors
   def create
-    @book.authors.create!(book_author_params)
-    render json: @book, status: :created
+    book.authors.create!(book_author_params)
+    render json: book, status: :created
 
     rescue
       render json: {error: $!}, status: :unprocessable_entity
@@ -40,13 +38,12 @@ class BookAuthorsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_book_author
-      @book_author = @book.authors.find_by!(id: params[:id]) if @book
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def book_author_params
-      params.require(:book_author).permit(:author, :order)
-    end
+  def set_book_author
+    @book_author = book.authors.find_by!(id: params[:id]) if book
+  end
+
+  def book_author_params
+    params.require(:book_author).permit(:author, :order)
+  end
 end
