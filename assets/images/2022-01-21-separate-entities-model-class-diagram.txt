@@ -1,0 +1,43 @@
+@startuml
+
+class Book {
+    name
+}
+
+class Author {
+    name
+}
+
+class Year {
+    year
+}
+
+class Publisher {
+    name
+}
+
+class Title {
+    title
+    link
+}
+
+class Review {
+    body
+    start
+    stop
+}
+
+class User {
+    name
+    email
+    password
+}
+
+Book *-left- "*" Title
+Book *-- "*" Author
+Book *-- "*" Year
+Book *-- "1" Publisher
+Book "1" -- "*" Review
+User "1" -- "*" Review
+
+@enduml
