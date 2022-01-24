@@ -34,9 +34,9 @@ class User {
 }
 
 Book *-left- "*" Title
-Book *-- "*" Author
-Book *-- "*" Year
-Book *-- "1" Publisher
+Book "*" -- "*" Author
+Book "*" -- "*" Year
+Book "*" -- "1" Publisher
 Book "1" -- "*" Review
 User "1" -- "*" Review
 
