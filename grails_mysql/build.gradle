@@ -75,7 +75,7 @@ dependencies {
     testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:3.141.59"
 
     runtimeOnly "mysql:mysql-connector-java"
-    implementation "org.grails.plugins:spring-security-core:4.0.0.M2"
+    implementation "org.grails.plugins:spring-security-core:5.0.0-RC1"
 }
 
 bootRun {
