@@ -27,11 +27,13 @@ Each service is a Rails app.  You need to run `bundle install` to fetch their
 dependencies.
 
 ```bash
-for service in books reviews users search signatures jwts gateway
+for service in books reviews users search signatures jwts
 do
     echo '==========' $service '=========='
     (cd $service; bundle install)
 done
+echo '========== gateway =========='
+(cd gateway; npm install)
 ```
 
 ### Using Docker Compose
@@ -66,7 +68,7 @@ docker compose up -d
 for service in books reviews users search signatures jwts
 do
     echo '==========' $service '=========='
-    (cd $service; bin/rails sercvice &)
+    (cd $service; bin/rails service &)
 done
 ```
 
