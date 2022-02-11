@@ -27,8 +27,8 @@ class SearchService
         json_message['id'],
         normalize(json_message['body']),
       ]
-      corpus << normalize(json_message['start']) if json_message.include?('start')
-      corpus << normalize(json_message['stop']) if json_message.include?('stop')
+      corpus << normalize(json_message['start']) if json_message['start'].present?
+      corpus << normalize(json_message['stop']) if json_message['stop'].present?
       update_index(
         corpus,
         {
