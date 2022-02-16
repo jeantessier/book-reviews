@@ -119,7 +119,7 @@ GEM
       logging
       ruby-kafka
       thor
-    puma (5.5.2)
+    puma (5.6.2)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
@@ -187,7 +187,7 @@ DEPENDENCIES
   jwt
   listen (~> 3.3)
   phobos
-  puma (~> 5.0)
+  puma (~> 5.6)
   rails (~> 6.1.4, >= 6.1.4.1)
   spring
   sqlite3 (~> 1.4)
