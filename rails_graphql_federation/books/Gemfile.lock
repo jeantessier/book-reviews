@@ -84,7 +84,7 @@ GEM
       activesupport (>= 5.0)
     google-protobuf (3.19.4-x86_64-darwin)
     google-protobuf (3.19.4-x86_64-linux)
-    graphql (2.0.0)
+    graphql (1.13.10)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     jwt (2.3.0)
@@ -183,7 +183,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   dotenv-rails
-  graphql
+  graphql (~> 1.13)
   jwt
   listen (~> 3.3)
   phobos
