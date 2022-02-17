@@ -81,7 +81,7 @@ module Types
     end
 
     def me
-      context[:jwt]
+      context[:current_user]
     end
 
     def search(q:)
