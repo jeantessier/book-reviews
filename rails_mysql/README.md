@@ -196,9 +196,7 @@ You will need to create a `User` and generate a JWT token for them.
 Once you have a user, you can get the JWT token from the `/user_token` endpoint.
 
 ```bash
-http \
-    POST \
-    :3000/user_token \
+http :3000/user_token \
     auth:='{"email": "jean@jeantessier.com", "password": "abcd1234"}'
 ```
 
@@ -209,6 +207,8 @@ And you'll get a response that looks like:
     "jwt": "eyJ0...P9Pk"
 }
 ```
+
+> This endpoint is currently unavailable.  Use the GraphQL method below instead.
 
 You can use the JWT to call protected endpoints that require authentication.
 
