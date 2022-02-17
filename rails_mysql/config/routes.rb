@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql" if Rails.env.development?
   post "/graphql", to: "graphql#execute"
-  post 'user_token' => 'user_token#create'
   devise_for :users
   resources :books do
     resources :book_authors, path: "authors"
@@ -10,5 +9,8 @@ Rails.application.routes.draw do
   end
   resources :reviews
   get 'users/:id' => 'users#show'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  # Defines the root path route ("/")
+  # root "articles#index"
 end

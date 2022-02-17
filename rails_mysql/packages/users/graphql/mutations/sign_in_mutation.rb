@@ -9,7 +9,6 @@ module Mutations
 
     field :jwt, String, null: true
 
-    # Inspired by Knock::AuthTokenController.
     # The error messages are too verbose for real sign in error message.
     # They are just to illustrate all that can be done with UserError.
     def resolve(email:, password:)
@@ -17,7 +16,7 @@ module Mutations
 
       if user.present?
         if user.authenticate(password)
-          auth_token = Knock::AuthToken.new payload: user.to_token_payload
+          auth_token = generate_jwt(user)
         else
           add_user_error argument: :password, message: "Password \"#{password}\" didn't match."
         end
@@ -25,7 +24,22 @@ module Mutations
         add_user_error argument: :email, message: "No user with email \"#{email}\"."
       end
 
-      with_user_errors jwt: auth_token&.token
+      with_user_errors jwt: auth_token
+    end
+
+    private
+
+    def generate_jwt(user)
+      payload = {
+        name: user[:name],
+        email: user[:email],
+        roles: user[:roles],
+        iss: 'book-reviews',
+        sub: user[:id],
+        iat: Time.now.to_i,
+        exp: Time.now.to_i + 3 * 24 * 60 *  60, # 3 days in seconds
+      }
+      JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
     end
   end
 end
