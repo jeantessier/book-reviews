@@ -117,8 +117,8 @@ GEM
       railties
       sprockets-rails
     graphql (1.13.10)
-    graphql-batch (0.5.0)
-      graphql (>= 1.10, < 2)
+    graphql-batch (0.5.1)
+      graphql (>= 1.10, < 3)
       promise.rb (~> 0.7.2)
     html_tokenizer (0.0.7)
     i18n (1.10.0)
@@ -127,7 +127,7 @@ GEM
     io-wait (0.2.1)
     irb (1.4.1)
       reline (>= 0.3.0)
-    jwt (1.5.6)
+    jwt (2.3.0)
     loofah (2.14.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -136,7 +136,7 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.7.1)
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
     msgpack (1.4.5)
     mysql2 (0.5.3)
@@ -156,8 +156,8 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.1)
-      mini_portile2 (~> 2.7.0)
+    nokogiri (1.13.3)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     packwerk (2.1.0)
@@ -171,7 +171,7 @@ GEM
       parser
       sorbet-runtime
     parallel (1.21.0)
-    parser (3.1.0.0)
+    parser (3.1.1.0)
       ast (~> 2.4.1)
     promise.rb (0.7.4)
     puma (5.6.2)
@@ -232,7 +232,7 @@ GEM
       rspec-support (~> 3.10)
     rspec-support (3.11.0)
     smart_properties (1.17.0)
-    sorbet-runtime (0.5.9656)
+    sorbet-runtime (0.5.9694)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
