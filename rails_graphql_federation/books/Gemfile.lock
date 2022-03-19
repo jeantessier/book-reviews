@@ -66,7 +66,7 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    apollo-federation (2.2.1)
+    apollo-federation (2.2.2)
       google-protobuf (~> 3.19)
       graphql (>= 1.10.14)
     bootsnap (1.11.1)
@@ -90,9 +90,8 @@ GEM
     exponential-backoff (0.0.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    google-protobuf (3.19.4-x86_64-darwin)
-    google-protobuf (3.19.4-x86_64-linux)
-    graphql (1.13.10)
+    google-protobuf (3.19.4)
+    graphql (2.0.2)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
@@ -104,7 +103,7 @@ GEM
     logging (2.3.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
-    loofah (2.14.0)
+    loofah (2.15.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -201,7 +200,7 @@ DEPENDENCIES
   bootsnap
   debug
   dotenv-rails
-  graphql (~> 1.13)
+  graphql
   jwt
   phobos
   puma (~> 5.0)

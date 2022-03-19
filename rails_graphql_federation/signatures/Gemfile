@@ -45,5 +45,5 @@ group :development do
   # gem "spring"
 end
 
-gem 'graphql', '~> 1.13'
+gem 'graphql'
 gem 'apollo-federation'
