@@ -174,7 +174,7 @@ GEM
     parser (3.1.1.0)
       ast (~> 2.4.1)
     promise.rb (0.7.4)
-    puma (5.6.2)
+    puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
@@ -269,7 +269,7 @@ DEPENDENCIES
   jwt
   mysql2 (>= 0.3.18, < 0.6.0)
   packwerk
-  puma (~> 5.0)
+  puma (~> 5.6)
   rack-cors
   rails (~> 7.0.2, >= 7.0.2.2)
   rspec-rails
