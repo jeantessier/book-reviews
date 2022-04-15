@@ -19,14 +19,25 @@ const userSchema = new mongoose.Schema({
 })
 userSchema.plugin(timestamps)
 
-userSchema.methods.setPassword = password => {
+/*
+ * !!!WARNING!!!   !!!WARNING!!!    !!!WARNING!!!    !!!WARNING!!!    !!!WARNING!!!
+ *
+ * DO NOT CHANGE THESE METHODS TO USE ES6 ARROW FUNCTIONS.
+ * IT WILL BREAK MONGOOSE.
+ *
+ * See: https://mongoosejs.com/docs/guide.html#methods
+ */
+
+userSchema.methods.setPassword = function (password) {
     this.salt = crypto.randomBytes(16).toString('hex')
     this.hash = this.hashPassword(password)
 }
 
-userSchema.methods.validPassword = password => this.hash === this.hashPassword(password)
+userSchema.methods.validPassword = function (password) {
+    return this.hash === this.hashPassword(password)
+}
 
-userSchema.methods.generateJwt = () => {
+userSchema.methods.generateJwt = function () {
     const expiry = new Date()
     expiry.setDate(expiry.getDate() + 7)
 
@@ -39,6 +50,8 @@ userSchema.methods.generateJwt = () => {
     }, process.env.JWT_SECRET)
 }
 
-userSchema.methods.hashPassword = password => crypto.pbkdf2Sync(password, this.salt, 4096, 512, "sha256").toString("base64")
+userSchema.methods.hashPassword = function (password) {
+    return crypto.pbkdf2Sync(password, this.salt, 4096, 512, "sha256").toString("base64")
+}
 
 mongoose.model('User', userSchema)
