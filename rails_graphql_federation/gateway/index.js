@@ -1,5 +1,5 @@
 const { ApolloServer } = require('apollo-server')
-const { ApolloGateway, RemoteGraphQLDataSource } = require("@apollo/gateway")
+const { ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource } = require("@apollo/gateway")
 
 require('dotenv').config()
 
@@ -11,14 +11,16 @@ const signatures_service = process.env.SIGNATURES_SERVICE || 'http://localhost:3
 const jwts_service = process.env.JWTS_SERVICE || 'http://localhost:3006/graphql'
 
 const gateway = new ApolloGateway({
-    serviceList: [
-        { name: 'books', url: books_service },
-        { name: 'reviews', url: reviews_service },
-        { name: 'users', url: users_service },
-        { name: 'search', url: search_service },
-        { name: 'signatures', url: signatures_service },
-        { name: 'jwts', url: jwts_service },
-    ],
+    supergraphSdl: new IntrospectAndCompose({
+        subgraphs: [
+            { name: 'books', url: books_service },
+            { name: 'reviews', url: reviews_service },
+            { name: 'users', url: users_service },
+            { name: 'search', url: search_service },
+            { name: 'signatures', url: signatures_service },
+            { name: 'jwts', url: jwts_service },
+        ],
+    }),
     buildService: ({ url, name }) => {
         return new (class extends RemoteGraphQLDataSource {
             willSendRequest({ request, context }) {
