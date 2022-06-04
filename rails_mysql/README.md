@@ -41,12 +41,20 @@ And use the base URL http://localhost:3000.
 > [cURL](https://en.wikipedia.org/wiki/CURL) or
 > [Postman](https://www.getpostman.com/) instead.  Httpie is a tool written in
 > Python that installs itself in your local Python environment.  You can install
-> it with:
+> it with either:
 >
 > ```bash
 > pip install httpie
+> pip install -U httpie-jwt-auth
 > ```
 >
+> or
+> 
+> ```bash
+> brew install httpie
+> httpie cli plugins install httpie-jwt-auth
+> ```
+> 
 > It assumes HTTP and `localhost` by default, so a call can be as simple as:
 >
 > ```bash
