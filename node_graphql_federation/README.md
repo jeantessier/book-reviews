@@ -26,7 +26,7 @@ Each service is a Node app.  You need to run `npm install` to fetch their
 dependencies.
 
 ```bash
-for service in books reviews users search signatures gateway
+for service in books reviews users search signatures jwts gateway
 do
     echo '==========' $service '=========='
     (cd $service; npm install)
