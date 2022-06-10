@@ -22,6 +22,8 @@ ties them all together into a single, unified schema.
 
 ### Initial Setup
 
+#### Install Node Packages
+
 Each service is a Node app.  You need to run `npm install` to fetch their
 dependencies.
 
@@ -32,6 +34,30 @@ do
     (cd $service; npm install)
 done
 ```
+
+#### Configure Local Environments
+
+You also need to specify their environment specifics in their `.env` file.  The
+template has sensible values for connecting to Kafka, but you need to supply
+your own key for signing JWTs.
+
+```bash
+for service in books reviews users search signatures jwts gateway
+do
+    echo '==========' $service '=========='
+    (cd $service; cp .env.template .env)
+done
+```
+
+Edit each `.env` file to specify the signing key.  Make sure you use the same
+value in each service.
+
+#### Re-Sign Bootstrap Credentials
+
+You will also need to sign the forged credentials in `seed.sh` and
+`Books_node_graphql_federation_helpers.sh`, called `JWT_AUTH_TOKEN`.  You can do
+so by entering the existing JWT at [JWT.io](https://jwt.io/), providing your
+local signing key, and copying the resulting JWT back to the two scripts.
 
 ### Using Docker Compose
 
@@ -69,7 +95,7 @@ docker compose --file docker-compose.yml --file docker-compose.kafka-override.ym
 #### Starting the Federated Services
 
 ```bash
-for service in books reviews users search signatures
+for service in books reviews users search signatures jwts
 do
     echo '==========' $service '=========='
     (cd $service; npm start &)
@@ -87,10 +113,12 @@ information about their internal state as they process requests and messages.
 
 The gateway lives at `http://localhost:4000` like a normal Node app.
 
-When the gateway is running, you can update the Apollo Graph Manager.  You will
-need an API key from the Apollo
-[Graph Manager](https://engine.apollographql.com/).  Once you have obtained it,
+When the gateway is running, you can update your graph schema in Apollo Studio.
+You will need the API key from
+[Apollo Studio](https://studio.apollographql.com/).  Once you have obtained it,
 copy the `.env.template` file to `.env` and put your key in the placeholder.
+Use `apollo service:push` to read your local federated graph schema and upload
+it to Apollo Studio.
 
 ```bash
 (cd gateway; apollo service:push)
