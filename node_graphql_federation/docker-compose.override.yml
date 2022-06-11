@@ -6,6 +6,22 @@ version: '3.7'
 
 services:
 
+  books:
+    environment:
+      - JWT_SECRET=thisIsSecret
+
+  reviews:
+    environment:
+      - JWT_SECRET=thisIsSecret
+
+  users:
+    environment:
+      - JWT_SECRET=thisIsSecret
+
+  search:
+    environment:
+      - JWT_SECRET=thisIsSecret
+
   jwts:
     environment:
       - JWT_SECRET=thisIsSecret
