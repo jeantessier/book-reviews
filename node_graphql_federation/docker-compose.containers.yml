@@ -7,7 +7,7 @@ version: '3.7'
 services:
 
   books:
-    image: book-reviews/node_graphql_federation/books
+    image: jeantessier/book_reviews-node_graphql_federation-books
     build: ./books
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
@@ -17,7 +17,7 @@ services:
       - kafka
 
   reviews:
-    image: book-reviews/node_graphql_federation/reviews
+    image: jeantessier/book_reviews-node_graphql_federation-reviews
     build: ./reviews
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
@@ -27,7 +27,7 @@ services:
       - kafka
 
   users:
-    image: book-reviews/node_graphql_federation/users
+    image: jeantessier/book_reviews-node_graphql_federation-users
     build: ./users
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
@@ -37,7 +37,7 @@ services:
       - kafka
 
   search:
-    image: book-reviews/node_graphql_federation/search
+    image: jeantessier/book_reviews-node_graphql_federation-search
     build: ./search
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
@@ -47,13 +47,13 @@ services:
       - kafka
 
   signatures:
-    image: book-reviews/node_graphql_federation/signatures
+    image: jeantessier/book_reviews-node_graphql_federation-signatures
     build: ./signatures
     deploy:
       replicas: 4
 
   jwts:
-    image: book-reviews/node_graphql_federation/jwts
+    image: jeantessier/book_reviews-node_graphql_federation-jwts
     build: ./jwts
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
@@ -63,7 +63,7 @@ services:
       - kafka
 
   gateway:
-    image: book-reviews/node_graphql_federation/gateway
+    image: jeantessier/book_reviews-node_graphql_federation-gateway
     build: ./gateway
     depends_on:
       - books
