@@ -62,7 +62,10 @@ local signing key, and copying the resulting JWT back to the two scripts.
 ### Using Docker Compose
 
 ```bash
-docker compose up -d
+docker compose \
+    --file docker-compose.local.yml \
+    --file docker-compose.override.yml \
+    up -d
 ```
 
 or
@@ -83,9 +86,9 @@ HTTP port 80.  Inside the Docker network, it lives at `http://gateway`.  But it
 also maps the host's port 4000 to its port 80.  This way, from outside the
 Docker network, it lives at `http://localhost:4000` like a normal Node app.
 
-If you use the first command, the containers default to using the local service
-folders directly.  They will pick up any changes immediately.  They will use
-their local `.env` files.
+If you use the first command, with `docker-compose.local.yml`, the containers
+will use the local service folders directly.  They will pick up any changes
+immediately.  They will use their local `.env` files.
 
 If you use the second command, with `docker-compose.containers.yml`, then Docker
 will compile images for each service and use them to launch containers.  These
@@ -112,7 +115,7 @@ communicate with each one.  For example, the books service lives at
 It is much easier to run Kafka using Docker Compose.
 
 ```bash
-docker compose --file docker-compose.yml --file docker-compose.kafka-override.yml up -d kafka
+docker compose --file docker-compose.local.yml --file docker-compose.kafka-override.yml up -d kafka
 ```
 
 > NOTE: Switching Docker Compose files will reset the Kafka broker and you will
@@ -175,7 +178,7 @@ With a sampling of reviews by the two users.
 You can reset Kafka with this command:
 
 ```bash
-docker compose --file docker-compose.yml --file docker-compose.kafka-override.yml up -d --force-recreate kafka
+docker compose --file docker-compose.local.yml --file docker-compose.kafka-override.yml up -d --force-recreate kafka
 ```
 
 This command will add data derived from `../data/Books_????-??-??*.md`.
