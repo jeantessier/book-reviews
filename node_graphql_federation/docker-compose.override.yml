@@ -3,6 +3,10 @@ version: '3.7'
 #
 # docker compose up -d
 #
+# or
+#
+# docker compose --file docker-compose.containers.yml --file docker-compose.override.yml up -d
+#
 
 services:
 

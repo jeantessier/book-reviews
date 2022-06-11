@@ -65,6 +65,15 @@ local signing key, and copying the resulting JWT back to the two scripts.
 docker compose up -d
 ```
 
+or
+
+```bash
+docker compose \
+    --file docker-compose.containers.yml \
+    --file docker-compose.override.yml \
+    up -d
+```
+
 This will run each federated service nicely hidden inside a Docker network,
 where each one appears as its own host, using the default HTTP port 80.  For
 example, within the Docker network, the books service lives at `http://books/`.
@@ -73,6 +82,23 @@ The gateway runs inside the Docker network as its own host and using the default
 HTTP port 80.  Inside the Docker network, it lives at `http://gateway`.  But it
 also maps the host's port 4000 to its port 80.  This way, from outside the
 Docker network, it lives at `http://localhost:4000` like a normal Node app.
+
+If you use the first command, the containers default to using the local service
+folders directly.  They will pick up any changes immediately.  They will use
+their local `.env` files.
+
+If you use the second command, with `docker-compose.containers.yml`, then Docker
+will compile images for each service and use them to launch containers.  These
+images will not include `.env` and need to receive their environment variables
+from the Compose file.  If you make local changes, you will need to rebuild
+images and relaunch containers for them to take effect.
+
+```bash
+docker compose \
+    --file docker-compose.containers.yml \
+    --file docker-compose.override.yml \
+    build --no-cache
+```
 
 ### Running Them Manually
 
