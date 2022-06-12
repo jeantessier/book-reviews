@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { UserInputError } = require('apollo-server-errors')
-const { buildFederatedSchema } = require('@apollo/federation')
+const { buildSubgraphSchema } = require('@apollo/federation')
 const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
@@ -91,7 +91,7 @@ const fetchUserByEmail = email => {
 }
 
 const server = new ApolloServer({
-    schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
+    schema: buildSubgraphSchema([ { typeDefs, resolvers } ]),
     plugins: [
         {
             requestDidStart(requestContext) {

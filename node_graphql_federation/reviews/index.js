@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { UserInputError } = require('apollo-server-errors')
-const { buildFederatedSchema } = require('@apollo/federation')
+const { buildSubgraphSchema } = require('@apollo/federation')
 const { v4: uuidv4 } = require('uuid')
 const jwt = require('jsonwebtoken');
 
@@ -233,7 +233,7 @@ const fetchReviewsByBookId = id => [ ...reviews ].filter(([ _, review ]) => id =
 const fetchReviewsByReviewerId = id => [ ...reviews ].filter(([ _, review ]) => id === review.reviewer.id).map(([ _, review ]) => review)
 
 const server = new ApolloServer({
-    schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
+    schema: buildSubgraphSchema([ { typeDefs, resolvers } ]),
     context: ({ req }) => {
         try {
             const authHeader = req.headers.authorization || ''

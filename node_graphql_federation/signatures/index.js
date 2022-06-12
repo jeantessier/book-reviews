@@ -1,5 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
-const { buildFederatedSchema } = require('@apollo/federation')
+const { buildSubgraphSchema } = require('@apollo/federation')
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -26,7 +26,7 @@ const resolvers = {
 }
 
 const server = new ApolloServer({
-    schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
+    schema: buildSubgraphSchema([ { typeDefs, resolvers } ]),
     plugins: [
         {
             requestDidStart(requestContext) {

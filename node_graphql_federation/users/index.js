@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { AuthenticationError, ForbiddenError, UserInputError } = require('apollo-server-errors')
-const { buildFederatedSchema } = require('@apollo/federation')
+const { buildSubgraphSchema } = require('@apollo/federation')
 const { v4: uuidv4 } = require('uuid')
 const jwt = require('jsonwebtoken');
 
@@ -216,7 +216,7 @@ const fetchUserByEmail = email => {
 }
 
 const server = new ApolloServer({
-    schema: buildFederatedSchema([ { typeDefs, resolvers } ]),
+    schema: buildSubgraphSchema([ { typeDefs, resolvers } ]),
     context: ({ req }) => {
         try {
             const authHeader = req.headers.authorization || ''
