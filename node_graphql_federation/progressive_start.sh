@@ -23,7 +23,6 @@ readonly SERVICES=(
 
 for service in ${SERVICES[*]}
 do
-    echo press ENTER to start $service
-    read
+    read -p "press ENTER to start $service "
     docker compose --file $COMPOSE_FILE --file docker-compose.override.yml up -d $service
 done
