@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package book_reviews;
+
+message Book {
+    string id = 1;
+    string name = 2;
+    repeated Title titles = 3;
+    repeated string authors = 4;
+    string publisher = 5;
+    repeated string years = 6;
+
+    message Title {
+        string title = 1;
+        string link = 2;
+    }
+}
+
+message User {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    string password = 4;
+    repeated string roles = 5;
+}
+
+message Review {
+    string id = 1;
+    User reviewer = 2;
+    Book book = 3;
+    string body = 4;
+    google.protobuf.Timestamp start = 5;
+    google.protobuf.Timestamp stop = 6;
+}
