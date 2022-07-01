@@ -1,6 +1,8 @@
 #!/bin/sh
 
 readonly IMAGE_MODE=${1:-local}
+shift
+
 readonly COMPOSE_FILE=docker-compose.${IMAGE_MODE}.yml
 if [[ ! -r $COMPOSE_FILE ]]
 then

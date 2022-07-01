@@ -1,0 +1,14 @@
+{
+  "name": "book-reviews",
+  "version": "1.0.0",
+  "description": "",
+  "workspaces": [
+    "books",
+    "reviews",
+    "users",
+    "search",
+    "signatures",
+    "jwts",
+    "gateway"
+  ]
+}

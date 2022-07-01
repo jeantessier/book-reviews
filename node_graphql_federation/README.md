@@ -3,17 +3,18 @@
 This is a sample set of applications that show how to put book reviews in a
 federated GraphQL schema.
 
-There are five underlying services:
-
 ![GraphQL Schemas of Individual Services](federated_schema_1.png)
+
+There are six underlying services:
 
 - `books` has per-book data
 - `users` has per-user data
 - `reviews` has the reviews themselves
 - `search` runs the search query
 - `signatures` augments users with a fancier signature
+- `jwts` supports login by generating JWTs
 
-These five services each define a part of overall schema.  The `gateway` service
+These six services each define a part of overall schema.  The `gateway` service
 ties them all together into a single, unified schema.
 
 ![Unified GraphQL Schema](federated_schema_2.png)
@@ -28,11 +29,7 @@ Each service is a Node app.  You need to run `npm install` to fetch their
 dependencies.
 
 ```bash
-for service in books reviews users search signatures jwts gateway
-do
-    echo '==========' $service '=========='
-    (cd $service; npm install)
-done
+npm --workspaces install
 ```
 
 #### Configure Local Environments
@@ -127,7 +124,7 @@ docker compose --file docker-compose.local.yml --file docker-compose.kafka-overr
 for service in books reviews users search signatures jwts
 do
     echo '==========' $service '=========='
-    (cd $service; npm start &)
+    npm --workspace $service start &
 done
 ```
 
@@ -137,7 +134,7 @@ information about their internal state as they process requests and messages.
 #### Starting the Gateway
 
 ```bash
-(cd gateway; npm start &)
+npm --workspace gateway start &
 ```
 
 The gateway lives at `http://localhost:4000` like a normal Node app.

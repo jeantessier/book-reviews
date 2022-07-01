@@ -1,21 +1,4 @@
 #!/bin/sh
 
-readonly SERVICES=(
-    books
-    reviews
-    users
-    search
-    signatures
-    jwts
-    gateway
-)
-
-for service in ${SERVICES[*]}
-do
-    echo '==========' $service '=========='
-    (
-        cd $service
-        \rm -R node_modules package-lock.json
-        npm install
-    )
-done
+\rm -R node_modules package-lock.json
+npm --workspaces install

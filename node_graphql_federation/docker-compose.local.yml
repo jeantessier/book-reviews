@@ -10,11 +10,11 @@ services:
     image: node:alpine
     working_dir: /home/node/app
     volumes:
-      - ./books:/home/node/app
+      - .:/home/node/app
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
-    command: npm start
+    command: npm start --workspace books
     deploy:
       replicas: 4
     depends_on:
@@ -24,11 +24,11 @@ services:
     image: node:alpine
     working_dir: /home/node/app
     volumes:
-      - ./reviews:/home/node/app
+      - .:/home/node/app
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
-    command: npm start
+    command: npm start --workspace reviews
     deploy:
       replicas: 4
     depends_on:
@@ -38,11 +38,11 @@ services:
     image: node:alpine
     working_dir: /home/node/app
     volumes:
-      - ./users:/home/node/app
+      - .:/home/node/app
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
-    command: npm start
+    command: npm start --workspace users
     deploy:
       replicas: 4
     depends_on:
@@ -52,11 +52,11 @@ services:
     image: node:alpine
     working_dir: /home/node/app
     volumes:
-      - ./search:/home/node/app
+      - .:/home/node/app
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
-    command: npm start
+    command: npm start --workspace search
     deploy:
       replicas: 4
     depends_on:
@@ -66,10 +66,10 @@ services:
     image: node:alpine
     working_dir: /home/node/app
     volumes:
-      - ./signatures:/home/node/app
+      - .:/home/node/app
     environment:
       - PORT=80
-    command: npm start
+    command: npm start --workspace signatures
     deploy:
       replicas: 4
 
@@ -77,11 +77,11 @@ services:
     image: node:alpine
     working_dir: /home/node/app
     volumes:
-      - ./jwts:/home/node/app
+      - .:/home/node/app
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
       - PORT=80
-    command: npm start
+    command: npm start --workspace jwts
     deploy:
       replicas: 4
     depends_on:
@@ -91,7 +91,7 @@ services:
     image: node:alpine
     working_dir: /home/node/app
     volumes:
-      - ./gateway:/home/node/app
+      - .:/home/node/app
     environment:
       - PORT=80
       - BOOKS_SERVICE=http://books
@@ -100,7 +100,7 @@ services:
       - SEARCH_SERVICE=http://search
       - SIGNATURES_SERVICE=http://signatures
       - JWTS_SERVICE=http://jwts
-    command: npm start
+    command: npm start --workspace gateway
     depends_on:
       - books
       - reviews
