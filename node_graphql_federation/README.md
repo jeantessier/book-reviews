@@ -12,7 +12,7 @@ There are six underlying services:
 - `reviews` has the reviews themselves
 - `search` runs the search query
 - `signatures` augments users with a fancier signature
-- `jwts` supports login by generating JWTs
+- `jwts` generates JWTs when the user logs in
 
 These six services each define a part of overall schema.  The `gateway` service
 ties them all together into a single, unified schema.
