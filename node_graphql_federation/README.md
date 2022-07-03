@@ -29,7 +29,7 @@ Each service is a Node app.  You need to run `npm install` to fetch their
 dependencies.
 
 ```bash
-npm --workspaces install
+npm install --workspaces
 ```
 
 #### Configure Local Environments
@@ -124,7 +124,7 @@ docker compose --file docker-compose.local.yml --file docker-compose.kafka-overr
 for service in books reviews users search signatures jwts
 do
     echo '==========' $service '=========='
-    npm --workspace $service start &
+    npm start --workspace $service &
 done
 ```
 
@@ -134,7 +134,7 @@ information about their internal state as they process requests and messages.
 #### Starting the Gateway
 
 ```bash
-npm --workspace gateway start &
+npm start --workspace gateway &
 ```
 
 The gateway lives at `http://localhost:4000` like a normal Node app.
