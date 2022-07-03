@@ -3,9 +3,9 @@
 This is a sample set of applications that show how to put book reviews in a
 federated GraphQL schema.
 
-There are six underlying services:
-
 ![GraphQL Schemas of Individual Services](federated_schema_1.png)
+
+There are six underlying services:
 
 - `books` has per-book data
 - `users` has per-user data
