@@ -1,12 +1,23 @@
 {
   "name": "node_mongo",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A book reviews application backed by a MongoDB database.",
   "private": true,
   "scripts": {
     "dev": "nodemon ./bin/www",
     "start": "node ./bin/www",
     "cypress:open": "cypress open"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeantessier/book-reviews.git"
+  },
+  "keywords": [
+    "book reviews",
+    "mongodb"
+  ],
+  "author": "Jean Tessier <jean@jeantessier.com> (https://jeantessier.com/)",
+  "license": "ISC",
   "dependencies": {
     "body-parser": "*",
     "cookie-parser": "*",
@@ -25,5 +36,6 @@
   },
   "devDependencies": {
     "cypress": "*"
-  }
+  },
+  "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_mongo"
 }
