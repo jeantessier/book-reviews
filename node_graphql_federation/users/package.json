@@ -1,22 +1,32 @@
 {
-  "name": "users",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@jeantessier/book_reviews.node_graphql_federation.users",
+  "version": "1.0.1",
+  "description": "A microservice for managing users as part of a book reviews application.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeantessier/book-reviews.git"
+  },
+  "keywords": [
+    "book reviews",
+    "graphql",
+    "graphql federation",
+    "kafka"
+  ],
+  "author": "Jean Tessier <jean@jeantessier.com> (https://jeantessier.com/)",
   "license": "ISC",
   "dependencies": {
     "@apollo/federation": "*",
+    "@jeantessier/book_reviews.node_graphql_federation.kafka": "*",
     "apollo-server": "*",
     "dotenv": "*",
     "graphql": "*",
     "jsonwebtoken": "*",
-    "kafkajs": "*",
     "uuid": "*"
-  }
+  },
+  "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_graphql_federation"
 }

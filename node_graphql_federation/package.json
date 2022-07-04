@@ -1,8 +1,9 @@
 {
-  "name": "book-reviews",
+  "name": "@jeantessiere/book-reviews.node_graphql_federation",
   "version": "1.0.0",
-  "description": "",
+  "description": "A book reviews application made up of cooperating microservices connected through Kafka",
   "workspaces": [
+    "kafka",
     "books",
     "reviews",
     "users",

@@ -1,12 +1,8 @@
 {
-  "name": "@jeantessier/book_reviews.node_graphql_federation.signatures",
-  "version": "1.0.1",
-  "description": "A microservice for augmenting users with pretty signatures as part of a book reviews application",
+  "name": "@jeantessier/book_reviews.node_graphql_federation.kafka",
+  "version": "1.0.2",
+  "description": "A shared module between @jeantessier/book_reviews.node_graphql_federation.* microservices for connecting them using Kafka.",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jeantessier/book-reviews.git"
@@ -20,9 +16,8 @@
   "author": "Jean Tessier <jean@jeantessier.com> (https://jeantessier.com/)",
   "license": "ISC",
   "dependencies": {
-    "@apollo/federation": "*",
-    "apollo-server": "*",
-    "graphql": "*"
+    "kafkajs": "*",
+    "uuid": "*"
   },
   "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_graphql_federation"
 }

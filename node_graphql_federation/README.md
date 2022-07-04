@@ -650,3 +650,19 @@ You can extract the federated shema from services that you started manually.
 ```bash
 extract_schema.sh
 ```
+
+## Updating Services
+
+Each service is published to the [NPM registry](https://www.npmjs.com/).  If you
+make changes, especially in the `kafka` shared module, you will need to publish
+your changes for them to take effect when building containers.
+
+```bash
+npm publish --access public --workspaces
+```
+
+or
+
+```bash
+npm publish --access public --workspace kafka
+```

@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
 
-const { groupId, startConsumer } = require('./kafka')
+const { groupId, startConsumer } = require('@jeantessier/book_reviews.node_graphql_federation.kafka')
 
 const users = new Map()
 const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`))

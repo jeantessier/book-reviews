@@ -9,6 +9,8 @@ services:
   books:
     image: jeantessier/book_reviews-node_graphql_federation-books
     build: ./books
+    volumes:
+      - ./kafka:/home/node/kafka:ro
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka:9092
     deploy:

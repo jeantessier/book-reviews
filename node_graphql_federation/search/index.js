@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
 
-const { groupId, sendMessage, startConsumer } = require('./kafka')
+const { groupId, sendMessage, startConsumer } = require('@jeantessier/book_reviews.node_graphql_federation.kafka')
 
 const indices = new Map()
 const dump = map => map.forEach((index, word) => {
