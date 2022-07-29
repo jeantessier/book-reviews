@@ -11,6 +11,12 @@ mkdir ruby
 protoc --ruby_out ruby book_reviews.proto
 ```
 
+Install the `google-protobuf` library:
+
+```bash
+gem install google-protobuf
+```
+
 You can then use it with:
 
 ```ruby
@@ -78,7 +84,7 @@ mkdir python
 protoc --python_out python book_reviews.proto
 ```
 
-Install `protobuf` library:
+Install the `protobuf` library:
 
 ```bash
 pip3 install protobuf
