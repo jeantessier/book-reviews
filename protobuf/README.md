@@ -17,7 +17,6 @@ You can then use it with:
 require 'securerandom'
 require './ruby/book_reviews_pb'
 
-
 # Create a book with two titles
 book = BookReviews::Book.new(
     id: SecureRandom.uuid,
@@ -34,7 +33,7 @@ File.write 'book.data', BookReviews::Book.encode(book)
 
 
 # Create a user
-user = BookReviews::User.new name: 'Jean Tessier', email: 'jean@arbo.works', password: 'abcd1234', roles: [ :ROLE_ADMIN ]
+user = BookReviews::User.new name: 'Jean Tessier', email: 'jean@arbo.works', password: 'abcd1234', roles: [ :ROLE_USER, :ROLE_ADMIN ]
 user.id = SecureRandom.uuid
 
 encoded_user = BookReviews::User.encode user
@@ -70,4 +69,42 @@ protoc --decode_raw < user.data
 ```bash
 mkdir java
 protoc --java_out java book_reviews.proto
+```
+
+### Python
+
+```bash
+mkdir python
+protoc --python_out python book_reviews.proto
+```
+
+Install `protobuf` library:
+
+```bash
+pip3 install protobuf
+```
+
+Read a user from a serialized protobuf:
+
+```python
+import uuid
+import python.book_reviews_pb2 as book_reviews
+
+# Create a user
+user = book_reviews.User()
+user.id = str(uuid.uuid4())
+user.name = "Jean Tessier"
+user.email = "jean@arbo.works"
+user.password = "abcd1234"
+user.roles.append("ROLE_USER")
+user.roles.append("ROLE_ADMIN")
+
+# Write the user to a binary protobuf in a file
+with open("user.data", "wb") as f:
+    f.write(user.SerializeToString())
+
+# Read a user from a binary protobuf
+decoded_user = book_reviews.User()
+with open("user.data", "rb") as f:
+    decoded_user.ParseFromString(f.read())
 ```
