@@ -23,6 +23,7 @@ You can then use it with:
 require 'securerandom'
 require './ruby/book_reviews_pb'
 
+
 # Create a book with two titles
 book = BookReviews::Book.new(
     id: SecureRandom.uuid,
@@ -90,7 +91,7 @@ Install the `protobuf` library:
 pip3 install protobuf
 ```
 
-Read a user from a serialized protobuf:
+Create a user:
 
 ```python
 import uuid
@@ -100,10 +101,16 @@ import python.book_reviews_pb2 as book_reviews
 user = book_reviews.User()
 user.id = str(uuid.uuid4())
 user.name = "Jean Tessier"
-user.email = "jean@arbo.works"
+user.email = "jean@jeantessier.com"
 user.password = "abcd1234"
 user.roles.append("ROLE_USER")
 user.roles.append("ROLE_ADMIN")
+```
+
+I/O with a serialized protobuf:
+
+```python
+import python.book_reviews_pb2 as book_reviews
 
 # Write the user to a binary protobuf in a file
 with open("user.data", "wb") as f:
@@ -113,4 +120,21 @@ with open("user.data", "wb") as f:
 decoded_user = book_reviews.User()
 with open("user.data", "rb") as f:
     decoded_user.ParseFromString(f.read())
+```
+
+I/O with a text protobuf:
+
+```python
+from google.protobuf import text_format
+
+import python.book_reviews_pb2 as book_reviews
+
+# Write the user to a text protobuf in a file
+with open("user.txt", "w") as f:
+    f.write(text_format.MessageToString(user))
+
+# Read a user from a text protobuf
+read_user = book_reviews.User()
+with open("user.txt") as f:
+    text_format.Parse(f.read(), read_user)
 ```
