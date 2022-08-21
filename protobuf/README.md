@@ -111,6 +111,152 @@ mkdir java
 protoc --java_out java book_reviews.proto
 ```
 
+You will need JAR files for:
+- `com.google.protobuf:protobuf-java`
+- `com.google.protobuf:protobuf-java-util`
+- `com.google.code.gson:gson`
+
+Copy them to `java/lib`.
+Add them to your `CLASSPATH` for convenience.
+
+```bash
+for f in java/lib/* java/classes
+do
+    export CLASSPATH=$f:$CLASSPATH
+done
+```
+
+To compile the protobuf classes:
+
+```bash
+mkdir java/classes
+javac -d java/classes java/book_reviews/BookReviews.java
+```
+
+To create entities in Java:
+
+```java
+import com.google.protobuf.Timestamp;
+import book_reviews.BookReviews;
+
+# Create a book with two titles
+BookReviews.Book book = BookReviews.Book
+    .newBuilder()
+    .setId(UUID.randomUUID() as String)
+    .setName("The_Hobbit")
+    .addAuthors("J.R.R. Tolkien")
+    .addYears("1937")
+    .setPublisher("Allen & Unwin")
+    .addTitles(
+        BookReviews.Book.Title
+	    .newBuilder()
+	    .setTitle("The Hobbit")
+	    .setLink("https://en.wikipedia.org/wiki/The_Hobbit")
+    )
+    .addTitles(
+        BookReviews.Book.Title
+	    .newBuilder()
+	    .setTitle("Bilbo, le hobbit")
+    )
+    .build();
+
+# Create a user
+BookReviews.User user = BookReviews.User
+    .newBuilder()
+    .setId(UUID.randomUUID() as String)
+    .setName("Jean Tessier")
+    .setEmail("jean@jeantessier.com")
+    .setPassword("abcd1234")
+    .addRoles("ROLE_USER")
+    .addRoles("ROLE_ADMIN")
+    .build();
+
+# Create a review
+long now = System.currentTimeMillis();
+BookReviews.Review review = BookReviews.Review
+    .newBuilder()
+    .setId(UUID.randomUUID() as String)
+    .setReviewer(user)
+    .setBook(book)
+    .setBody("Awesome!")
+    .setStart(
+        Timestamp
+	    .newBuilder()
+	    .setSeconds((now / 1000) as long)
+	    .setNanos(((now % 1000) * 1_000_000) as int)
+	    .build()
+    )
+    .build();
+```
+
+To create entities in Groovy:
+
+```groovy
+import com.google.protobuf.Timestamp
+import book_reviews.BookReviews
+
+# Create a book with two titles
+book_builder = BookReviews.Book.newBuilder()
+book_builder.id = UUID.randomUUID() as String
+book_builder.name = "The_Hobbit"
+book_builder.addAuthors "J.R.R. Tolkien"
+book_builder.addYears "1937"
+book_builder.publisher = "Allen & Unwin"
+
+title_builder = BookReviews.Book.Title.newBuilder()
+
+title_builder.title = "The Hobbit"
+title_builder.link = "https://en.wikipedia.org/wiki/The_Hobbit"
+book_builder.addTitles(title_builder)
+
+title_builder.title = "Bilbo, le hobbit"
+title_builder.clearLink()
+book_builder.addTitles(title_builder)
+
+book = book_builder.build()
+
+# Create a user
+user_builder = BookReviews.User.newBuilder()
+user_builder.id = UUID.randomUUID() as String
+user_builder.name = "Jean Tessier"
+user_builder.email = "jean@jeantessier.com"
+user_builder.password = "abcd1234"
+user_builder.addRoles "ROLE_USER"
+user_builder.addRoles "ROLE_ADMIN"
+user = user_builder.build()
+
+# Create a review
+now = System.currentTimeMillis();
+review_builder = BookReviews.Review.newBuilder()
+review_builder.id = UUID.randomUUID() as String
+review_builder.reviewer = user
+review_builder.book = book
+review_builder.body = "Awesome!"
+
+start_builder = Timestamp.newBuilder()
+start_builder.seconds = (now / 1000) as long
+start_builder.nanos = ((now % 1000) * 1_000_000) as int
+review_builder.start = start_builder.build()
+
+review = review_builder.build();
+```
+
+File I/O with a serialized protobuf:
+
+```java
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import book_reviews.BookReviews;
+
+# Write the user to a binary protobuf in a file
+try (FileOutputStream output = new FileOutputStream("user.data")) {
+    user.writeTo(output);
+}
+
+# Read a user from a binary protobuf
+BookReviews.User user = BookReviews.User.parseFrom(new FileInputStream("user.data"));
+```
+
 ### Python
 
 ```bash
