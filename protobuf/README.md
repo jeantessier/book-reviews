@@ -172,27 +172,20 @@ BookReviews.User user = BookReviews.User
     .build();
 
 # Create a review
-long now = System.currentTimeMillis();
 BookReviews.Review review = BookReviews.Review
     .newBuilder()
     .setId(UUID.randomUUID() as String)
     .setReviewer(user)
     .setBook(book)
     .setBody("Awesome!")
-    .setStart(
-        Timestamp
-	    .newBuilder()
-	    .setSeconds((now / 1000) as long)
-	    .setNanos(((now % 1000) * 1_000_000) as int)
-	    .build()
-    )
+    .setStart(Timestamp.fromMillis(System.currentTimeMillis()))
     .build();
 ```
 
 To create entities in Groovy:
 
 ```groovy
-import com.google.protobuf.Timestamp
+import com.google.protobuf.util.Timestamps
 import book_reviews.BookReviews
 
 # Create a book with two titles
@@ -226,18 +219,12 @@ user_builder.addRoles "ROLE_ADMIN"
 user = user_builder.build()
 
 # Create a review
-now = System.currentTimeMillis();
 review_builder = BookReviews.Review.newBuilder()
 review_builder.id = UUID.randomUUID() as String
 review_builder.reviewer = user
 review_builder.book = book
 review_builder.body = "Awesome!"
-
-start_builder = Timestamp.newBuilder()
-start_builder.seconds = (now / 1000) as long
-start_builder.nanos = ((now % 1000) * 1_000_000) as int
-review_builder.start = start_builder.build()
-
+review_builder.start = Timestamps.fromMillis System.currentTimeMillis()
 review = review_builder.build();
 ```
 
@@ -255,6 +242,45 @@ try (FileOutputStream output = new FileOutputStream("user.data")) {
 
 # Read a user from a binary protobuf
 BookReviews.User user = BookReviews.User.parseFrom(new FileInputStream("user.data"));
+```
+
+File I/O with a JSON protobuf:
+
+```java
+import java.io.FileReader;
+import java.io.FileWriter;
+import com.google.protobuf.util.JsonFormat;
+import book_reviews.BookReviews;
+
+# Write the user to a JSON protobuf in a file
+JsonFormat.Printer printer = JsonFormat.printer();
+try (FileWriter writer = new FileWriter("user.json")) {
+    writer.print(printer.print(user));
+}
+
+# Read a user from a JSON protobuf
+JsonFormat.Parser parser = JsonFormat.parser();
+BookReviews.User.Builder builder = BookReviews.User.newBuilder();
+try (FileReader reader = new FileReader("user.json")) {
+    parser.merge(reader, builder);
+}
+BookReviews.User user = builder.build();
+```
+
+File I/O with a text protobuf:
+
+```java
+import java.io.FileReader;
+import java.io.FileWriter;
+import book_reviews.BookReviews;
+
+# Write the user to a text protobuf in a file
+try (FileWriter writer = new FileWriter("user.json")) {
+    writer.print(user.toString());
+}
+
+# Read a user from a JSON protobuf
+# TBD
 ```
 
 ### Python
