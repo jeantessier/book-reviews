@@ -40,7 +40,7 @@ File.write 'book.data', BookReviews::Book.encode(book)
 
 
 # Create a user
-user = BookReviews::User.new name: 'Jean Tessier', email: 'jean@arbo.works', password: 'abcd1234', roles: [ :ROLE_USER, :ROLE_ADMIN ]
+user = BookReviews::User.new name: 'Jean Tessier', email: 'jean@jeantessier.com', password: 'abcd1234', roles: [ :ROLE_USER, :ROLE_ADMIN ]
 user.id = SecureRandom.uuid
 
 encoded_user = BookReviews::User.encode user
@@ -49,6 +49,7 @@ File.write 'user.data', encoded_user
 
 # Create a review
 review = BookReviews::Review.new reviewer: user, book: book, body: 'Awesome!'
+review.id = SecureRandom.uuid
 start = Date.parse('2022-06-04')
 review.start = Google::Protobuf::Timestamp.new seconds: start.to_time.to_i, nanos: start.to_time.nsec
 File.write 'review.data', BookReviews::Review.encode(review)
@@ -60,6 +61,38 @@ File.write 'review.data', BookReviews::Review.encode(review)
 # Read a user from a protobuf
 decoded_user = BookReviews::User.decode encoded_user
 ```
+
+File I/O with a serialized protobuf:
+
+```ruby
+require './ruby/book_reviews_pb'
+
+# Write the user to a binary protobuf in a file
+File.write 'user.data', BookReviews::User.encode(user)
+
+# Read a user from a binary protobuf
+user = nil
+File.open 'user.data' do |f|
+  user = BookReviews::User.decode f.read
+end
+```
+
+File I/O with a JSON protobuf:
+
+```ruby
+require './ruby/book_reviews_pb'
+
+# Write the user to a binary protobuf in a file
+File.write 'user.json', BookReviews::User.encode_json(user)
+
+# Read a user from a binary protobuf
+user = nil
+File.open 'user.json' do |f|
+  user = BookReviews::User.decode_json f.read
+end
+```
+
+### Bash
 
 ```bash
 protoc --decode book_reviews.Book book_reviews.proto < book.data
@@ -107,7 +140,7 @@ user.roles.append("ROLE_USER")
 user.roles.append("ROLE_ADMIN")
 ```
 
-I/O with a serialized protobuf:
+File I/O with a serialized protobuf:
 
 ```python
 import python.book_reviews_pb2 as book_reviews
@@ -122,7 +155,7 @@ with open("user.data", "rb") as f:
     decoded_user.ParseFromString(f.read())
 ```
 
-I/O with a text protobuf:
+File I/O with a text protobuf:
 
 ```python
 from google.protobuf import text_format
@@ -131,7 +164,7 @@ import python.book_reviews_pb2 as book_reviews
 
 # Write the user to a text protobuf in a file
 with open("user.txt", "w") as f:
-    f.write(text_format.MessageToString(user))
+f.write(text_format.MessageToString(user))
 
 # Read a user from a text protobuf
 read_user = book_reviews.User()

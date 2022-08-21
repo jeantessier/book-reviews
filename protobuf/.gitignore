@@ -1,0 +1,9 @@
+# Directories with compiled protobufs
+java
+python
+ruby
+
+# Serialized protobufs
+book.*
+review.*
+user.*
