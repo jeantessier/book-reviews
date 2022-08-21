@@ -62,6 +62,8 @@ File.write 'review.data', BookReviews::Review.encode(review)
 decoded_user = BookReviews::User.decode encoded_user
 ```
 
+Ruby supports binary and JSON protobufs.
+
 File I/O with a serialized protobuf:
 
 ```ruby
@@ -228,6 +230,8 @@ review_builder.start = Timestamps.fromMillis System.currentTimeMillis()
 review = review_builder.build();
 ```
 
+Java supports binary, JSON, and text protobufs.
+
 File I/O with a serialized protobuf:
 
 ```java
@@ -272,15 +276,22 @@ File I/O with a text protobuf:
 ```java
 import java.io.FileReader;
 import java.io.FileWriter;
+import com.google.protobuf.TextFormat;
 import book_reviews.BookReviews;
 
 # Write the user to a text protobuf in a file
-try (FileWriter writer = new FileWriter("user.json")) {
-    writer.print(user.toString());
+TextFormat.Printer printer = TextFormat.printer();
+try (FileWriter writer = new FileWriter("user.text")) {
+    printer.print(user, writer);
 }
 
 # Read a user from a JSON protobuf
-# TBD
+TextFormat.Parser parser = Text	Format.parser();
+BookReviews.User.Builder builder = BookReviews.User.newBuilder();
+try (FileReader reader = new FileReader("user.text")) {
+    parser.merge(reader, builder);
+}
+BookReviews.User user = builder.build();
 ```
 
 ### Python
@@ -311,6 +322,8 @@ user.password = "abcd1234"
 user.roles.append("ROLE_USER")
 user.roles.append("ROLE_ADMIN")
 ```
+
+Python supports binary and text protobufs.
 
 File I/O with a serialized protobuf:
 
