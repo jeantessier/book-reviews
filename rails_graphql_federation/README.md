@@ -68,7 +68,7 @@ docker compose up -d
 for service in books reviews users search signatures jwts
 do
     echo '==========' $service '=========='
-    (cd $service; bin/rails service &)
+    (cd $service; bin/rails server &)
 done
 ```
 
