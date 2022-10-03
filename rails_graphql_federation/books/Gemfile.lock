@@ -178,8 +178,8 @@ GEM
       io-console (~> 0.5)
     ruby-kafka (1.5.0)
       digest-crc
-    sqlite3 (1.5.0-x86_64-darwin)
-    sqlite3 (1.5.0-x86_64-linux)
+    sqlite3 (1.5.1-x86_64-darwin)
+    sqlite3 (1.5.1-x86_64-linux)
     strscan (3.0.4)
     thor (1.2.1)
     timeout (0.3.0)
@@ -205,7 +205,7 @@ DEPENDENCIES
   phobos
   puma (~> 5.6)
   rails (~> 7.0.2, >= 7.0.2.2)
-  sqlite3 (~> 1.4)
+  sqlite3 (~> 1.5)
   tzinfo-data
 
 BUNDLED WITH
