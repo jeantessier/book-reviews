@@ -1,17 +1,13 @@
 version: '3.7'
 
 #
-# docker compose up -d kafka
+# docker compose up -d
 #
 
 services:
-
-  zookeeper:
-    ports:
-      - 2181:2181
 
   kafka:
     ports:
       - 9092:9092
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092

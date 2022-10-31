@@ -12,7 +12,6 @@ then
 fi
 
 readonly SERVICES=(
-    zookeeper
     kafka
     books
     reviews

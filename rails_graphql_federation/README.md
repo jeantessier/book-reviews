@@ -111,10 +111,12 @@ With a sampling of reviews by the two users.
 
 ### Real Data
 
-You can reset Kafka with this command:
+You can reset Kafka with these command:
 
 ```bash
-docker compose up -d --force-recreate kafka
+docker compose stop
+docker volume rm rails_graphql_federation_kafka_data
+docker compose up -d
 ```
 
 This command will add data derived from `../data/Books_????-??-??*.md`.

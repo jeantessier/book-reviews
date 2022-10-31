@@ -172,10 +172,12 @@ With a sampling of reviews by the two users.
 
 ### Real Data
 
-You can reset Kafka with this command:
+You can reset Kafka with these command:
 
 ```bash
-docker compose --file docker-compose.local.yml --file docker-compose.kafka-override.yml up -d --force-recreate kafka
+docker compose --file docker-compose.local.yml --file docker-compose.kafka-override.yml stop kafka
+docker volume rm node_graphql_federation_kafka_data
+docker compose --file docker-compose.local.yml --file docker-compose.kafka-override.yml up -d kafka
 ```
 
 This command will add data derived from `../data/Books_????-??-??*.md`.

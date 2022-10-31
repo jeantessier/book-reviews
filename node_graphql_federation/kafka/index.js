@@ -16,6 +16,12 @@ const ssl = !!sasl
 
 const groupId = process.env.KAFKA_CONSUMER_GROUP_ID ? process.env.KAFKA_CONSUMER_GROUP_ID : uuidv4()
 
+console.log('Kafka configuration:')
+console.log(`    clientId: ${clientId}`)
+console.log(`    bootstrapServer: ${bootstrapServer}`)
+console.log(`    ssl: ${ssl}`)
+console.log(`    sasl: ${sasl}`)
+
 // This creates a client instance that is configured to connect to the Kafka broker provided by
 // the environment variable KAFKA_BOOTSTRAP_SERVER
 const kafka = new Kafka({
