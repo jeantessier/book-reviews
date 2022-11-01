@@ -12,6 +12,6 @@ services:
 
   book_reviews:
     environment:
-      - JWT_SECRET=thisIsSecretInDocker
+      JWT_SECRET: thisIsSecretInDocker
     ports:
       - "3000:3000"

@@ -12,7 +12,7 @@ services:
     volumes:
       - ./kafka:/home/node/kafka:ro
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
     deploy:
       replicas: 4
     depends_on:
@@ -22,7 +22,7 @@ services:
     image: jeantessier/book_reviews-node_graphql_federation-reviews
     build: ./reviews
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
     deploy:
       replicas: 4
     depends_on:
@@ -32,7 +32,7 @@ services:
     image: jeantessier/book_reviews-node_graphql_federation-users
     build: ./users
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
     deploy:
       replicas: 4
     depends_on:
@@ -42,7 +42,7 @@ services:
     image: jeantessier/book_reviews-node_graphql_federation-search
     build: ./search
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
     deploy:
       replicas: 4
     depends_on:
@@ -58,7 +58,7 @@ services:
     image: jeantessier/book_reviews-node_graphql_federation-jwts
     build: ./jwts
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
     deploy:
       replicas: 4
     depends_on:

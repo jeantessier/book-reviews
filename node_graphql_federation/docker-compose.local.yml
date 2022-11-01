@@ -12,8 +12,8 @@ services:
     volumes:
       - .:/home/node/app
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
-      - PORT=80
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      PORT: 80
     command: npm start --workspace books
     deploy:
       replicas: 4
@@ -26,8 +26,8 @@ services:
     volumes:
       - .:/home/node/app
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
-      - PORT=80
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      PORT: 80
     command: npm start --workspace reviews
     deploy:
       replicas: 4
@@ -40,8 +40,8 @@ services:
     volumes:
       - .:/home/node/app
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
-      - PORT=80
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      PORT: 80
     command: npm start --workspace users
     deploy:
       replicas: 4
@@ -54,8 +54,8 @@ services:
     volumes:
       - .:/home/node/app
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
-      - PORT=80
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      PORT: 80
     command: npm start --workspace search
     deploy:
       replicas: 4
@@ -68,7 +68,7 @@ services:
     volumes:
       - .:/home/node/app
     environment:
-      - PORT=80
+      PORT: 80
     command: npm start --workspace signatures
     deploy:
       replicas: 4
@@ -79,8 +79,8 @@ services:
     volumes:
       - .:/home/node/app
     environment:
-      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
-      - PORT=80
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      PORT: 80
     command: npm start --workspace jwts
     deploy:
       replicas: 4
@@ -93,13 +93,13 @@ services:
     volumes:
       - .:/home/node/app
     environment:
-      - PORT=80
-      - BOOKS_SERVICE=http://books
-      - REVIEWS_SERVICE=http://reviews
-      - USERS_SERVICE=http://users
-      - SEARCH_SERVICE=http://search
-      - SIGNATURES_SERVICE=http://signatures
-      - JWTS_SERVICE=http://jwts
+      PORT: 80
+      BOOKS_SERVICE: http://books
+      REVIEWS_SERVICE: http://reviews
+      USERS_SERVICE: http://users
+      SEARCH_SERVICE: http://search
+      SIGNATURES_SERVICE: http://signatures
+      JWTS_SERVICE: http://jwts
     command: npm start --workspace gateway
     depends_on:
       - books
