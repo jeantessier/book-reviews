@@ -28,7 +28,7 @@ const gateway = new ApolloGateway({
                     request.http.headers.set('Authorization', context.authHeader)
                 }
             }
-        })({ url, name})
+        })({ url, name })
     }
 })
 

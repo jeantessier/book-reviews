@@ -22,7 +22,7 @@ const gateway = new ApolloGateway({
         ],
     }),
     buildService: ({ url, name }) => {
-        return new (class extends RemoteGraphQLDataSource {
+        return new(class extends RemoteGraphQLDataSource {
             willSendRequest({ request, context }) {
                 if (context.authHeader) {
                     request.http.headers.set('Authorization', context.authHeader)
