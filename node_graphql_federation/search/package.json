@@ -1,6 +1,6 @@
 {
   "name": "@jeantessier/book_reviews.node_graphql_federation.search",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A microservice for performing searches as part of a book reviews application",
   "main": "index.js",
   "scripts": {
@@ -20,11 +20,12 @@
   "author": "Jean Tessier <jean@jeantessier.com> (https://jeantessier.com/)",
   "license": "ISC",
   "dependencies": {
-    "@apollo/federation": "*",
+    "@apollo/server": "*",
+    "@apollo/subgraph": "*",
     "@jeantessier/book_reviews.node_graphql_federation.kafka": "*",
-    "apollo-server": "*",
     "dotenv": "*",
     "graphql": "*",
+    "graphql-tag": "*",
     "jsonwebtoken": "*"
   },
   "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_graphql_federation"

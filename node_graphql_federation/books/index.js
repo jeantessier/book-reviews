@@ -1,6 +1,8 @@
-const { ApolloServer, gql } = require('apollo-server')
-const { UserInputError } = require('apollo-server-errors')
-const { buildSubgraphSchema } = require('@apollo/federation')
+const { ApolloServer } = require('@apollo/server')
+const { startStandaloneServer } = require('@apollo/server/standalone')
+const { buildSubgraphSchema } = require('@apollo/subgraph')
+const { GraphQLError } = require('graphql')
+const { gql } = require('graphql-tag')
 const { v4: uuidv4 } = require('uuid')
 const jwt = require('jsonwebtoken');
 
@@ -34,6 +36,10 @@ startConsumer(
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
+  # The following directive migrates the schema to Federation 2.
+  # I couldn't get @link to work, so I'm staying with Federation 1 for now.
+  # extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+
   type Book @key(fields: "id") {
     id: ID!
 
@@ -102,7 +108,11 @@ const addBook = async (_, { book }, context, info) => {
 
     const bookForName = fetchBookByName(book.name)
     if (bookForName) {
-        throw new UserInputError(`Name "${book.name}" is already taken.`)
+        throw new GraphQLError(`Name "${book.name}" is already taken.`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
 
     book.id = uuidv4()
@@ -128,13 +138,21 @@ const updateBook = async (_, { update }, context, info) => {
 
     const book = fetchBookById(update.id)
     if (!book) {
-        throw new UserInputError(`No book with ID "${update.id}".`)
+        throw new GraphQLError(`No book with ID "${update.id}".`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
 
     if (update.name) {
         const bookForName = fetchBookByName(update.name)
         if (bookForName && bookForName.id !== book.id) {
-            throw new UserInputError(`Name "${update.name}" is already taken.`)
+            throw new GraphQLError(`Name "${update.name}" is already taken.`, {
+                extensions: {
+                    code: 'BAD_USER_INPUT',
+                }
+            })
         }
     }
 
@@ -164,7 +182,11 @@ const removeBook = async (_, { id }, context, info) => {
 
     const book = fetchBookById(id)
     if (!book) {
-        throw new UserInputError(`No book with ID "${id}".`)
+        throw new GraphQLError(`No book with ID "${id}".`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
 
     await sendMessage(
@@ -208,7 +230,32 @@ const fetchBookByName = name => {
 }
 
 const server = new ApolloServer({
-    schema: buildSubgraphSchema([ { typeDefs, resolvers } ]),
+    schema: buildSubgraphSchema({ typeDefs, resolvers }),
+    plugins: [
+        {
+            requestDidStart(requestContext) {
+                console.log(`====================   ${new Date().toJSON()}   ====================`)
+                console.log("Request did start!")
+                if (process.env.DEBUG) {
+                    console.log(`    context: ${JSON.stringify(requestContext.contextValue)}`)
+                }
+                console.log(`    query: ${requestContext.request.query}`)
+                console.log(`    operationName: ${requestContext.request.operationName}`)
+                console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
+                if (process.env.DEBUG) {
+                    console.log("    books:")
+                    dump(books)
+                }
+                console.log()
+            },
+        },
+    ],
+})
+
+const port = process.env.PORT || 4001
+
+// The `listen` method launches a web server.
+startStandaloneServer(server, {
     context: ({ req }) => {
         try {
             const authHeader = req.headers.authorization || ''
@@ -225,26 +272,7 @@ const server = new ApolloServer({
             return {}
         }
     },
-    plugins: [
-        {
-            requestDidStart(requestContext) {
-                console.log(`====================   ${new Date().toJSON()}   ====================`)
-                console.log("Request did start!")
-                console.log(`    query: ${requestContext.request.query}`)
-                console.log(`    operationName: ${requestContext.request.operationName}`)
-                console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
-                if (process.env.DEBUG) {
-                    console.log("    books:")
-                    dump(books)
-                }
-            },
-        },
-    ],
-})
-
-const port = process.env.PORT || 4001
-
-// The `listen` method launches a web server.
-server.listen(port).then(({ url }) => {
+    listen: { port },
+}).then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`)
 })

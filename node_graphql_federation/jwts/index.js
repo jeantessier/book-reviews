@@ -1,6 +1,8 @@
-const { ApolloServer, gql } = require('apollo-server')
-const { UserInputError } = require('apollo-server-errors')
-const { buildSubgraphSchema } = require('@apollo/federation')
+const { ApolloServer } = require('@apollo/server')
+const { startStandaloneServer } = require('@apollo/server/standalone')
+const { buildSubgraphSchema } = require('@apollo/subgraph')
+const { GraphQLError } = require('graphql')
+const { gql } = require('graphql-tag')
 const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
@@ -33,6 +35,10 @@ startConsumer(
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
+  # The following directive migrates the schema to Federation 2.
+  # I couldn't get @link to work, so I'm staying with Federation 1 for now.
+  # extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+
   input LoginInput {
     email: String!
     password: String!
@@ -53,11 +59,19 @@ const typeDefs = gql`
 const login = async (_, { input }) => {
     const user = fetchUserByEmail(input.email)
     if (!user) {
-        throw new UserInputError(`No user with email "${input.email}".`)
+        throw new GraphQLError(`No user with email "${input.email}".`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
 
     if (input.password !== user.password) {
-        throw new UserInputError(`Password for ${input.email} does not match.`)
+        throw new GraphQLError(`Password for ${input.email} does not match.`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
 
     return { jwt: generateJwt(user) }
@@ -91,12 +105,15 @@ const fetchUserByEmail = email => {
 }
 
 const server = new ApolloServer({
-    schema: buildSubgraphSchema([ { typeDefs, resolvers } ]),
+    schema: buildSubgraphSchema({ typeDefs, resolvers }),
     plugins: [
         {
             requestDidStart(requestContext) {
                 console.log(`====================   ${new Date().toJSON()}   ====================`)
                 console.log("Request did start!")
+                if (process.env.DEBUG) {
+                    console.log(`    context: ${JSON.stringify(requestContext.contextValue)}`)
+                }
                 console.log(`    query: ${requestContext.request.query}`)
                 console.log(`    operationName: ${requestContext.request.operationName}`)
                 console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
@@ -104,6 +121,7 @@ const server = new ApolloServer({
                     console.log("    users:")
                     dump(users)
                 }
+                console.log()
             },
         },
     ],
@@ -112,6 +130,8 @@ const server = new ApolloServer({
 const port = process.env.PORT || 4006
 
 // The `listen` method launches a web server.
-server.listen(port).then(({ url }) => {
+startStandaloneServer(server, {
+    listen: { port },
+}).then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`)
 })

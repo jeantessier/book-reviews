@@ -1,6 +1,8 @@
-const { ApolloServer, gql } = require('apollo-server')
-const { UserInputError } = require('apollo-server-errors')
-const { buildSubgraphSchema } = require('@apollo/federation')
+const { ApolloServer } = require('@apollo/server')
+const { startStandaloneServer } = require('@apollo/server/standalone')
+const { buildSubgraphSchema } = require('@apollo/subgraph')
+const { GraphQLError } = require('graphql')
+const { gql } = require('graphql-tag')
 const { v4: uuidv4 } = require('uuid')
 const jwt = require('jsonwebtoken');
 
@@ -72,6 +74,10 @@ startConsumer(
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
+  # The following directive migrates the schema to Federation 2.
+  # I couldn't get @link to work, so I'm staying with Federation 1 for now.
+  # extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+
   type Review @key(fields: "id") {
     id: ID!
     reviewer: User!
@@ -152,7 +158,11 @@ const updateReview = async (_, { update }, context, info) => {
 
     const review = fetchReviewById(update.id)
     if (!review) {
-        throw new UserInputError(`No review with ID "${update.id}".`)
+        throw new GraphQLError(`No review with ID "${update.id}".`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
     if (review.reviewer.id !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
         throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on behalf of another user.`)
@@ -181,7 +191,11 @@ const removeReview = async (_, { id }, context, info) => {
 
     const review = fetchReviewById(id)
     if (!review) {
-        throw new UserInputError(`No review with ID "${id}".`)
+        throw new GraphQLError(`No review with ID "${id}".`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
     if (review.reviewer.id !== context.currentUser.id && !context.currentUser.roles?.includes('ROLE_ADMIN')) {
         throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on behalf of another user.`)
@@ -233,7 +247,32 @@ const fetchReviewsByBookId = id => [ ...reviews ].filter(([ _, review ]) => id =
 const fetchReviewsByReviewerId = id => [ ...reviews ].filter(([ _, review ]) => id === review.reviewer.id).map(([ _, review ]) => review)
 
 const server = new ApolloServer({
-    schema: buildSubgraphSchema([ { typeDefs, resolvers } ]),
+    schema: buildSubgraphSchema({ typeDefs, resolvers }),
+    plugins: [
+        {
+            requestDidStart(requestContext) {
+                console.log(`====================   ${new Date().toJSON()}   ====================`)
+                console.log("Request did start!")
+                if (process.env.DEBUG) {
+                    console.log(`    context: ${JSON.stringify(requestContext.contextValue)}`)
+                }
+                console.log(`    query: ${requestContext.request.query}`)
+                console.log(`    operationName: ${requestContext.request.operationName}`)
+                console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
+                if (process.env.DEBUG) {
+                    console.log("    reviews:")
+                    dump(reviews)
+                }
+                console.log()
+            },
+        },
+    ],
+})
+
+const port = process.env.PORT || 4002
+
+// The `listen` method launches a web server.
+startStandaloneServer(server, {
     context: ({ req }) => {
         try {
             const authHeader = req.headers.authorization || ''
@@ -250,26 +289,7 @@ const server = new ApolloServer({
             return {}
         }
     },
-    plugins: [
-        {
-            requestDidStart(requestContext) {
-                console.log(`====================   ${new Date().toJSON()}   ====================`)
-                console.log("Request did start!")
-                console.log(`    query: ${requestContext.request.query}`)
-                console.log(`    operationName: ${requestContext.request.operationName}`)
-                console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
-                if (process.env.DEBUG) {
-                    console.log("    reviews:")
-                    dump(reviews)
-                }
-            },
-        },
-    ],
-})
-
-const port = process.env.PORT || 4002
-
-// The `listen` method launches a web server.
-server.listen(port).then(({ url }) => {
+    listen: { port },
+}).then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`)
 })

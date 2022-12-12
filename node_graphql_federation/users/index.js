@@ -1,6 +1,8 @@
-const { ApolloServer, gql } = require('apollo-server')
-const { AuthenticationError, ForbiddenError, UserInputError } = require('apollo-server-errors')
-const { buildSubgraphSchema } = require('@apollo/federation')
+const { ApolloServer } = require('@apollo/server')
+const { startStandaloneServer } = require('@apollo/server/standalone')
+const { buildSubgraphSchema } = require('@apollo/subgraph')
+const { GraphQLError } = require('graphql')
+const { gql } = require('graphql-tag')
 const { v4: uuidv4 } = require('uuid')
 const jwt = require('jsonwebtoken');
 
@@ -34,6 +36,10 @@ startConsumer(
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = gql`
+  # The following directive migrates the schema to Federation 2.
+  # I couldn't get @link to work, so I'm staying with Federation 1 for now.
+  # extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+
   type User @key(fields: "id") {
     id: ID!
     name: String!
@@ -79,7 +85,11 @@ const typeDefs = gql`
 const signUp = async (_, { user }) => {
     const userForEmail = fetchUserByEmail(user.email)
     if (userForEmail) {
-        throw new UserInputError(`Email "${user.email}" is already taken.`)
+        throw new GraphQLError(`Email "${user.email}" is already taken.`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
 
     user.id = uuidv4()
@@ -106,7 +116,11 @@ const addUser = async (_, { user }, context, info) => {
 
     const userForEmail = fetchUserByEmail(user.email)
     if (userForEmail) {
-        throw new UserInputError(`Email "${user.email}" is already taken.`)
+        throw new GraphQLError(`Email "${user.email}" is already taken.`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
 
     user.id = uuidv4()
@@ -135,13 +149,21 @@ const updateUser = async (_, { update }, context, info) => {
 
     const user = fetchUserById(update.id)
     if (!user) {
-        throw new UserInputError(`No user with ID "${update.id}".`)
+        throw new GraphQLError(`No user with ID "${update.id}".`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
 
     if (update.email) {
         const userForEmail = fetchUserByEmail(update.email)
         if (userForEmail && userForEmail.id !== user.id) {
-            throw new UserInputError(`Email "${update.email}" is already taken.`)
+            throw new GraphQLError(`Email "${update.email}" is already taken.`, {
+                extensions: {
+                    code: 'BAD_USER_INPUT',
+                }
+            })
         }
     }
 
@@ -171,7 +193,11 @@ const removeUser = async (_, { id }, context, info) => {
 
     const user = fetchUserById(id)
     if (!user) {
-        throw new UserInputError(`No user with ID "${id}".`)
+        throw new GraphQLError(`No user with ID "${id}".`, {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+            }
+        })
     }
 
     await sendMessage(
@@ -216,7 +242,32 @@ const fetchUserByEmail = email => {
 }
 
 const server = new ApolloServer({
-    schema: buildSubgraphSchema([ { typeDefs, resolvers } ]),
+    schema: buildSubgraphSchema({ typeDefs, resolvers }),
+    plugins: [
+        {
+            requestDidStart(requestContext) {
+                console.log(`====================   ${new Date().toJSON()}   ====================`)
+                console.log("Request did start!")
+                if (process.env.DEBUG) {
+                    console.log(`    context: ${JSON.stringify(requestContext.contextValue)}`)
+                }
+                console.log(`    query: ${requestContext.request.query}`)
+                console.log(`    operationName: ${requestContext.request.operationName}`)
+                console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
+                if (process.env.DEBUG) {
+                    console.log("    users:")
+                    dump(users)
+                }
+                console.log()
+            },
+        },
+    ],
+})
+
+const port = process.env.PORT || 4003
+
+// The `listen` method launches a web server.
+startStandaloneServer(server, {
     context: ({ req }) => {
         try {
             const authHeader = req.headers.authorization || ''
@@ -233,26 +284,7 @@ const server = new ApolloServer({
             return {}
         }
     },
-    plugins: [
-        {
-            requestDidStart(requestContext) {
-                console.log(`====================   ${new Date().toJSON()}   ====================`)
-                console.log("Request did start!")
-                console.log(`    query: ${requestContext.request.query}`)
-                console.log(`    operationName: ${requestContext.request.operationName}`)
-                console.log(`    variables: ${JSON.stringify(requestContext.request.variables)}`)
-                if (process.env.DEBUG) {
-                    console.log("    users:")
-                    dump(users)
-                }
-            },
-        },
-    ],
-})
-
-const port = process.env.PORT || 4003
-
-// The `listen` method launches a web server.
-server.listen(port).then(({ url }) => {
+    listen: { port },
+}).then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`)
 })

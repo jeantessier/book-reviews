@@ -11,5 +11,8 @@
     "signatures",
     "jwts",
     "gateway"
-  ]
+  ],
+  "dependencies": {
+    "update": "^0.7.4"
+  }
 }
