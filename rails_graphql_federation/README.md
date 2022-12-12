@@ -80,6 +80,9 @@ done
 
 The gateway lives at `http://localhost:3000` like a normal Node app.
 
+If you define the `DEBUG` environment variable, the gateway will output extra
+information about calls to the federated services.
+
 When the gateway is running, you can update the Apollo Graph Manager.  You will
 need an API key from the Apollo
 [Graph Manager](https://engine.apollographql.com/).  Once you have obtained it,
