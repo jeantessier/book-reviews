@@ -78,8 +78,6 @@ GEM
     crass (1.0.6)
     date (3.3.3)
     debug (1.7.1)
-      irb (>= 1.5.0)
-      reline (>= 0.3.1)
     digest-crc (0.6.4)
       rake (>= 12.0.0, < 14.0.0)
     dotenv (2.8.1)
@@ -91,13 +89,10 @@ GEM
     globalid (1.1.0)
       activesupport (>= 5.0)
     google-protobuf (3.21.12)
-    graphql (2.0.16)
+    graphql (2.0.17)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    io-console (0.6.0)
-    irb (1.6.2)
-      reline (>= 0.3.0)
-    jwt (2.6.0)
+    jwt (2.7.0)
     little-plugger (1.1.4)
     logging (2.3.1)
       little-plugger (~> 1.1)
@@ -105,7 +100,7 @@ GEM
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mail (2.8.0.1)
+    mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
       net-pop
@@ -126,11 +121,11 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.8)
-    nokogiri (1.14.0-arm64-darwin)
+    nokogiri (1.14.2-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.14.0-x86_64-darwin)
+    nokogiri (1.14.2-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.14.0-x86_64-linux)
+    nokogiri (1.14.2-x86_64-linux)
       racc (~> 1.4)
     phobos (2.1.5)
       activesupport (>= 3.0.0)
@@ -173,21 +168,19 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
-    reline (0.3.2)
-      io-console (~> 0.5)
     ruby-kafka (1.5.0)
       digest-crc
     sqlite3 (1.6.0-arm64-darwin)
     sqlite3 (1.6.0-x86_64-darwin)
     sqlite3 (1.6.0-x86_64-linux)
     thor (1.2.1)
-    timeout (0.3.1)
+    timeout (0.3.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.6.6)
+    zeitwerk (2.6.7)
 
 PLATFORMS
   arm64-darwin-21
@@ -209,4 +202,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   2.4.1
+   2.4.7
