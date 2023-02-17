@@ -29,19 +29,6 @@ RSpec.describe BookAuthorsController do
 
   let!(:user) { FactoryBot.create :user }
 
-  let(:jwt_token) { Knock::AuthToken.new(payload: {sub: user.id}).token }
-  let(:auth_header) { {'Authorization': "Bearer #{jwt_token}"} }
-
-  # I think this version of RSpec does not handle headers passed to #get or #post
-  # So, we cannot use:
-  #     post :create, params: {book: valid_attributes}, session: valid_session, headers: auth_header
-  # We have to inject a valid token into the controller directly.  Yuck!
-  before(:example) do
-    def @controller.token_from_request_headers
-      Knock::AuthToken.new(payload: {sub: User.all.first.id}).token
-    end
-  end
-
   describe "GET #index" do
     it "returns a success response" do
       get :index, params: {book_id: book.id}, session: valid_session
@@ -78,65 +65,104 @@ RSpec.describe BookAuthorsController do
   end
 
   describe "POST #create" do
-    context "with valid params" do
-      it "creates a new BookAuthor" do
-        expect do
-          post :create, params: {book_id: book.id, book_author: valid_attributes}, session: valid_session
-        end.to change(BookAuthor, :count).by(1)
-      end
-
-      it "renders a JSON response with the new book_author" do
+    context "not authenticated"  do
+      it "returns an error" do
         post :create, params: {book_id: book.id, book_author: valid_attributes}, session: valid_session
-        expect(response).to have_http_status(:created)
-        expect(response.media_type).to eq('application/json')
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
-    context "with invalid params" do
-      it "renders a JSON response with errors for the new book_author" do
-        post :create, params: {book_id: book.id, book_author: invalid_attributes}, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.media_type).to eq('application/json')
+    context "authenticated" do
+      before { sign_in user }
+
+      context "with valid params" do
+        it "creates a new BookAuthor" do
+          expect do
+            post :create, params: {book_id: book.id, book_author: valid_attributes}, session: valid_session
+          end.to change(BookAuthor, :count).by(1)
+        end
+
+        it "renders a JSON response with the new book_author" do
+          post :create, params: {book_id: book.id, book_author: valid_attributes}, session: valid_session
+          expect(response).to have_http_status(:created)
+          expect(response.media_type).to eq('application/json')
+        end
+      end
+
+      context "with invalid params" do
+        it "renders a JSON response with errors for the new book_author" do
+          post :create, params: {book_id: book.id, book_author: invalid_attributes}, session: valid_session
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.media_type).to eq('application/json')
+        end
       end
     end
   end
 
   describe "PUT #update" do
-    context "with valid params" do
-      let(:new_order) { rand(1_000...10_000) }
-      let(:new_attributes) do
-        {
-            order: new_order
-        }
-      end
-
-      it "updates the requested book_author" do
-        put :update, params: {book_id: book.id, id: book_author.to_param, book_author: new_attributes}, session: valid_session
-        book_author.reload
-        expect(book_author.order).to eq(new_order)
-      end
-
-      it "renders a JSON response with the book_author" do
-        put :update, params: {book_id: book.id, id: book_author.to_param, book_author: valid_attributes}, session: valid_session
-        expect(response).to have_http_status(:ok)
-        expect(response.media_type).to eq('application/json')
+    context "not authenticated"  do
+      it "returns an error" do
+        post :update, params: {book_id: book.id, id: book_author.to_param, book_author: valid_attributes}, session: valid_session
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
-    context "with invalid params" do
-      it "renders a JSON response with errors for the book_author" do
-        put :update, params: {book_id: book.id, id: book_author.to_param, book_author: invalid_attributes}, session: valid_session
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.media_type).to eq('application/json')
+    context "authenticated" do
+      before { sign_in user }
+
+      context "with valid params" do
+        let(:new_order) { rand(1_000...10_000) }
+        let(:new_attributes) do
+          {
+              order: new_order
+          }
+        end
+
+        it "updates the requested book_author" do
+          put :update, params: {book_id: book.id, id: book_author.to_param, book_author: new_attributes}, session: valid_session
+          book_author.reload
+          expect(book_author.order).to eq(new_order)
+        end
+
+        it "renders a JSON response with the book_author" do
+          put :update, params: {book_id: book.id, id: book_author.to_param, book_author: valid_attributes}, session: valid_session
+          expect(response).to have_http_status(:ok)
+          expect(response.media_type).to eq('application/json')
+        end
+      end
+
+      context "with invalid params" do
+        it "renders a JSON response with errors for the book_author" do
+          put :update, params: {book_id: book.id, id: book_author.to_param, book_author: invalid_attributes}, session: valid_session
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.media_type).to eq('application/json')
+        end
       end
     end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested book_author" do
-      expect do
+    context "not authenticated"  do
+      it "returns an error" do
         delete :destroy, params: {book_id: book.id, id: book_author.to_param}, session: valid_session
-      end.to change(BookAuthor, :count).by(-1)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it "does not destroy the requested book_author" do
+        expect do
+          delete :destroy, params: {book_id: book.id, id: book_author.to_param}, session: valid_session
+        end.not_to change(BookAuthor, :count)
+      end
+    end
+
+    context "authenticated" do
+      before { sign_in user }
+
+      it "destroys the requested book_author" do
+        expect do
+          delete :destroy, params: {book_id: book.id, id: book_author.to_param}, session: valid_session
+        end.to change(BookAuthor, :count).by(-1)
+      end
     end
   end
 end

@@ -1,5 +1,7 @@
 class BookAuthor < ApplicationRecord
-  belongs_to :book, inverse_of: :authors
+  # Optional so the tests can create transient instances.
+  # Otherwise, we get "Validation failed: Book must exist" errors.
+  belongs_to :book, inverse_of: :authors, optional: true
 
   validates_presence_of :author
   validates_numericality_of :order, greater_than_or_equal_to: 0
