@@ -9,7 +9,7 @@ populate it with collections derived from `Books_????-??-??.md`.
 
 ```bash
 ./Books_mongo.pl > book_reviews.js
-mongo node_mongo_book_reviews book_reviews.js
+mongosh node_mongo_book_reviews book_reviews.js
 ```
 
 ## Running the Server
@@ -43,8 +43,8 @@ It does make initializing the database a little more difficult.
 
 ```bash
 ./Books_mongo.pl > book_reviews.js
-docker cp book_reviews.js node_mongo_mongo_1:/tmp/book_reviews.js
-docker compose exec mongo mongo node_mongo_book_reviews /tmp/book_reviews.js
+docker compose cp book_reviews.js mongo:/tmp/book_reviews.js
+docker compose exec mongo mongosh node_mongo_book_reviews /tmp/book_reviews.js
 ```
 
 ## Sample Commands
@@ -88,12 +88,12 @@ db.users.findOneAndUpdate(
 > you can get into the database with:
 > 
 > ```bash
-> docker compose exec mongo mongo node_mongo_book_reviews
+> docker compose exec mongo mongosh node_mongo_book_reviews
 > ```
 >
-> You do need the double "mongo" in the command above. The first one is the name
-> of the database container under Docker Compose.  The second one is the MongoDB
-> CLI shell.
+> You do need the "mongo mongosh" in the command above. The first one is the
+> name of the database container under Docker Compose.  The second one is the
+> MongoDB CLI shell.
 
 Once you have a functioning admin user, you can use it to grant `ROLE_ADMIN` to
 other users, using the `PATCH` verb.

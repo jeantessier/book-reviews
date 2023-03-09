@@ -8,6 +8,8 @@ services:
 
   mongo:
     image: mongo
+    volumes:
+      - "mongo_data:/data/db"
 
   mongo_express:
     image: mongo-express
@@ -38,3 +40,8 @@ services:
     command: npm start
     depends_on:
       - mongo
+
+volumes:
+
+  mongo_data:
+    driver: local
