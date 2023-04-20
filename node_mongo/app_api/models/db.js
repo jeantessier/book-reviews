@@ -18,10 +18,11 @@ mongoose.connection.on("disconnected", () => {
 // CAPTURE APP TERMINATION / RESTART EVENTS
 // To be called when process is restarted or terminated
 const gracefulShutdown = (msg, callback) => {
-    mongoose.connection.close(() => {
-        console.log('Mongoose disconnected through ' + msg)
-        callback()
-    })
+    mongoose.connection.close()
+        .then(() => {
+            console.log(`Mongoose disconnected through ${msg}`)
+            callback()
+        })
 }
 // For nodemon restarts
 process.once('SIGUSR2', () => {
