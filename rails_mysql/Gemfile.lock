@@ -117,7 +117,7 @@ GEM
     graphiql-rails (1.9.0)
       railties
       sprockets-rails
-    graphql (1.13.19)
+    graphql (2.0.24)
     graphql-batch (0.5.3)
       graphql (>= 1.12.18, < 3)
       promise.rb (~> 0.7.2)
@@ -268,7 +268,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   graphiql-rails (~> 1.7)
-  graphql (~> 1.13)
+  graphql
   graphql-batch
   jwt
   mysql2 (>= 0.3.18, < 0.6.0)

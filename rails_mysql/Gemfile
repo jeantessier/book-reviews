@@ -57,7 +57,7 @@ group :development, :test do
   gem 'dotenv-rails'
 end
 
-gem "graphql", "~> 1.13"
+gem "graphql"
 
 gem "graphiql-rails", "~> 1.7", group: :development
 
