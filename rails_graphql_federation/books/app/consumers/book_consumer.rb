@@ -41,9 +41,9 @@ class BookConsumer
     raise "No book with ID #{json_message['id']}" if book.nil?
 
     book[:name] = json_message['name'] if json_message.include?('name')
-    book[:titles] = json_message['titles'] if json_message.include?('titles')
+    book[:titles] = json_message['titles'].collect { |title| title.transform_keys(&:to_sym) } if json_message.include?('titles')
     book[:authors] = json_message['authors'] if json_message.include?('authors')
-    book[:publisher] = json_message['publisher'].collect { |title| title.transform_keys(&:to_sym) } if json_message.include?('publisher')
+    book[:publisher] = json_message['publisher'] if json_message.include?('publisher')
     book[:years] = json_message['years'] if json_message.include?('years')
   end
 
