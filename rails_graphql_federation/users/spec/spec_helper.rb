@@ -97,6 +97,6 @@ RSpec.configure do |config|
   # Include Phobos helper
   config.include Phobos::Test::Helper
   config.before(:each) do
-    Phobos.configure('config/phobos.yml')
+    Phobos.configure('config/phobos_spec.yml')
   end
 end
