@@ -602,3 +602,22 @@ You can extract the federated shema from services that you started manually.
 ```bash
 extract_schema.sh
 ```
+
+## Running Tests
+
+Even though we mock Kafka in tests, it still needs to be running for the Phobos
+gem to initialize properly.  You can start Kafka using Docker Compose:
+
+```bash
+docker compose up -d
+```
+
+### Running All Tests
+
+```bash
+for d in books reviews users search signatures jwts
+do
+    echo $d
+    (cd $d; bin/rspec)
+done
+```
