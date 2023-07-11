@@ -614,10 +614,34 @@ docker compose up -d
 
 ### Running All Tests
 
+Each microservice is a Rails app with RSpec tests.  You can run them manually:
+
 ```bash
-for d in books reviews users search signatures jwts
+for service in books reviews users search signatures jwts
 do
-    echo $d
-    (cd $d; bin/rspec)
+    echo $service
+    (cd $service; bin/rspec)
 done
+```
+
+Or, you can use `rspec.sh`:
+
+```bash
+./rspec.sh
+```
+
+If you give it a target, it will run it in the microservices that support it.
+
+E.g.,
+
+```bash
+./rspec.sh spec/consumers
+```
+
+or
+
+```bash
+./rspec.sh \
+    spec/consumers/book_consumer_spec.rb:29 \
+    spec/consumers/user_consumer_spec.rb:29
 ```
