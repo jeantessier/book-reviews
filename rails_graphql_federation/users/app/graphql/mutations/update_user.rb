@@ -30,15 +30,22 @@ module Mutations
 
       payload = { type: 'userUpdated' }.merge(user).to_json
 
+      headers = {
+        current_user: context[:current_user][:sub],
+        request_id: context[:request_id],
+      }
+
       Rails.logger.info <<-MSG
         Sending message ...
           topic: #{KAFKA_TOPIC}
+          headers: #{headers}
           key: #{id}
           payload: #{payload}
       MSG
 
       producer.publish(
         topic: KAFKA_TOPIC,
+        headers: headers,
         key: id,
         payload: payload,
       )

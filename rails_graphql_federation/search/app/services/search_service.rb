@@ -63,7 +63,7 @@ class SearchService
       )
     end
 
-    def search(q, current_user)
+    def search(q, current_user, request_id)
       user = current_user&.has_key?(:sub) ? current_user[:sub] : nil
 
       results_collector = {}
@@ -87,18 +87,25 @@ class SearchService
         user: user,
         query: q,
         results: results,
+      }.to_json
+
+      headers = {
+        current_user: user,
+        request_id: request_id,
       }
 
       Rails.logger.info <<-MSG
         Sending message ...
           topic: #{KAFKA_TOPIC}
-          key: #{payload[:id]}
+          headers: #{headers}
+          key: #{user}
           payload: #{payload.to_json}
       MSG
 
       producer.publish(
         topic: KAFKA_TOPIC,
-        key: payload[:id],
+        headers: headers,
+        key: user,
         payload: payload.to_json,
       )
 

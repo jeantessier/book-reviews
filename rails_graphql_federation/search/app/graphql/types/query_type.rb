@@ -20,7 +20,7 @@ module Types
     end
 
     def search(q:)
-      SearchService.search q, context[:current_user]
+      SearchService.search q, context[:current_user], context[:request_id]
     end
   end
 end
