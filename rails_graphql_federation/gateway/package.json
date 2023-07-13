@@ -23,7 +23,8 @@
     "@apollo/gateway": "*",
     "@apollo/server": "*",
     "dotenv": "*",
-    "graphql": "*"
+    "graphql": "*",
+    "uuid": "*"
   },
   "homepage": "https://github.com/jeantessier/book-reviews/tree/master/rails_graphql_federation"
 }

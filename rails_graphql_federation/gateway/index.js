@@ -1,6 +1,7 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource } = require("@apollo/gateway")
+const { v4: uuidv4 } = require('uuid')
 
 require('dotenv').config()
 
@@ -13,6 +14,7 @@ const jwts_service = process.env.JWTS_SERVICE || 'http://localhost:3006/graphql'
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     willSendRequest({ request, context }) {
+        request.http.headers.set('X-Request-Id', context.requestId)
         if (context.authHeader) {
             request.http.headers.set('Authorization', context.authHeader)
         }
@@ -78,10 +80,10 @@ const port = process.env.PORT || 3000
 
 startStandaloneServer(server, {
     context: async ({ req }) => {
-        const authHeader = req.headers.authorization || ''
-        if (!authHeader) return {}
-
-        return { authHeader }
+        return {
+            authHeader: req.headers.authorization || '',
+            requestId: req.headers["x-request-id"] || uuidv4()
+        }
     },
     listen: { port },
 }).then(({ url }) => {
