@@ -59,8 +59,8 @@ It is much easier to run Kafka using Docker Compose.
 docker compose up -d
 ```
 
-> NOTE: Switching Docker Compose files will reset the Kafka broker and you will
-> lose all data recorded so far.
+> NOTE: When setting up a new installation, use `reset_kafka.sh` so it can
+> create the appropriate topics.
 
 #### Starting the Federated Services
 
@@ -114,12 +114,10 @@ With a sampling of reviews by the two users.
 
 ### Real Data
 
-You can reset Kafka with these command:
+You can reset Kafka with this command:
 
 ```bash
-docker compose stop
-docker volume rm rails_graphql_federation_kafka_data
-docker compose up -d
+reset_kafka.sh
 ```
 
 This command will add data derived from `../data/Books_????-??-??*.md`.
@@ -630,7 +628,8 @@ Or, you can use `rspec.sh`:
 ./rspec.sh
 ```
 
-If you give it a target, it will run it in the microservices that support it.
+If you give it a target, it will run it in the microservices that support this
+target.
 
 E.g.,
 
