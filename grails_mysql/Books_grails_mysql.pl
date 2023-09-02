@@ -55,24 +55,22 @@ sub DocumentPartAsMysql {
         $line = shift(@lines);
         chomp $line;
 
-        if ($line =~ /(\w+):\s*(.*)/) {
-            local ($key, $value) = ($1, $2);
-
-            if ($key eq "title") {
-                push @titles, $value;
-            } elsif ($key eq "author") {
-                push @authors, $value;
-            } elsif ($key eq "year") {
-                push @years, $value;
+        if ($line =~ /(?<key>\w+):\s*(?<value>.*)/) {
+            if ($+{key} eq "title") {
+                push @titles, $+{value};
+            } elsif ($+{key} eq "author") {
+                push @authors, $+{value};
+            } elsif ($+{key} eq "year") {
+                push @years, $+{value};
             } else {
-                $meta_data{$key} = $value;
+                $meta_data{$+{key}} = $+{value};
             }
         }
     } until ($line =~ /^\s*$/);
 
     local ($title) = $titles[0];
-    if ($title =~ /\[(.*)\]\(.*\)/) {
-        $title = $1;
+    if ($title =~ /\[(?<title>.*)\]\((?<link>.*)\)/) {
+        $title = $+{title};
     }
 
     local ($book_stmt) = "-- " . $title . "\nselect " . &SqlText("Inserting " . $title . " ...") . " as '';\n\ninsert into\n    book(name, publisher, date_created, last_updated)\nvalues\n    (" . &SqlText($meta_data{"name"}) . ", " . &SqlText($meta_data{"publisher"}) . ", now(), now());\nset \@book_id = last_insert_id();";
@@ -86,8 +84,8 @@ sub DocumentPartAsMysql {
     } @years;
 
     local (@title_stmts) = map {
-        if (/\[(.*)\]\((.*)\)/) {
-            "insert into\n    title(book_id, title, link)\nvalues\n    (\@book_id, " . &SqlText($1) . ", " . &SqlText($2) . ");";
+        if (/\[(?<title>.*)\]\((?<link>.*)\)/) {
+            "insert into\n    title(book_id, title, link)\nvalues\n    (\@book_id, " . &SqlText($+{title}) . ", " . &SqlText($+{link}) . ");";
         } else {
             "insert into\n    title(book_id, title)\nvalues\n    (\@book_id, " . &SqlText($_) . ");";
         }

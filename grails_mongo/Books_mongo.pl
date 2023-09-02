@@ -43,17 +43,15 @@ sub DocumentPartAsMongo {
         $line = shift(@lines);
         chomp $line;
 
-        if ($line =~ /(\w+):\s*(.*)/) {
-            local ($key, $value) = ($1, $2);
-
-            if ($key eq "title") {
-                push @titles, $value;
-            } elsif ($key eq "author") {
-                push @authors, $value;
-            } elsif ($key eq "year") {
-                push @years, $value;
+        if ($line =~ /(?<key>\w+):\s*(?<value>.*)/) {
+            if ($+{key} eq "title") {
+                push @titles, $+{value};
+            } elsif ($+{key} eq "author") {
+                push @authors, $+{value};
+            } elsif ($+{key} eq "year") {
+                push @years, $+{value};
             } else {
-                $meta_data{$key} = $value;
+                $meta_data{$+{key}} = $+{value};
             }
         }
     } until ($line =~ /^\s*$/);
@@ -63,10 +61,10 @@ sub DocumentPartAsMongo {
             name => &JsonText($meta_data{"name"}),
             authors => &JsonList(map { &JsonText($_) } @authors),
             titles => &JsonList(map {
-                if (/\[(.*)\]\((.*)\)/) {
+                if (/\[(?<title>.*)\]\((?<link>.*)\)/) {
                     &JsonRecord(
-                        title => &JsonText($1),
-                        link => &JsonText($2),
+                        title => &JsonText($+{title}),
+                        link => &JsonText($+{link}),
                     );
                 } else {
                     &JsonRecord(
