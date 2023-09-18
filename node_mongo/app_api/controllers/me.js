@@ -5,28 +5,24 @@ const User = mongoose.model('User')
 
 const sendJSONresponse = (res, status, content) => res.status(status).json(content)
 
-module.exports.readMe = async (req, res) => {
-    try {
-        const user = await User.findOne({ _id: req.currentUser.sub }).select("-salt -hash")
-        if (user) {
-            sendJSONresponse(res, 200, user)
-        } else {
-            sendJSONresponse(res, 404, {
-                "message": `No user with ID ${req.currentUser.sub}`
-            })
-        }
-    } catch(err) {
-        sendJSONresponse(res, 404, err)
-    }
+module.exports.readMe = (req, res) => {
+    User
+        .findById(req.currentUser.sub)
+        .select("-salt -hash")
+        .then(user => {
+            if (user) {
+                sendJSONresponse(res, 200, user)
+            } else {
+                sendJSONresponse(res, 404, { message: `No user with ID ${req.currentUser.sub}` })
+            }
+        }).catch(err => sendJSONresponse(res, 404, err))
 }
 
 module.exports.updateMe = async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.currentUser.sub })
+        const user = await User.findById(req.currentUser.sub)
         if (!user) {
-            sendJSONresponse(res, 404, {
-                "message": `No user with ID ${req.currentUser.sub}`
-            })
+            sendJSONresponse(res, 404, { message: `No user with ID ${req.currentUser.sub}` })
             return
         }
 
@@ -53,18 +49,14 @@ module.exports.replaceMe = async (req, res) => {
     const { name, email, password } = req.body
 
     if (!name || !email || !password) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        })
+        sendJSONresponse(res, 400, { message: "All fields required" })
         return
     }
 
     try {
-        const user = await User.findOne({ _id: req.currentUser.sub })
+        const user = await User.findById(req.currentUser.sub)
         if (!user) {
-            sendJSONresponse(res, 404, {
-                "message": `No user with ID ${req.currentUser.sub}`
-            })
+            sendJSONresponse(res, 404, { message: `No user with ID ${req.currentUser.sub}` })
             return
         }
 
@@ -87,22 +79,18 @@ module.exports.deleteMe = async (req, res) => {
             await Review.deleteMany({ reviewer: req.currentUser.sub })
             sendJSONresponse(res, 204, null)
         } else {
-            sendJSONresponse(res, 404, {
-                "message": `No user with ID ${req.currentUser.sub}`
-            })
+            sendJSONresponse(res, 404, { message: `No user with ID ${req.currentUser.sub}` })
         }
     } catch(err) {
         sendJSONresponse(res, 404, err)
     }
 }
 
-module.exports.listMyReviews = async (req, res) => {
-    try {
-        const reviews = await Review.find({ reviewer: req.currentUser.sub })
-        sendJSONresponse(res, 200, reviews)
-    } catch(err) {
-        sendJSONresponse(res, 400, err)
-    }
+module.exports.listMyReviews = (req, res) => {
+    Review
+        .find({ reviewer: req.currentUser.sub })
+        .then(reviews => sendJSONresponse(res, 200, reviews))
+        .catch(err => sendJSONresponse(res, 400, err))
 }
 
 module.exports.createMyReview = async (req, res) => {
@@ -110,9 +98,7 @@ module.exports.createMyReview = async (req, res) => {
     const reviewer = req.currentUser.sub
 
     if (!book || !body) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        })
+        sendJSONresponse(res, 400, { message: "All fields required" })
         return
     }
 
@@ -124,21 +110,15 @@ module.exports.createMyReview = async (req, res) => {
         ])
 
         if (!actualReviewer) {
-            sendJSONresponse(res, 404, {
-                "message": `No user with ID ${reviewer}`
-            })
+            sendJSONresponse(res, 404, { message: `No user with ID ${reviewer}` })
             return
         }
         if (!actualBook) {
-            sendJSONresponse(res, 404, {
-                "message": `No book with ID ${book}`
-            })
+            sendJSONresponse(res, 404, { message: `No book with ID ${book}` })
             return
         }
         if (actualReview) {
-            sendJSONresponse(res, 409, {
-                "message": `There is already a review of book ${book} by reviewer ${reviewer}`
-            })
+            sendJSONresponse(res, 409, { message: `There is already a review of book ${book} by reviewer ${reviewer}` })
             return
         }
 
@@ -157,29 +137,23 @@ module.exports.createMyReview = async (req, res) => {
     }
 }
 
-module.exports.readMyReview = async (req, res) => {
-    try {
-        const review = await Review.findOne({ _id: req.params.reviewId, reviewer: req.currentUser.sub })
-        if (!review) {
-            sendJSONresponse(res, 404, {
-                "message": `No review with ID ${req.params.reviewId}`
-            })
-            return
-        }
-
-        sendJSONresponse(res, 200, review)
-    } catch(err) {
-        sendJSONresponse(res, 400, err)
-    }
+module.exports.readMyReview = (req, res) => {
+    Review
+        .findOne({ _id: req.params.reviewId, reviewer: req.currentUser.sub })
+        .then(review => {
+            if (review) {
+                sendJSONresponse(res, 200, review)
+            } else {
+                sendJSONresponse(res, 404, { message: `No review with ID ${req.params.reviewId}` })
+            }
+        }).catch(err => sendJSONresponse(res, 400, err))
 }
 
 module.exports.updateMyReview = async (req, res) => {
     try {
         const review = await Review.findOne({ _id: req.params.reviewId, reviewer: req.currentUser.sub })
         if (!review) {
-            sendJSONresponse(res, 404, {
-                "message": `No review with ID ${req.params.reviewId}`
-            })
+            sendJSONresponse(res, 404, { message: `No review with ID ${req.params.reviewId}` })
             return
         }
 
@@ -206,18 +180,14 @@ module.exports.replaceMyReview = async (req, res) => {
     const { body, start, stop } = req.body
 
     if (!body) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        })
+        sendJSONresponse(res, 400, { message: "All fields required" })
         return
     }
 
     try {
         const review = await Review.findOne({ _id: req.params.reviewId, reviewer: req.currentUser.sub })
         if (!review) {
-            sendJSONresponse(res, 404, {
-                "message": `No review with ID ${req.params.reviewId}`
-            })
+            sendJSONresponse(res, 404, { message: `No review with ID ${req.params.reviewId}` })
             return
         }
 
@@ -236,9 +206,7 @@ module.exports.deleteMyReview = async (req, res) => {
     try {
         const review = await Review.findOne({ _id: req.params.reviewId, reviewer: req.currentUser.sub })
         if (!review) {
-            sendJSONresponse(res, 404, {
-                "message": `No review with ID ${req.params.reviewId}`
-            })
+            sendJSONresponse(res, 404, { message: `No review with ID ${req.params.reviewId}` })
             return
         }
 
@@ -249,11 +217,9 @@ module.exports.deleteMyReview = async (req, res) => {
     }
 }
 
-module.exports.deleteAllMyReviews = async (req, res) => {
-    try {
-        await Review.deleteMany({ reviewer: req.currentUser.sub })
-        sendJSONresponse(res, 204, null)
-    } catch(err) {
-        sendJSONresponse(res, 404, err)
-    }
+module.exports.deleteAllMyReviews = (req, res) => {
+    Review
+        .deleteMany({ reviewer: req.currentUser.sub })
+        .then(_ => sendJSONresponse(res, 204, null))
+        .catch(err => sendJSONresponse(res, 404, err))
 }

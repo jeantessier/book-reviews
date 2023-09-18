@@ -4,38 +4,30 @@ const Review = mongoose.model('Review')
 
 const sendJSONresponse = (res, status, content) => res.status(status).json(content)
 
-module.exports.list = async (req, res) => {
-    try {
-        const books = await Book.find()
-        sendJSONresponse(res, 200, books)
-    } catch(err) {
-        sendJSONresponse(res, 400, err)
-    }
+module.exports.list = (req, res) => {
+    Book
+        .find()
+        .then(books => sendJSONresponse(res, 200, books))
+        .catch(err => sendJSONresponse(res, 400, err))
 }
 
 module.exports.create = async (req, res) => {
     if (!req.currentUser.admin) {
-        sendJSONresponse(res, 403, {
-            "message": "You need admin privileges for this operation"
-        })
+        sendJSONresponse(res, 403, { message: "You need admin privileges for this operation" })
         return
     }
 
     const { name, titles, authors, publisher, years } = req.body
 
     if (!name) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        })
+        sendJSONresponse(res, 400, { message: "All fields required" })
         return
     }
 
     try {
         const namedBook = await Book.findOne({ name })
         if (namedBook) {
-            sendJSONresponse(res, 409, {
-                "message": `There is already a book named ${name}`
-            })
+            sendJSONresponse(res, 409, { message: `There is already a book named ${name}` })
             return
         }
 
@@ -54,35 +46,28 @@ module.exports.create = async (req, res) => {
     }
 }
 
-module.exports.readOne = async (req, res) => {
-    try {
-        const book = await Book.findOne({ _id: req.params.id })
-        if (book) {
-            sendJSONresponse(res, 200, book)
-        } else {
-            sendJSONresponse(res, 404, {
-                "message": `No book with ID ${req.params.id}`
-            })
-        }
-    } catch(err) {
-        sendJSONresponse(res, 404, err)
-    }
+module.exports.readOne = (req, res) => {
+    Book
+        .findById(req.params.id)
+        .then(book => {
+            if (book) {
+                sendJSONresponse(res, 200, book)
+            } else {
+                sendJSONresponse(res, 404, { message: `No book with ID ${req.params.id}` })
+            }
+        }).catch(err => sendJSONresponse(res, 400, err))
 }
 
 module.exports.updateOne = async (req, res) => {
     if (!req.currentUser.admin) {
-        sendJSONresponse(res, 403, {
-            "message": "You need admin privileges for this operation"
-        })
+        sendJSONresponse(res, 403, { message: "You need admin privileges for this operation" })
         return
     }
 
     try {
-        const book = await Book.findOne({ _id: req.params.id })
+        const book = await Book.findById(req.params.id)
         if (!book) {
-            sendJSONresponse(res, 404, {
-                "message": `No book with ID ${req.params.id}`
-            })
+            sendJSONresponse(res, 404, { message: `No book with ID ${req.params.id}` })
             return
         }
 
@@ -90,9 +75,7 @@ module.exports.updateOne = async (req, res) => {
 
         const namedBook = await Book.findOne({ name })
         if (namedBook && namedBook !== book) {
-            sendJSONresponse(res, 409, {
-                "message": `There is already a book named ${name}`
-            })
+            sendJSONresponse(res, 409, { message: `There is already a book named ${name}` })
             return
         }
 
@@ -121,35 +104,27 @@ module.exports.updateOne = async (req, res) => {
 
 module.exports.replaceOne = async (req, res) => {
     if (!req.currentUser.admin) {
-        sendJSONresponse(res, 403, {
-            "message": "You need admin privileges for this operation"
-        })
+        sendJSONresponse(res, 403, { message: "You need admin privileges for this operation" })
         return
     }
 
     const { name, titles, authors, publisher, years } = req.body
 
     if (!name) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        })
+        sendJSONresponse(res, 400, { message: "All fields required" })
         return
     }
 
     try {
-        const book = await Book.findOne({ _id: req.params.id })
+        const book = await Book.findById(req.params.id)
         if (!book) {
-            sendJSONresponse(res, 404, {
-                "message": `No book with ID ${req.params.id}`
-            })
+            sendJSONresponse(res, 404, { message: `No book with ID ${req.params.id}` })
             return
         }
 
         const namedBook = await Book.findOne({ name })
         if (namedBook && namedBook !== book) {
-            sendJSONresponse(res, 409, {
-                "message": `There is already a book named ${name}`
-            })
+            sendJSONresponse(res, 409, { message: `There is already a book named ${name}` })
             return
         }
 
@@ -168,9 +143,7 @@ module.exports.replaceOne = async (req, res) => {
 
 module.exports.deleteOne = async (req, res) => {
     if (!req.currentUser.admin) {
-        sendJSONresponse(res, 403, {
-            "message": "You need admin privileges for this operation"
-        })
+        sendJSONresponse(res, 403, { message: "You need admin privileges for this operation" })
         return
     }
 
@@ -180,9 +153,7 @@ module.exports.deleteOne = async (req, res) => {
             await Review.deleteMany({ book: req.params.id })
             sendJSONresponse(res, 204, null)
         } else {
-            sendJSONresponse(res, 404, {
-                "message": `No book with ID ${req.params.id}`
-            })
+            sendJSONresponse(res, 404, { message: `No book with ID ${req.params.id}` })
         }
     } catch(err) {
         sendJSONresponse(res, 404, err)
@@ -191,9 +162,7 @@ module.exports.deleteOne = async (req, res) => {
 
 module.exports.deleteAll = async (req, res) => {
     if (!req.currentUser.admin) {
-        sendJSONresponse(res, 403, {
-            "message": "You need admin privileges for this operation"
-        })
+        sendJSONresponse(res, 403, { message: "You need admin privileges for this operation" })
         return
     }
 

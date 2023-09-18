@@ -5,13 +5,12 @@ const User = mongoose.model('User')
 
 const sendJSONresponse = (res, status, content) => res.status(status).json(content)
 
-module.exports.list = async (req, res) => {
-    try {
-        const reviews = await Review.find()
-        sendJSONresponse(res, 200, reviews)
-    } catch(err) {
-        sendJSONresponse(res, 400, err)
-    }
+module.exports.list = (req, res) => {
+    Review
+        .find()
+        .sort({ start: -1 })
+        .then(reviews => sendJSONresponse(res, 200, reviews))
+        .catch(err => sendJSONresponse(res, 400, err))
 }
 
 module.exports.create = async (req, res) => {
@@ -20,9 +19,7 @@ module.exports.create = async (req, res) => {
 
     if (reviewer) {
         if (reviewer !== req.currentUser.sub && !req.currentUser.admin) {
-            sendJSONresponse(res, 403, {
-                "message": "You need admin privileges to create reviews on behalf of someone else"
-            })
+            sendJSONresponse(res, 403, { message: "You need admin privileges to create reviews on behalf of someone else" })
             return
         }
     } else {
@@ -30,9 +27,7 @@ module.exports.create = async (req, res) => {
     }
 
     if (!book || !body) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        })
+        sendJSONresponse(res, 400, { message: "All fields required" })
         return
     }
 
@@ -44,21 +39,15 @@ module.exports.create = async (req, res) => {
         ])
 
         if (!actualReviewer) {
-            sendJSONresponse(res, 404, {
-                "message": `No user with ID ${reviewer}`
-            })
+            sendJSONresponse(res, 404, { message: `No user with ID ${reviewer}` })
             return
         }
         if (!actualBook) {
-            sendJSONresponse(res, 404, {
-                "message": `No book with ID ${book}`
-            })
+            sendJSONresponse(res, 404, { message: `No book with ID ${book}` })
             return
         }
         if (actualReview) {
-            sendJSONresponse(res, 409, {
-                "message": `There is already a review of book ${book} by reviewer ${reviewer}`
-            })
+            sendJSONresponse(res, 409, { message: `There is already a review of book ${book} by reviewer ${reviewer}` })
             return
         }
 
@@ -77,35 +66,28 @@ module.exports.create = async (req, res) => {
     }
 }
 
-module.exports.readOne = async (req, res) => {
-    try {
-        const review = await Review.findOne({ _id: req.params.id })
-        if (!review) {
-            sendJSONresponse(res, 404, {
-                "message": `No review with ID ${req.params.id}`
-            })
-            return
-        }
-
-        sendJSONresponse(res, 200, review)
-    } catch(err) {
-        sendJSONresponse(res, 404, err)
-    }
+module.exports.readOne = (req, res) => {
+    Review
+        .findById(req.params.id)
+        .then(review => {
+            if (review) {
+                sendJSONresponse(res, 200, review)
+            } else {
+                sendJSONresponse(res, 404, { message: `No review with ID ${req.params.id}` })
+            }
+        })
+        .catch(err => sendJSONresponse(res, 404, err))
 }
 
 module.exports.updateOne = async (req, res) => {
     try {
-        const review = await Review.findOne({ _id: req.params.id })
+        const review = await Review.findById(req.params.id)
         if (!review) {
-            sendJSONresponse(res, 404, {
-                "message": `No review with ID ${req.params.id}`
-            })
+            sendJSONresponse(res, 404, { message: `No review with ID ${req.params.id}` })
             return
         }
         if (review.reviewer !== req.currentUser.sub && !req.currentUser.admin) {
-            sendJSONresponse(res, 403, {
-                "message": "You need admin privileges to edit someone else's review"
-            })
+            sendJSONresponse(res, 403, { message: "You need admin privileges to edit someone else's review" })
             return
         }
 
@@ -132,24 +114,18 @@ module.exports.replaceOne = async (req, res) => {
     const { body, start, stop } = req.body
 
     if (!body) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        })
+        sendJSONresponse(res, 400, { message: "All fields required" })
         return
     }
 
     try {
-        const review = await Review.findOne({ _id: req.params.id })
+        const review = await Review.findById(req.params.id)
         if (!review) {
-            sendJSONresponse(res, 404, {
-                "message": `No review with ID ${req.params.id}`
-            })
+            sendJSONresponse(res, 404, { message: `No review with ID ${req.params.id}` })
             return
         }
         if (review.reviewer !== req.currentUser.sub && !req.currentUser.admin) {
-            sendJSONresponse(res, 403, {
-                "message": "You need admin privileges to edit someone else's review"
-            })
+            sendJSONresponse(res, 403, { message: "You need admin privileges to edit someone else's review" })
             return
         }
 
@@ -166,17 +142,13 @@ module.exports.replaceOne = async (req, res) => {
 
 module.exports.deleteOne = async (req, res) => {
     try {
-        const review = await Review.findOne({ _id: req.params.id })
+        const review = await Review.findById(req.params.id)
         if (!review) {
-            sendJSONresponse(res, 404, {
-                "message": `No review with ID ${req.params.id}`
-            })
+            sendJSONresponse(res, 404, { message: `No review with ID ${req.params.id}` })
             return
         }
         if (review.reviewer !== req.currentUser.sub && !req.currentUser.admin) {
-            sendJSONresponse(res, 403, {
-                "message": "You need admin privileges to delete someone else's review"
-            })
+            sendJSONresponse(res, 403, { message: "You need admin privileges to delete someone else's review" })
             return
         }
 

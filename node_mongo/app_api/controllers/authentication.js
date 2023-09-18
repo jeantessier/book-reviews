@@ -6,9 +6,7 @@ const sendJSONresponse = (res, status, content) => res.status(status).json(conte
 
 module.exports.register = (req, res) => {
     if (!req.body.name || !req.body.email || !req.body.password) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        })
+        sendJSONresponse(res, 400, { message: "All fields required" })
         return
     }
 
@@ -24,9 +22,7 @@ module.exports.register = (req, res) => {
         .save()
         .then(() => {
             const token = user.generateJwt()
-            sendJSONresponse(res, 200, {
-                "token": token
-            })
+            sendJSONresponse(res, 200, { token })
         }).catch(err => {
             sendJSONresponse(res, 404, err)
         })
@@ -34,9 +30,7 @@ module.exports.register = (req, res) => {
 
 module.exports.login = (req, res) => {
     if (!req.body.email || !req.body.password) {
-        sendJSONresponse(res, 400, {
-            "message": "All fields required"
-        })
+        sendJSONresponse(res, 400, { message: "All fields required" })
         return
     }
 
@@ -48,9 +42,7 @@ module.exports.login = (req, res) => {
 
         if (user) {
             const token = user.generateJwt()
-            sendJSONresponse(res, 200, {
-                "token": token
-            })
+            sendJSONresponse(res, 200, { token })
         } else {
             sendJSONresponse(res, 401, info)
         }
