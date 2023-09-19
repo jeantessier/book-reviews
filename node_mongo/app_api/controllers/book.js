@@ -174,3 +174,22 @@ module.exports.deleteAll = async (req, res) => {
         sendJSONresponse(res, 404, err)
     }
 }
+
+module.exports.listBookReviews = (req, res) => {
+    Review
+        .find({ book: req.params.id })
+        .then(reviews => sendJSONresponse(res, 200, reviews))
+        .catch(err => sendJSONresponse(res, 400, err))
+}
+
+module.exports.deleteAllBookReviews = (req, res) => {
+    if (!req.currentUser.admin) {
+        sendJSONresponse(res, 403, { message: "You need admin privileges for this operation" })
+        return
+    }
+
+    Review
+        .deleteMany({ book: req.params.id })
+        .then(_ => sendJSONresponse(res, 204, null))
+        .catch(err => sendJSONresponse(res, 404, err))
+}

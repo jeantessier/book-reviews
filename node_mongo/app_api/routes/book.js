@@ -22,4 +22,9 @@ router
     .put(auth, ctrlBook.replaceOne)
     .delete(auth, ctrlBook.deleteOne)
 
+router
+    .route("/:id/reviews")
+    .get(ctrlBook.listBookReviews)
+    .delete(auth, ctrlBook.deleteAllBookReviews)
+
 module.exports = router
