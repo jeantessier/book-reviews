@@ -3,6 +3,7 @@
 readonly API_ENDPOINT=:3000/api
 
 # Forged admin credentials: { "admin": true }
+# This value depends on JWT_SECRET for your environment.
 export JWT_AUTH_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.8KFeahppAFH8WUxwGLLkbBAaZHF5ZKciOG5HSQ0gajo
 
 function addUser() {

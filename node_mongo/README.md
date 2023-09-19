@@ -12,6 +12,30 @@ populate it with collections derived from `Books_????-??-??.md`.
 mongosh node_mongo_book_reviews book_reviews.js
 ```
 
+### Seed Data
+
+You can seed the system by running the `seed.sh` script in the top folder.
+
+It creates two users:
+
+- Jean Tessier
+- Simon Tolkien
+
+It creates six books:
+
+- The Hobbit
+- The Lord of the Rings
+- The Fellowship of the Ring
+- The Two Towers
+- The Return of the King
+- The Silmarillion
+
+With a sampling of reviews by the two users.
+
+> The script uses forged credentials in a JWT that you will need to recreate
+> so you can sign it with the `JTW_SECRET` for your environment.  See the note
+> in the `seed.sh` script.
+
 ## Running the Server
 
 You need to configure the secret to sign JWTs and the location of the database
@@ -46,6 +70,10 @@ It does make initializing the database a little more difficult.
 docker compose cp book_reviews.js mongo:/tmp/book_reviews.js
 docker compose exec mongo mongosh node_mongo_book_reviews /tmp/book_reviews.js
 ```
+
+If you want to use the seed data from the `seed.sh` script, it will work as is
+with the Docker Compose setup.  Just make sure you have the right JWT signed
+with the `JWT_SECRET` for your installation.
 
 ## Sample Commands
 
