@@ -99,10 +99,7 @@ const generateJwt = user => {
     return jwt.sign(payload, process.env.JWT_SECRET, options)
 }
 
-const fetchUserByEmail = email => {
-    const userEntry = Array.from(users.entries()).find(([_, user]) => user.email === email)
-    return userEntry ? userEntry[1] : undefined
-}
+const fetchUserByEmail = email => Array.from(users.values()).find(user => user.email === email)
 
 const server = new ApolloServer({
     schema: buildSubgraphSchema({ typeDefs, resolvers }),

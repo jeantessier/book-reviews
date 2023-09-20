@@ -243,8 +243,8 @@ const resolvers = {
 }
 
 const fetchReviewById = id => reviews.get(id)
-const fetchReviewsByBookId = id => [ ...reviews ].filter(([ _, review ]) => id === review.book.id).map(([ _, review ]) => review)
-const fetchReviewsByReviewerId = id => [ ...reviews ].filter(([ _, review ]) => id === review.reviewer.id).map(([ _, review ]) => review)
+const fetchReviewsByBookId = id => Array.from(reviews.values()).filter(review => id === review.book.id)
+const fetchReviewsByReviewerId = id => Array.from(reviews.values()).filter(review => id === review.reviewer.id)
 
 const server = new ApolloServer({
     schema: buildSubgraphSchema({ typeDefs, resolvers }),

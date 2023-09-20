@@ -224,10 +224,7 @@ const resolvers = {
 }
 
 const fetchBookById = id => books.get(id)
-const fetchBookByName = name => {
-    const bookEntry = Array.from(books.entries()).find(([_, book]) => book.name === name)
-    return bookEntry ? bookEntry[1] : undefined
-}
+const fetchBookByName = name => Array.from(books.values()).find(book => book.name === name)
 
 const server = new ApolloServer({
     schema: buildSubgraphSchema({ typeDefs, resolvers }),
