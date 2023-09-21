@@ -639,6 +639,44 @@ this:
 }
 ```
 
+### Deleting All Books From The Shell
+
+Once your authenticated as a user with `admin` privileges, you can make one call
+to fetch book IDs and loop through them to delete them.
+
+```bash
+for book_id in $(http :4000 query='{books {id}}' | jq --raw-output '.data.books.[].id')
+do
+  echo Remove book $book_id
+  http --auth-type jwt :4000 \
+    query='mutation BurnBook($id: ID!) {removeBook(id: $id)}' \
+    variables:="{\"id\": \"$book_id\"}" | \
+  jq '.data.removeBook'
+done
+```
+
+This has the classic _N + 1_ problem.  If there are _N_ books in the system, you
+will make _N + 1_ GraphQL calls to delete them all.
+
+### Deleting All Users From The Shell
+
+Once your authenticated as a user with `admin` privileges, you can make one call
+to fetch user IDs and loop through them to delete them.
+
+```bash
+for user_id in $(http :4000 query='{users {id}}' | jq --raw-output '.data.users.[].id')
+do
+  echo Remove user $user_id
+  http --auth-type jwt :4000 \
+    query='mutation ForgetUser($id: ID!) {removeUser(id: $id)}' \
+    variables:="{\"id\": \"$user_id\"}" | \
+  jq '.data.removeUser'
+done
+```
+
+This has the classic _N + 1_ problem.  If there are _N_ books in the system, you
+will make _N + 1_ GraphQL calls to delete them all.
+
 ## Extracting the Schema
 
 You can extract the federated shema from services that you started manually.
