@@ -202,19 +202,11 @@ module.exports.replaceMyReview = async (req, res) => {
     }
 }
 
-module.exports.deleteMyReview = async (req, res) => {
-    try {
-        const review = await Review.findOne({ _id: req.params.reviewId, reviewer: req.currentUser.sub })
-        if (!review) {
-            sendJSONresponse(res, 404, { message: `No review with ID ${req.params.reviewId}` })
-            return
-        }
-
-        await Review.deleteOne({ _id: req.params.reviewId, reviewer: req.currentUser.sub })
-        sendJSONresponse(res, 204, null)
-    } catch(err) {
-        sendJSONresponse(res, 404, err)
-    }
+module.exports.deleteMyReview = (req, res) => {
+    Review
+        .deleteOne({ _id: req.params.reviewId, reviewer: req.currentUser.sub })
+        .then(_ => sendJSONresponse(res, 204, null))
+        .catch(err => sendJSONresponse(res, 404, err))
 }
 
 module.exports.deleteAllMyReviews = (req, res) => {
