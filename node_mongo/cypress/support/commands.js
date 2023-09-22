@@ -25,7 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('resetDb', () => {
-    cy.exec('echo \'db.reviews.deleteMany({}); db.books.deleteMany({}); db.users.deleteMany({})\' | docker-compose exec -T mongo mongo node_mongo_book_reviews_test')
+    cy.exec('echo \'db.reviews.deleteMany({}); db.books.deleteMany({}); db.users.deleteMany({})\' | docker-compose exec -T mongo mongosh node_mongo_book_reviews_test')
 })
 
 Cypress.Commands.add('createUser', (name, email, password) => {
