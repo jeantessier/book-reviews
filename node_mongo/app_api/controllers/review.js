@@ -86,7 +86,7 @@ module.exports.updateOne = async (req, res) => {
             sendJSONresponse(res, 404, { message: `No review with ID ${req.params.id}` })
             return
         }
-        if (review.reviewer !== req.currentUser.sub && !req.currentUser.admin) {
+        if (review.reviewer.toString() !== req.currentUser.sub && !req.currentUser.admin) {
             sendJSONresponse(res, 403, { message: "You need admin privileges to edit someone else's review" })
             return
         }
@@ -124,7 +124,7 @@ module.exports.replaceOne = async (req, res) => {
             sendJSONresponse(res, 404, { message: `No review with ID ${req.params.id}` })
             return
         }
-        if (review.reviewer !== req.currentUser.sub && !req.currentUser.admin) {
+        if (review.reviewer.toString() !== req.currentUser.sub && !req.currentUser.admin) {
             sendJSONresponse(res, 403, { message: "You need admin privileges to edit someone else's review" })
             return
         }
@@ -147,7 +147,7 @@ module.exports.deleteOne = async (req, res) => {
             sendJSONresponse(res, 404, { message: `No review with ID ${req.params.id}` })
             return
         }
-        if (review.reviewer !== req.currentUser.sub && !req.currentUser.admin) {
+        if (review.reviewer.toString() !== req.currentUser.sub && !req.currentUser.admin) {
             sendJSONresponse(res, 403, { message: "You need admin privileges to delete someone else's review" })
             return
         }
