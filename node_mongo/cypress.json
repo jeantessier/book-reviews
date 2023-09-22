@@ -1,5 +1,0 @@
-{
-  "baseUrl": "http://localhost:3001",
-  "registerUrl": "/api/register",
-  "loginUrl": "/api/login"
-}
