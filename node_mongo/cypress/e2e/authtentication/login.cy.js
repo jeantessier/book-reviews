@@ -3,18 +3,16 @@ describe('Authentication', () => {
     describe('login', () => {
         const url = Cypress.config('loginUrl')
 
-        const email = 'abc@bookreviews.com'
-        const password = 'abcd1234'
-
         beforeEach(() => {
-            cy.createUser('Abc', email, password)
+            cy.fixture('users/abc')
+                .then(user => cy.createUser(user.name, user.email, user.password))
         })
 
         context('successful login', () => {
-            const body = { email, password }
 
             beforeEach(() => {
-                cy.request('POST', url, body).as('request')
+                cy.fixture('users/abc')
+                    .then(user => cy.request('POST', url, { email: user.email, password: user.password }).as('request'))
             })
 
             it('returns 200', () => {
@@ -32,15 +30,18 @@ describe('Authentication', () => {
         })
 
         context('wrong email address', () => {
-            const body = { email: 'wrong email', password }
 
             beforeEach(() => {
-                cy.request({
-                    method: 'POST',
-                    url,
-                    body,
-                    failOnStatusCode: false,
-                }).as('request')
+                cy.fixture('users/abc')
+                    .then(user => {
+                        const body = { email: 'wrong email', password: user.password }
+                        return cy.request({
+                            method: 'POST',
+                            url,
+                            body,
+                            failOnStatusCode: false,
+                        }).as('request')
+                    })
             })
 
             it('returns 401', () => {
@@ -58,15 +59,18 @@ describe('Authentication', () => {
         })
 
         context('wrong password', () => {
-            const body = { email, password: 'wrong password' }
 
             beforeEach(() => {
-                cy.request({
-                    method: 'POST',
-                    url,
-                    body,
-                    failOnStatusCode: false,
-                }).as('request')
+                cy.fixture('users/abc')
+                    .then(user => {
+                        const body = { email: user.email, password: 'wrong password' }
+                        return cy.request({
+                            method: 'POST',
+                            url,
+                            body,
+                            failOnStatusCode: false,
+                        }).as('request')
+                    })
             })
 
             it('returns 401', () => {
