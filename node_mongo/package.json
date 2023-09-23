@@ -35,7 +35,9 @@
     "serve-favicon": "*"
   },
   "devDependencies": {
-    "cypress": "*"
+    "cypress": "*",
+    "jest": "*",
+    "mongodb-memory-server": "*"
   },
   "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_mongo"
 }

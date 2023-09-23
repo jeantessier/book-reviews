@@ -36,10 +36,37 @@ With a sampling of reviews by the two users.
 > so you can sign it with the `JTW_SECRET` for your environment.  See the note
 > in the `seed.sh` script.
 
+## Running the Tests
+
+The unit tests use Jest.
+
+```bash
+jest
+```
+
+For example, to run only the model tests:
+
+```bash
+jest app_api/models
+```
+
+The end-to-end tests use Cypress.  They need a running app to test against.
+
+```bash
+docker compose up -d book_reviews
+npm run cypress:open
+```
+
 ## Running the Server
 
 You need to configure the secret to sign JWTs and the location of the database
-in the `.env` file on the project's top-level folder.  For example:
+in the `.env` file on the project's top-level folder.
+
+```bash
+cp .env.template .env
+```
+
+For example:
 
 ```
 JWT_SECRET=<put your signature secret here>
