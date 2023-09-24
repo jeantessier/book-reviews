@@ -10,7 +10,8 @@ describe('Book', () => {
 
             it('returns 200', () => {
                 cy.get('@request')
-                    .should('be.ok')
+                    .its('status')
+                    .should('equal', 200)
             })
 
             it('gets an empty array', () => {
@@ -29,7 +30,8 @@ describe('Book', () => {
 
             it('returns 200', () => {
                 cy.get('@request')
-                    .should('be.ok')
+                    .its('status')
+                    .should('equal', 200)
             })
 
             it('gets a non-empty array', () => {
@@ -62,7 +64,8 @@ describe('Book', () => {
 
             it('returns 200', () => {
                 cy.get('@request')
-                    .should('be.ok')
+                    .its('status')
+                    .should('equal', 200)
             })
 
             it('gets a non-empty array', () => {
