@@ -1,0 +1,6 @@
+{
+  "name": "Simon Tolkien",
+  "email": "simon@tolkien.com",
+  "password": "abcd1234",
+  "roles": ["ROLE_USER"]
+}

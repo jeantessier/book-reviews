@@ -1,5 +1,6 @@
 {
   "name": "Abc",
   "email": "abc@bookreviews.com",
-  "password": "abcd1234"
+  "password": "abcd1234",
+  "roles": ["ROLE_USER"]
 }

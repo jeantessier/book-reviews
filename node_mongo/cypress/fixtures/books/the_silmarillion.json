@@ -1,0 +1,12 @@
+{
+    "name": "The_Silmarillion",
+    "titles": [
+        {
+            "title": "The Silmarillion",
+            "link": "https://en.wikipedia.org/wiki/The_Silmarillion"
+        }
+    ],
+    "publisher": "Unwin & Allen",
+    "authors": ["Christopher Tolkien", "J.R.R. Tolkien"],
+    "years": ["1977"]
+}

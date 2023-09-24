@@ -141,7 +141,6 @@ describe('Authentication', () => {
                     .should('equal', 'All fields required')
             })
         })
-
     })
 
 })

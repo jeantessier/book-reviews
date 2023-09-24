@@ -1,0 +1,12 @@
+{
+    "name": "The_Lord_of_the_Rings",
+    "titles": [
+        {
+            "title": "The Lord of the Rings",
+            "link": "https://en.wikipedia.org/wiki/The_Lord_of_the_Rings"
+        }
+    ],
+    "publisher": "Unwin & Allen",
+    "authors": ["J.R.R. Tolkien"],
+    "years": ["1954", "1955"]
+}

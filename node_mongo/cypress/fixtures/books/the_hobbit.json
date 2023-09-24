@@ -1,0 +1,15 @@
+{
+    "name": "The_Hobbit",
+    "titles": [
+        {
+            "title": "The Hobbit",
+            "link": "https://en.wikipedia.org/wiki/The_Hobbit"
+        }, {
+            "title": "Bilbo le Hobbit",
+            "link": "https://fr.wikipedia.org/wiki/Le_Hobbit"
+        }
+    ],
+    "publisher": "Unwin & Allen",
+    "authors": ["J.R.R. Tolkien"],
+    "years": ["1937"]
+}

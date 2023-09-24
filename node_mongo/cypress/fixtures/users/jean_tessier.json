@@ -1,0 +1,6 @@
+{
+  "name": "Jean Tessier",
+  "email": "jean@jeantessier.com",
+  "password": "abcd1234",
+  "roles": ["ROLE_USER"]
+}

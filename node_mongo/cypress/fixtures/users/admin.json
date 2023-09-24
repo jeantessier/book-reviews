@@ -1,0 +1,6 @@
+{
+  "name": "Administrator",
+  "email": "admin@bookreviews.com",
+  "password": "abcd1234",
+  "roles": ["ROLE_USER", "ROLE_ADMIN"]
+}

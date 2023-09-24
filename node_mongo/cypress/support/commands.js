@@ -31,3 +31,35 @@ Cypress.Commands.add('resetDb', () => {
 Cypress.Commands.add('createUser', (name, email, password) => {
     cy.request('POST', Cypress.config('registerUrl'), { name, email, password })
 })
+
+Cypress.Commands.add('populateBook', book => {
+    cy.exec(`echo 'db.books.insertOne(${JSON.stringify(book)})' | docker-compose exec -T mongo mongosh node_mongo_book_reviews_test`)
+})
+
+Cypress.Commands.add('populateAllBooks', () => {
+    [
+        'books/the_hobbit',
+        'books/the_lord_of_the_rings',
+        'books/the_fellowship_of_the_ring',
+        'books/the_two_towers',
+        'books/the_return_of_the_king',
+        'books/the_silmarillion'
+    ].forEach(fixtureName => {
+        cy.fixture(fixtureName).then(book => cy.populateBook(book))
+    })
+})
+
+Cypress.Commands.add('populateUser', user => {
+    const { password, ... userData } = { salt: user.password, hash: user.password, ... user }
+    cy.exec(`echo 'db.users.insertOne(${JSON.stringify(userData)})' | docker-compose exec -T mongo mongosh node_mongo_book_reviews_test`)
+})
+
+Cypress.Commands.add('populateAllUsers', () => {
+    [
+        'users/admin',
+        'users/jean_tessier',
+        'users/simon_tolkien'
+    ].forEach(fixtureName => {
+        cy.fixture(fixtureName).then(user => cy.populateUser(user))
+    })
+})
