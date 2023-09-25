@@ -63,3 +63,7 @@ Cypress.Commands.add('populateAllUsers', () => {
         cy.fixture(fixtureName).then(user => cy.populateUser(user))
     })
 })
+
+Cypress.Commands.add('grantRole', (email, role) => {
+    cy.exec(`echo 'db.users.updateOne({email: "${email}"}, {$addToSet: {roles: "${role}"}})' | docker-compose exec -T mongo mongosh node_mongo_book_reviews_test`)
+})
