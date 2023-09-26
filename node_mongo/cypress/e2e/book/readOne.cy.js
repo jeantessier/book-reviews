@@ -1,3 +1,5 @@
+const path = require('path')
+
 describe('Book', () => {
 
     describe('readOne', () => {
@@ -9,7 +11,7 @@ describe('Book', () => {
             beforeEach(() => {
                 cy.request({
                     method: 'GET',
-                    url: bookUrl + '/bad_id',
+                    url: path.join(bookUrl, 'bad_id'),
                     failOnStatusCode: false,
                 }).as('request')
             })
@@ -60,7 +62,7 @@ describe('Book', () => {
             context('found', () => {
                 beforeEach(() => {
                     cy.request({
-                        url: bookUrl + "/" + bookId,
+                        url: path.join(bookUrl, bookId),
                         failOnStatusCode: false,
                     }).as('request')
                 })
@@ -92,7 +94,7 @@ describe('Book', () => {
                 beforeEach(() => {
                     cy.resetDb()
                     cy.request({
-                        url: bookUrl + "/" + bookId,
+                        url: path.join(bookUrl, bookId),
                         failOnStatusCode: false,
                     }).as('request')
                 })
