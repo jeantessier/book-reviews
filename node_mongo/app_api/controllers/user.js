@@ -51,7 +51,7 @@ module.exports.readOne = (req, res) => {
             } else {
                 sendJSONresponse(res, 404, { message: `No user with ID ${req.params.id}` })
             }
-        }).catch(err => sendJSONresponse(res, 404, err))
+        }).catch(err => sendJSONresponse(res, 400, err))
 }
 
 module.exports.updateOne = async (req, res) => {
