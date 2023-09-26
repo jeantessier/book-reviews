@@ -87,12 +87,13 @@ describe('Book', () => {
                         .should('equal', 201)
                 })
 
-                it('returns the populated user', () => {
+                it('returns the populated book', () => {
                     cy.fixture('books/the_fellowship_of_the_ring')
                         .then(expectedBook => {
                             cy.get('@request').should(response => {
                                 const actualBook = response.body
                                 expect(actualBook).to.have.property('name', expectedBook.name)
+                                // Something in the titles structure keeps failing tests.
                                 // expect(actualBook).to.have.deep.property('titles', expectedBook.titles)
                                 expect(actualBook).to.have.property('publisher', expectedBook.publisher)
                                 expect(actualBook).to.have.deep.property('authors', expectedBook.authors)
