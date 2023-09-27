@@ -67,3 +67,34 @@ Cypress.Commands.add('populateAllUsers', () => {
 Cypress.Commands.add('grantRole', (email, role) => {
     cy.exec(`echo 'db.users.updateOne({email: "${email}"}, {$addToSet: {roles: "${role}"}})' | docker-compose exec -T mongo mongosh node_mongo_book_reviews_test`)
 })
+
+Cypress.Commands.add('populateReview', review => {
+    const { bookName, reviewerEmail, body, start, stop } = review
+    // I have to use a heredoc because some review bodies contain "'" characters.
+    cy.exec(`
+docker-compose exec -T mongo mongosh node_mongo_book_reviews_test << EOF
+    db.reviews.insertOne({
+        book: db.books.findOne({name: "${bookName}"})._id,
+        reviewer: db.users.findOne({email: "${reviewerEmail}"})._id,
+        body: ${JSON.stringify(body)},
+        start: ${JSON.stringify(start)},
+        stop: ${JSON.stringify(stop)}
+    })
+EOF
+    `)
+})
+
+Cypress.Commands.add('populateAllReviews', () => {
+    [
+        'reviews/the_hobbit_by_jean_tessier',
+        'reviews/the_hobbit_by_simon_tolkien',
+        'reviews/the_lord_of_the_rings_by_jean_tessier',
+        'reviews/the_fellowship_of_the_ring_by_jean_tessier',
+        'reviews/the_two_towers_by_jean_tessier',
+        'reviews/the_return_of_the_king_by_jean_tessier',
+        'reviews/the_silmarillion_by_jean_tessier',
+        'reviews/the_silmarillion_by_simon_tolkien'
+    ].forEach(fixtureName => {
+        cy.fixture(fixtureName).then(review => cy.populateReview(review))
+    })
+})

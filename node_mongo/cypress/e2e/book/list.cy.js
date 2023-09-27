@@ -68,7 +68,7 @@ describe('Book', () => {
                     .should('equal', 200)
             })
 
-            it('gets a non-empty array', () => {
+            it('gets all the books', () => {
                 cy.get('@request')
                     .its('body')
                     .should('have.lengthOf', 6)

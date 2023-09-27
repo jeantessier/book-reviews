@@ -5,6 +5,7 @@ module.exports = defineConfig({
   loginUrl: '/api/login',
   bookUrl: '/api/book',
   userUrl: '/api/user',
+  reviewUrl: '/api/review',
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.

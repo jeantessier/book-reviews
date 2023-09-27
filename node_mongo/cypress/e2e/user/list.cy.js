@@ -68,7 +68,7 @@ describe('User', () => {
                     .should('equal', 200)
             })
 
-            it('gets a non-empty array', () => {
+            it('gets all the users', () => {
                 cy.get('@request')
                     .its('body')
                     .should('have.lengthOf', 3)
