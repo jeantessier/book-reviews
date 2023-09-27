@@ -38,10 +38,11 @@ describe("User model", () => {
         // Then
         // Object Id should be defined when successfully saved to MongoDB.
         expect(savedUser._id).toBeDefined()
+        expect(savedUser.name).toBe(userData.name)
         expect(savedUser.email).toBe(userData.email)
-        expect(savedUser.phone).toBe(userData.phone)
         expect(savedUser.salt).toBeDefined()
         expect(savedUser.hash).toBeDefined()
+        expect(savedUser.password).toBeUndefined()
     })
 
     // You shouldn't be able to add in any field that isn't defined in the schema
