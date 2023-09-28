@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon ./bin/www",
+    "test": "jest --watchAll",
     "start": "node ./bin/www",
     "cypress:open": "cypress open"
   },
