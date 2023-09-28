@@ -79,6 +79,27 @@ describe("User model", () => {
         expect(err.errors.email).toBeDefined()
     })
 
+    it("does not create user if email is already taken", async () => {
+        // Given
+        const validUser = new User(userData)
+        validUser.setPassword(userData.password)
+        await validUser.save()
+        const duplicateUser = new User(userData)
+        duplicateUser.setPassword(userData.password)
+
+        // When
+        let err
+        try {
+            await duplicateUser.save()
+        } catch (error) {
+            err = error
+        }
+
+        // Then
+        expect(err).toBeDefined()
+        expect(err.message).toMatch(/duplicate key error/)
+    })
+
     describe('generateJwt', () => {
         it("generates a JWT", async () => {
             // Given
