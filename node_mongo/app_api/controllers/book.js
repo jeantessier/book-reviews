@@ -5,7 +5,7 @@ const Review = mongoose.model('Review')
 const sendJSONresponse = (res, status, content) => res.status(status).json(content)
 
 module.exports.list = (req, res) => {
-    Book
+    return Book
         .find()
         .then(books => sendJSONresponse(res, 200, books))
         .catch(err => sendJSONresponse(res, 400, err))
@@ -47,7 +47,7 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.readOne = (req, res) => {
-    Book
+    return Book
         .findById(req.params.id)
         .then(book => {
             if (book) {
