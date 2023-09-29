@@ -23,12 +23,36 @@ sub DocumentPartsAsMongo {
     local (@files) = grep { /^${document}_\d{4}-\d{2}-\d{2}(_\w)?.md$/ } readdir(DIRHANDLE);
     closedir(DIRHANDLE);
 
-    local ($drop_stmt) = join("\n", "db.books.drop();", "db.reviews.drop();", "db.users.drop();");
-    local ($time_stmt) = "var initTime = new Date();";
-    local ($user_stmt) = "var user = db.users.insertOne(" . &JsonRecord(name => &JsonText("Jean Tessier"), email => &JsonText("jean\@jeantessier.com"), hash => &JsonText("0123456789abcdef9842ed9614143f40ca11e5c24da1d1a115087efc6dc2205ce46ee788737dfe06d02ad5d2c5ba67b1ef571dd00bd50136ba2ed5e9f6301e0f"), salt => &JsonText("0123456789abcdef0123456789abcdef"), roles => &JsonList(&JsonText("ROLE_USER")), __v => 0, createdAt => "initTime", updatedAt => "initTime") . ");";
+    local ($drop_stmt) = join("\n", map { "db.$_.drop()" } "books", "reviews", "users");
+    local ($time_stmt) = "var initTime = new Date()";
+
+    local ($users_stmt) = "var users = db.users.insertMany(" .
+        &JsonList(
+            &JsonRecord(
+                name => &JsonText("Administrator"),
+                email => &JsonText("admin\@bookreviews.com"),
+                hash => &JsonText("0123456789abcdef9842ed9614143f40ca11e5c24da1d1a115087efc6dc2205ce46ee788737dfe06d02ad5d2c5ba67b1ef571dd00bd50136ba2ed5e9f6301e0f"),
+                salt => &JsonText("0123456789abcdef0123456789abcdef"),
+                roles => &JsonList(&JsonText("ROLE_ADMIN"), &JsonText("ROLE_USER")),
+                __v => 0,
+                createdAt => "initTime",
+                updatedAt => "initTime",
+            ),
+            &JsonRecord(
+                name => &JsonText("Jean Tessier"),
+                email => &JsonText("jean\@jeantessier.com"),
+                hash => &JsonText("0123456789abcdef9842ed9614143f40ca11e5c24da1d1a115087efc6dc2205ce46ee788737dfe06d02ad5d2c5ba67b1ef571dd00bd50136ba2ed5e9f6301e0f"),
+                salt => &JsonText("0123456789abcdef0123456789abcdef"),
+                roles => &JsonList(&JsonText("ROLE_USER")),
+                __v => 0,
+                createdAt => "initTime",
+                updatedAt => "initTime",
+            ),
+        ). ")";
+
     local (@book_stmts) = map { &DocumentPartAsMongo("$DIRNAME/$_") } reverse sort @files;
 
-    return join("\n\n", $drop_stmt, $time_stmt, $user_stmt, @book_stmts);
+    return join("\n\n", $drop_stmt, $time_stmt, $users_stmt, @book_stmts);
 }
 
 sub DocumentPartAsMongo {
@@ -79,7 +103,7 @@ sub DocumentPartAsMongo {
             __v => 0,
             createdAt => "initTime",
             updatedAt => "initTime",
-        ) . ");";
+        ) . ")";
 
     local ($review_stmt) = "db.reviews.insertOne(" .
         &JsonRecord(
@@ -87,11 +111,11 @@ sub DocumentPartAsMongo {
             start => &JsonText($meta_data{"start"}),
             stop => (exists $meta_data{"stop"}) ? &JsonText($meta_data{"stop"}) : "null",
             book => "book.insertedId",
-            reviewer => "user.insertedId",
+            reviewer => "users.insertedIds[1]",
             __v => 0,
             createdAt => "initTime",
             updatedAt => "initTime",
-        ) . ");";
+        ) . ")";
 
     return join("\n", $book_stmt, $review_stmt);
 }

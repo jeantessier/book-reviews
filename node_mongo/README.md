@@ -8,8 +8,7 @@ This command will create a new database named `node_mongo_book_reviews` and
 populate it with collections derived from `Books_????-??-??.md`.
 
 ```bash
-./Books_mongo.pl > book_reviews.js
-mongosh node_mongo_book_reviews book_reviews.js
+./Books_mongo.pl | mongosh node_mongo_book_reviews
 ```
 
 ### Seed Data
@@ -35,6 +34,20 @@ With a sampling of reviews by the two users.
 > The script uses forged credentials in a JWT that you will need to recreate
 > so you can sign it with the `JTW_SECRET` for your environment.  See the note
 > in the `seed.sh` script.
+
+### Resetting Passwords
+
+Once the system is up and running, you can reset the user passwords using the
+forged credentials JWT in `seed.sh` and these commands:
+
+```bash
+export JWT_AUTH_TOKEN=eyJh...gajo
+
+for id in $(http :3000/api/user | jq --raw-output '.[]._id')
+do
+    http --auth-type jwt PATCH :3000/api/user/$id password=abcd1234 | jq '{_id, email}'
+done
+```
 
 ## Running the Tests
 
@@ -90,12 +103,10 @@ way, you don't need to install MongoDB explicitly.
 docker compose up -d book_reviews
 ```
 
-It does make initializing the database a little more difficult.
+It does make initializing the database a little different.
 
 ```bash
-./Books_mongo.pl > book_reviews.js
-docker compose cp book_reviews.js mongo:/tmp/book_reviews.js
-docker compose exec mongo mongosh node_mongo_book_reviews /tmp/book_reviews.js
+./Books_mongo.pl | docker compose exec -T mongo mongosh node_mongo_book_reviews
 ```
 
 If you want to use the seed data from the `seed.sh` script, it will work as is
