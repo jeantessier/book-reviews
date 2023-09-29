@@ -284,7 +284,7 @@ http :3000/api/book/<id>
 http --auth-type jwt :3000/api/book \
     name=The_Lord_of_the_Rings \
     titles:='[{"title": "The Lord of the Rings", "link": "http://lotr.wikia.com"}, {"title": "Le seigneur des anneaux"}]' \
-    authors="J. R. R. Tolkien" \
+    authors:='["J. R. R. Tolkien"]' \
     publisher="Allen &amp; Unwin" \
     years:='["1954", "1955"]'
 ```
@@ -295,7 +295,7 @@ http --auth-type jwt :3000/api/book \
     titles:='[{"title": "The Silmarillion"}]' \
     authors:='["J. R. R. Tolkien", "Christopher Tolkien"]' \
     publisher="Allen &amp; Unwin" \
-    years=1977
+    years:='["1977"]'
 ```
 
 It will fail if there is already a book by that `name`.
@@ -316,7 +316,7 @@ http --auth-type jwt PUT :3000/api/book/<id> \
     titles:='[{"title": "The Silmarillion"}]' \
     authors:='["J. R. R. Tolkien", "Christopher Tolkien"]' \
     publisher="Allen &amp; Unwin" \
-    years=1977
+    years:='["1977"]'
 ```
 
 It will fail if there is already another book by that `name`.
