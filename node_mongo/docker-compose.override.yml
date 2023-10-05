@@ -9,6 +9,9 @@ services:
   mongo_express:
     ports:
       - "8081:8081"
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: user
+      ME_CONFIG_BASICAUTH_PASSWORD: abcd1234
 
   book_reviews:
     environment:
