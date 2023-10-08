@@ -27,19 +27,12 @@ RSpec.describe BookReviewsController do
   end
 
   describe "GET #show" do
-    it "returns a success response" do
+    it "redirects to the ReviewsController" do
       get :show, params: {book_id: book.id, id: review.id}
-      expect(response).to be_successful
+      expect(response).to redirect_to(controller: "reviews", action: "show", id: review.id)
     end
 
-    it "includes the book's review" do
-      get :show, params: {book_id: book.id, id: review.id}
-      expect(JSON.parse(response.body)).to match(
-        a_hash_including("id" => review.id, "book_id" => book.id)
-      )
-    end
-
-    it "does not include another book's review" do
+    it "does not redirect to another book's review" do
       expect do
         get :show, params: {book_id: book.id, id: another_review.id}
       end.to raise_error(ActiveRecord::RecordNotFound)

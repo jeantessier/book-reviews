@@ -8,7 +8,7 @@ class BookReviewsController < BookPartController
 
   # GET /books/:book_id/reviews/:id
   def show
-    render json: @book_review
+    redirect_to review_url(@book_review), status: :see_other
   end
 
   private

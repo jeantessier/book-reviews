@@ -8,7 +8,7 @@ class UserReviewsController < UserPartController
 
   # GET /users/:user_id/reviews/:id
   def show
-    render json: @user_review
+    redirect_to review_url(@user_review), status: :see_other
   end
 
   private
