@@ -1,17 +1,17 @@
 class BookYearsController < BookPartController
   before_action :set_book_year, only: [:show, :update, :destroy]
 
-  # GET /books/:book_id/book_years
+  # GET /books/:book_id/years
   def index
     render json: book.years.sort
   end
 
-  # GET /books/:book_id/book_years/1
+  # GET /books/:book_id/years/:id
   def show
     render json: @book_year
   end
 
-  # POST /books/:book_id/book_years
+  # POST /books/:book_id/years
   def create
     book.years.create!(book_year_params)
     render json: book, status: :created
@@ -20,7 +20,7 @@ class BookYearsController < BookPartController
       render json: {error: $!}, status: :unprocessable_entity
   end
 
-  # PATCH/PUT /books/:book_id/book_years/1
+  # PATCH/PUT /books/:book_id/years/:id
   def update
     if @book_year.update(book_year_params)
       render json: @book_year
@@ -32,7 +32,7 @@ class BookYearsController < BookPartController
       render json: {error: $!}, status: :unprocessable_entity
   end
 
-  # DELETE /books/:book_id/book_years/1
+  # DELETE /books/:book_id/years/:id
   def destroy
     @book_year.destroy
   end
