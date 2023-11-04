@@ -145,9 +145,9 @@ describe("Book controller", () => {
     // readOne action
     //
 
-    it("readOne returns 404 if ID is not found", async () => {
+    it("readOne returns 400 if ID is not a valid ObjectId", async () => {
         // Given
-        const invalidId = new ObjectId()
+        const invalidId = "this is not an ObjectId"
         const mReq = { params: { id: invalidId } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
@@ -155,8 +155,22 @@ describe("Book controller", () => {
         await ctrlBook.readOne(mReq, mRes)
 
         // Then
+        expect(mRes.status).toBeCalledWith(400)
+        expect(mRes.json).toBeCalledWith(expect.any(mongoose.Error.CastError))
+    })
+
+    it("readOne returns 404 if ID is not found", async () => {
+        // Given
+        const notFoundId = new ObjectId()
+        const mReq = { params: { id: notFoundId } }
+        const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
+
+        // When
+        await ctrlBook.readOne(mReq, mRes)
+
+        // Then
         expect(mRes.status).toBeCalledWith(404)
-        expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(new RegExp(`No book with ID ${invalidId}`)) })
+        expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(new RegExp(`No book with ID ${notFoundId}`)) })
     })
 
     it("readOne returns 200 if ID is found", async () => {
