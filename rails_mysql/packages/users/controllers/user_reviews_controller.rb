@@ -1,5 +1,6 @@
 class UserReviewsController < UserPartController
   before_action :set_user_review, only: [:show]
+  attr_reader :user_review
 
   # GET /users/:user_id/reviews
   def index
@@ -8,7 +9,7 @@ class UserReviewsController < UserPartController
 
   # GET /users/:user_id/reviews/:id
   def show
-    redirect_to review_url(@user_review), status: :see_other
+    redirect_to review_url(user_review), status: :see_other
   end
 
   private

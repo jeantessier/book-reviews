@@ -1,5 +1,6 @@
 class BookReviewsController < BookPartController
   before_action :set_book_review, only: [:show]
+  attr_reader :book_review
 
   # GET /books/:book_id/reviews
   def index
@@ -8,7 +9,7 @@ class BookReviewsController < BookPartController
 
   # GET /books/:book_id/reviews/:id
   def show
-    redirect_to review_url(@book_review), status: :see_other
+    redirect_to review_url(book_review), status: :see_other
   end
 
   private

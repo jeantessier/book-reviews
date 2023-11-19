@@ -1,5 +1,6 @@
 class BookTitlesController < BookPartController
   before_action :set_book_title, only: [:show, :update, :destroy]
+  attr_reader :book_title
 
   # GET /books/:book_id/titles
   def index
@@ -8,7 +9,7 @@ class BookTitlesController < BookPartController
 
   # GET /books/:book_id/titles/:id
   def show
-    render json: @book_title
+    render json: book_title
   end
 
   # POST /books/:book_id/titles
@@ -22,10 +23,10 @@ class BookTitlesController < BookPartController
 
   # PATCH/PUT /books/:book_id/titles/:id
   def update
-    if @book_title.update(book_title_params)
-      render json: @book_title
+    if book_title.update(book_title_params)
+      render json: book_title
     else
-      render json: @book_title.errors, status: :unprocessable_entity
+      render json: book_title.errors, status: :unprocessable_entity
     end
 
     rescue
@@ -34,7 +35,7 @@ class BookTitlesController < BookPartController
 
   # DELETE /books/:book_id/titles/:id
   def destroy
-    @book_title.destroy
+    book_title.destroy
   end
 
   private
