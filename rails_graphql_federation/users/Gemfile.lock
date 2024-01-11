@@ -105,15 +105,15 @@ GEM
     exponential-backoff (0.0.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-protobuf (3.25.1)
-    graphql (2.2.3)
+    google-protobuf (3.25.2)
+    graphql (2.2.5)
       racc (~> 1.4)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     io-console (0.7.1)
-    irb (1.11.0)
+    irb (1.11.1)
       rdoc
-      reline (>= 0.3.8)
+      reline (>= 0.4.2)
     jwt (2.7.1)
     little-plugger (1.1.4)
     logging (2.3.1)
@@ -133,14 +133,14 @@ GEM
     msgpack (1.7.2)
     multi_json (1.15.0)
     mutex_m (0.2.0)
-    net-imap (0.4.9)
+    net-imap (0.4.9.1)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-smtp (0.4.0)
+    net-smtp (0.4.0.1)
       net-protocol
     nio4r (2.7.0)
     nokogiri (1.16.0-arm64-darwin)
@@ -159,7 +159,7 @@ GEM
       thor
     psych (5.1.2)
       stringio
-    puma (6.4.0)
+    puma (6.4.2)
       nio4r (~> 2.0)
     racc (1.7.3)
     rack (3.0.8)
@@ -202,7 +202,7 @@ GEM
     rake (13.1.0)
     rdoc (6.6.2)
       psych (>= 4.0.0)
-    reline (0.4.1)
+    reline (0.4.2)
       io-console (~> 0.5)
     rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
