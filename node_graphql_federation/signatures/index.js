@@ -2,6 +2,8 @@ const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { buildSubgraphSchema } = require('@apollo/subgraph')
 const { gql } = require('graphql-tag')
+const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -36,7 +38,7 @@ const server = new ApolloServer({
     plugins: [
         {
             requestDidStart(requestContext) {
-                console.log(`====================   ${new Date().toJSON()}   ====================`)
+                console.log(`====================   ${new Date().toJSON()}   ${requestContext.contextValue.requestId}   ====================`)
                 console.log("Request did start!")
                 if (process.env.DEBUG) {
                     console.log(`    context: ${JSON.stringify(requestContext.contextValue)}`)
@@ -50,10 +52,33 @@ const server = new ApolloServer({
     ],
 })
 
+const getCurrentUser = (req) => {
+    try {
+        const authHeader = req.headers.authorization || ''
+        if (!authHeader) return null
+
+        const authHeaderParts = authHeader.split(' ')
+        if (authHeaderParts.length < 2 || authHeaderParts[0].toLowerCase() !== 'bearer') return null
+
+        const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
+
+        return { id: jwtPayload.sub, ...jwtPayload }
+    } catch (e) {
+        console.warn(e)
+        return null
+    }
+}
+
 const port = process.env.PORT || 4005
 
 // The `listen` method launches a web server.
 startStandaloneServer(server, {
+    context: ({ req }) => {
+        return {
+            currentUser: getCurrentUser(req),
+            requestId: req.headers["x-request-id"] || uuidv4(),
+        }
+    },
     listen: { port },
 }).then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`)

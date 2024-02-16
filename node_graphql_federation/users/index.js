@@ -243,7 +243,7 @@ const server = new ApolloServer({
     plugins: [
         {
             requestDidStart(requestContext) {
-                console.log(`====================   ${new Date().toJSON()}   ====================`)
+                console.log(`====================   ${new Date().toJSON()}   ${requestContext.contextValue.requestId}   ====================`)
                 console.log("Request did start!")
                 if (process.env.DEBUG) {
                     console.log(`    context: ${JSON.stringify(requestContext.contextValue)}`)
@@ -261,24 +261,31 @@ const server = new ApolloServer({
     ],
 })
 
+const getCurrentUser = (req) => {
+    try {
+        const authHeader = req.headers.authorization || ''
+        if (!authHeader) return null
+
+        const authHeaderParts = authHeader.split(' ')
+        if (authHeaderParts.length < 2 || authHeaderParts[0].toLowerCase() !== 'bearer') return null
+
+        const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
+
+        return { id: jwtPayload.sub, ...jwtPayload }
+    } catch (e) {
+        console.warn(e)
+        return null
+    }
+}
+
 const port = process.env.PORT || 4003
 
 // The `listen` method launches a web server.
 startStandaloneServer(server, {
     context: ({ req }) => {
-        try {
-            const authHeader = req.headers.authorization || ''
-            if (!authHeader) return {}
-
-            const authHeaderParts = authHeader.split(' ')
-            if (authHeaderParts.length < 2 || authHeaderParts[0].toLowerCase() !== 'bearer') return {}
-
-            const jwtPayload = jwt.verify(authHeaderParts[1], process.env.JWT_SECRET)
-
-            return { currentUser: { id: jwtPayload.sub, ...jwtPayload } }
-        } catch (e) {
-            console.warn(e)
-            return {}
+        return {
+            currentUser: getCurrentUser(req),
+            requestId: req.headers["x-request-id"] || uuidv4(),
         }
     },
     listen: { port },

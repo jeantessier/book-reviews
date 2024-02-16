@@ -26,7 +26,8 @@
     "dotenv": "*",
     "graphql": "*",
     "graphql-tag": "*",
-    "jsonwebtoken": "*"
+    "jsonwebtoken": "*",
+    "uuid": "*"
   },
   "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_graphql_federation"
 }

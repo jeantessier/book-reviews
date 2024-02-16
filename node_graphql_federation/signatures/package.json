@@ -23,7 +23,8 @@
     "@apollo/server": "*",
     "@apollo/subgraph": "*",
     "graphql": "*",
-    "graphql-tag": "*"
+    "graphql-tag": "*",
+    "uuid": "*"
   },
   "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_graphql_federation"
 }
