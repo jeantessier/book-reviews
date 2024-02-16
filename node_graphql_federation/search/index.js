@@ -307,6 +307,11 @@ const search = async (_, { q }, context) => {
 
     const results = [ ...resultsCollector.values() ].sort((match1, match2) => match2.weight - match1.weight)
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.searches',
         {
@@ -314,7 +319,8 @@ const search = async (_, { q }, context) => {
             user: context.currentUser?.id,
             query: q,
             results,
-        }
+        },
+        headers,
     )
 
     return results

@@ -37,25 +37,27 @@ startConsumer(
     'reviews',
     booksAndUsersTopicName,
     {
-        bookRemoved: key => {
+        bookRemoved: (key, _, headers) => {
             [ ...reviews ].filter(([ _, review ]) => key === review.book.id).forEach(([ id, _ ]) => {
                 sendMessage(
                     'book-reviews.reviews',
                     {
                         type: 'reviewRemoved',
                         id,
-                    }
+                    },
+                    headers,
                 )
             })
         },
-        userRemoved: key => {
+        userRemoved: (key, _, headers) => {
             [ ...reviews ].filter(([ _, review ]) => key === review.reviewer.id).forEach(([ id, _ ]) => {
                 sendMessage(
                     'book-reviews.reviews',
                     {
                         type: 'reviewRemoved',
                         id,
-                    }
+                    },
+                    headers,
                 )
             })
         }
@@ -140,12 +142,18 @@ const addReview = async (_, { review }, context, info) => {
     reviewAddedMessage.reviewer = { __typename: 'User', id: reviewerId ? reviewerId : context.currentUser.id }
     reviewAddedMessage.book = { __typename: 'Book', id: bookId }
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.reviews',
         {
             type: 'reviewAdded',
             ...reviewAddedMessage,
-        }
+        },
+        headers,
     )
 
     return reviewAddedMessage
@@ -173,12 +181,18 @@ const updateReview = async (_, { update }, context, info) => {
         ...update,
     }
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.reviews',
         {
             type: 'reviewUpdated',
             ...reviewUpdatedMessage,
-        }
+        },
+        headers,
     )
 
     return reviewUpdatedMessage
@@ -201,12 +215,18 @@ const removeReview = async (_, { id }, context, info) => {
         throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on behalf of another user.`)
     }
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.reviews',
         {
             type: 'reviewRemoved',
             id,
-        }
+        },
+        headers,
     )
 
     return true

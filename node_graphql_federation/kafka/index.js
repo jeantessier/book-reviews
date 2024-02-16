@@ -31,12 +31,13 @@ const kafka = new Kafka({
     sasl
 })
 
-const sendMessage = async (topic, message) => {
+const sendMessage = async (topic, message, headers) => {
     const key = message.id
     const value = JSON.stringify(message)
 
     console.log('Sending message ...')
     console.log(`    topic: ${topic}`)
+    console.log(`    headers: ${JSON.stringify(headers)}`)
     console.log(`    key: ${key}`)
     console.log(`    value: ${value}`)
 
@@ -45,7 +46,7 @@ const sendMessage = async (topic, message) => {
     await producer.send({
         topic,
         messages: [
-            { key, value },
+            { key, value, headers },
         ],
     })
     await producer.disconnect()
@@ -57,17 +58,27 @@ const startConsumer = async (groupId, topic, messageHandlers, postCallback = () 
     await consumer.subscribe({ topic, fromBeginning: true })
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
-            console.log(`====================   ${new Date().toJSON()}   ====================`)
+            console.log(`====================   ${new Date().toJSON()}   ${message.headers["request_id"]}   ====================`)
             console.log("Received message!")
             console.log(`    topic: ${topic}`)
             console.log(`    partition: ${partition}`)
             console.log(`    offset: ${message.offset}`)
+            const headers = ["current_user", "request_id"].reduce(
+                (map, headerName) => {
+                    if (message.headers[headerName]) {
+                        map[headerName] = message.headers[headerName].toString()
+                    }
+                    return map
+                },
+                new Map()
+            )
+            console.log(`    headers: ${JSON.stringify(headers)}`)
             const key = message.key?.toString()
             console.log(`    key: ${key}`)
             const { type, ...body } = JSON.parse(message.value.toString())
             console.log(`    ${type} ${JSON.stringify(body)}`)
             if (type in messageHandlers) {
-                messageHandlers[type](key, body)
+                messageHandlers[type](key, body, headers)
             } else {
                 console.log("Skipping...")
             }

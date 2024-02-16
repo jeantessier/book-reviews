@@ -95,12 +95,18 @@ const signUp = async (_, { user }) => {
     user.id = uuidv4()
     user.roles = [ "ROLE_USER" ]
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.users',
         {
             type: 'userAdded',
             ...user,
-        }
+        },
+        headers,
     )
 
     return user
@@ -125,12 +131,18 @@ const addUser = async (_, { user }, context, info) => {
 
     user.id = uuidv4()
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.users',
         {
             type: 'userAdded',
             ...user,
-        }
+        },
+        headers,
     )
 
     return user
@@ -172,12 +184,18 @@ const updateUser = async (_, { update }, context, info) => {
         ...update,
     }
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.users',
         {
             type: 'userUpdated',
             ...userUpdatedMessage,
-        }
+        },
+        headers,
     )
 
     return userUpdatedMessage
@@ -200,12 +218,18 @@ const removeUser = async (_, { id }, context, info) => {
         })
     }
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.users',
         {
             type: 'userRemoved',
             id,
-        }
+        },
+        headers,
     )
 
     return true

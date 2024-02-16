@@ -117,12 +117,18 @@ const addBook = async (_, { book }, context, info) => {
 
     book.id = uuidv4()
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.books',
         {
             type: 'bookAdded',
             ...book,
-        }
+        },
+        headers,
     )
 
     return book
@@ -161,12 +167,18 @@ const updateBook = async (_, { update }, context, info) => {
         ...update,
     }
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.books',
         {
             type: 'bookUpdated',
             ...bookUpdatedMessage,
-        }
+        },
+        headers,
     )
 
     return bookUpdatedMessage
@@ -189,12 +201,18 @@ const removeBook = async (_, { id }, context, info) => {
         })
     }
 
+    let headers = { request_id: context.requestId }
+    if (context.currentUser) {
+        headers["current_user"] = context.currentUser.id
+    }
+
     await sendMessage(
         'book-reviews.books',
         {
             type: 'bookRemoved',
             id,
-        }
+        },
+        headers,
     )
 
     return true
