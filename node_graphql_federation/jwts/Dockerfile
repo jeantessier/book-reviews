@@ -1,3 +1,12 @@
+#
+# To build:
+#     docker build . --tag jeantessier/book_reviews-node_graphql_federation-jwts:$(perl -n -e 'print $1 if /"version": "(.*)"/' package.json) --tag jeantessier/book_reviews-node_graphql_federation-jwts:latest
+#
+# To upload to hub.docker.com:
+#     docker push jeantessier/book_reviews-node_graphql_federation-jwts:$(perl -n -e 'print $1 if /"version": "(.*)"/' package.json)
+#     docker push jeantessier/book_reviews-node_graphql_federation-jwts:latest
+#
+
 FROM node:alpine
 
 ARG kafkaClientId=jwts

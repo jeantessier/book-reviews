@@ -93,12 +93,8 @@ images will not include `.env` and need to receive their environment variables
 from the Compose file.  If you make local changes, you will need to rebuild
 images and relaunch containers for them to take effect.
 
-```bash
-docker compose \
-    --file docker-compose.containers.yml \
-    --file docker-compose.override.yml \
-    build --no-cache
-```
+The `push_docker_images.sh` script will build all the images, tag them with
+their version number, and push them to [Docker Hub](https://hub.docker.com/).
 
 ### Running Them Manually
 

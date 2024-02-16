@@ -1,3 +1,12 @@
+#
+# To build:
+#     docker build . --tag jeantessier/book_reviews-node_graphql_federation-reviews:$(perl -n -e 'print $1 if /"version": "(.*)"/' package.json) --tag jeantessier/book_reviews-node_graphql_federation-reviews:latest
+#
+# To upload to hub.docker.com:
+#     docker push jeantessier/book_reviews-node_graphql_federation-reviews:$(perl -n -e 'print $1 if /"version": "(.*)"/' package.json)
+#     docker push jeantessier/book_reviews-node_graphql_federation-reviews:latest
+#
+
 FROM node:alpine
 
 ARG kafkaClientId=reviews
