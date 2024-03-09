@@ -702,3 +702,30 @@ or
 ```bash
 npm publish --access public --workspace kafka
 ```
+
+## Kafka Maintenance
+
+Kafka will automatically remove obsolete consumer groups after some period of
+inactivity.  You can view unused consumer groups with:
+
+```bash
+docker compose \
+  --file docker-compose.local.yml \
+  exec kafka \
+  /opt/bitnami/kafka/bin/kafka-consumer-groups.sh \
+  --bootstrap-server kafka:9092 \
+  --describe \
+  --all-groups \
+  2>&1 \
+  | ruby -n -e 'puts $1 if /Consumer group .(([[:xdigit:]]|-)+). has no active members/'
+```
+
+And you can remove them with:
+
+```bash
+for consumer_group in $(docker compose --file docker-compose.local.yml exec kafka /opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server kafka:9092 --describe --all-groups 2>&1 | ruby -n -e 'puts $1 if /Consumer group .(([[:xdigit:]]|-)+). has no active members/')
+do
+  echo '==========' $consumer_group '=========='
+  docker compose --file docker-compose.local.yml exec kafka /opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server kafka:9092 --delete --group $consumer_group
+done
+```
