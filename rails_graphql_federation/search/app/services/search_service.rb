@@ -99,14 +99,14 @@ class SearchService
           topic: #{KAFKA_TOPIC}
           headers: #{headers}
           key: #{user}
-          payload: #{payload.to_json}
+          payload: #{payload}
       MSG
 
       producer.publish(
         topic: KAFKA_TOPIC,
         headers: headers,
         key: user,
-        payload: payload.to_json,
+        payload: payload,
       )
 
       results
