@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+mongoose.set('debug', process.env.MONGOOSE_DEBUG && process.env.MONGOOSE_DEBUG.toLowerCase() === 'true')
+
 const dbURI = process.env.MONGODB_URI
 mongoose.connect(dbURI)
 
