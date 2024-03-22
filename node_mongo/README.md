@@ -66,7 +66,7 @@ jest app_api/models
 The end-to-end tests use Cypress.  They need a running app to test against.
 
 ```bash
-docker compose up -d book_reviews
+docker compose up -d test_server
 npm run cypress:open
 ```
 
