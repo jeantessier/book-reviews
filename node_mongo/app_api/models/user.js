@@ -28,6 +28,11 @@ userSchema.virtual('numReviews', {
     foreignField: 'reviewer',
     count: true,
 })
+userSchema.virtual('reviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'reviewer',
+})
 
 /*
  * !!!WARNING!!!   !!!WARNING!!!    !!!WARNING!!!    !!!WARNING!!!    !!!WARNING!!!

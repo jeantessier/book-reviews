@@ -69,6 +69,8 @@ module.exports.create = async (req, res) => {
 module.exports.readOne = (req, res) => {
     Review
         .findById(req.params.id)
+        .populate('book')
+        .populate('reviewer')
         .then(review => {
             if (review) {
                 sendJSONresponse(res, 200, review)

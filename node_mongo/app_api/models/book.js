@@ -31,5 +31,10 @@ bookSchema.virtual('numReviews', {
     foreignField: 'book',
     count: true,
 })
+bookSchema.virtual('reviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'book',
+})
 
 mongoose.model('Book', bookSchema)

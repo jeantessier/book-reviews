@@ -1,14 +1,13 @@
 require('dotenv').config({ path: '.env.test' })
 
-const {ObjectId} = require("bson")
 const mongoose = require("mongoose")
 const db = require("../../test/db")
 require("../models/book")
-require("../models/user")
 require("../models/review")
+require("../models/user")
 const Book = mongoose.model('Book')
-const User = mongoose.model('User')
 const Review = mongoose.model('Review')
+const User = mongoose.model('User')
 
 const ctrlUser = require("./user")
 
@@ -192,7 +191,7 @@ describe("User controller", () => {
 
     it("readOne returns 404 if ID is not found", async () => {
         // Given
-        const notFoundId = new ObjectId()
+        const notFoundId = new mongoose.Schema.Types.ObjectId()
         const mReq = { params: { id: notFoundId } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 

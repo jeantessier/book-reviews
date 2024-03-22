@@ -53,6 +53,7 @@ module.exports.readOne = (req, res) => {
         .findById(req.params.id)
         .select('-salt -hash')
         .populate('numReviews')
+        .populate('reviews')
         .then(user => {
             if (user) {
                 sendJSONresponse(res, 200, user)

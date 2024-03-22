@@ -51,6 +51,7 @@ module.exports.readOne = (req, res) => {
     return Book
         .findById(req.params.id)
         .populate('numReviews')
+        .populate('reviews')
         .then(book => {
             if (book) {
                 sendJSONresponse(res, 200, book)

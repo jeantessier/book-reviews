@@ -10,6 +10,7 @@ module.exports.readMe = (req, res) => {
         .findById(req.currentUser.sub)
         .select("-salt -hash")
         .populate('numReviews')
+        .populate('reviews')
         .then(user => {
             if (user) {
                 sendJSONresponse(res, 200, user)
@@ -90,6 +91,7 @@ module.exports.deleteMe = async (req, res) => {
 module.exports.listMyReviews = (req, res) => {
     Review
         .find({ reviewer: req.currentUser.sub })
+        .populate('book')
         .then(reviews => sendJSONresponse(res, 200, reviews))
         .catch(err => sendJSONresponse(res, 400, err))
 }
@@ -141,6 +143,8 @@ module.exports.createMyReview = async (req, res) => {
 module.exports.readMyReview = (req, res) => {
     Review
         .findOne({ _id: req.params.reviewId, reviewer: req.currentUser.sub })
+        .populate('book')
+        .populate('reviewer')
         .then(review => {
             if (review) {
                 sendJSONresponse(res, 200, review)
