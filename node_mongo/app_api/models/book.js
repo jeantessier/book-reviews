@@ -19,7 +19,17 @@ const bookSchema = new mongoose.Schema({
     authors: [String],
     publisher: String,
     years: [String],
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
 })
 bookSchema.plugin(timestamps)
+
+bookSchema.virtual('numReviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'book',
+    count: true,
+})
 
 mongoose.model('Book', bookSchema)

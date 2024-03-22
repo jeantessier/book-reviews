@@ -7,6 +7,7 @@ const sendJSONresponse = (res, status, content) => res.status(status).json(conte
 module.exports.list = (req, res) => {
     return Book
         .find()
+        .populate('numReviews')
         .then(books => sendJSONresponse(res, 200, books))
         .catch(err => sendJSONresponse(res, 400, err))
 }
@@ -49,6 +50,7 @@ module.exports.create = async (req, res) => {
 module.exports.readOne = (req, res) => {
     return Book
         .findById(req.params.id)
+        .populate('numReviews')
         .then(book => {
             if (book) {
                 sendJSONresponse(res, 200, book)

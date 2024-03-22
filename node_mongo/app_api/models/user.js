@@ -16,8 +16,18 @@ const userSchema = new mongoose.Schema({
     hash: String,
     salt: String,
     roles: [String],
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
 })
 userSchema.plugin(timestamps)
+
+userSchema.virtual('numReviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'reviewer',
+    count: true,
+})
 
 /*
  * !!!WARNING!!!   !!!WARNING!!!    !!!WARNING!!!    !!!WARNING!!!    !!!WARNING!!!

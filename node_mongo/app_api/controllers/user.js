@@ -5,9 +5,10 @@ const User = mongoose.model('User')
 const sendJSONresponse = (res, status, content) => res.status(status).json(content)
 
 module.exports.list = (req, res) => {
-    User
+    return User
         .find()
         .select('-salt -hash')
+        .populate('numReviews')
         .then(users => sendJSONresponse(res, 200, users))
         .catch(err => sendJSONresponse(res, 400, err))
 }
@@ -22,6 +23,12 @@ module.exports.create = async (req, res) => {
 
     if (!name || !email || !password) {
         sendJSONresponse(res, 400, { message: "All fields required" })
+        return
+    }
+
+    const usedEmail = await User.findOne({ email })
+    if (usedEmail) {
+        sendJSONresponse(res, 409, { message: `There is already a user with ${email}` })
         return
     }
 
@@ -42,9 +49,10 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.readOne = (req, res) => {
-    User
+    return User
         .findById(req.params.id)
         .select('-salt -hash')
+        .populate('numReviews')
         .then(user => {
             if (user) {
                 sendJSONresponse(res, 200, user)

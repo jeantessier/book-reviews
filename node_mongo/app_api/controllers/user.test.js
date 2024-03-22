@@ -10,7 +10,7 @@ const Book = mongoose.model('Book')
 const User = mongoose.model('User')
 const Review = mongoose.model('Review')
 
-const ctrlBook = require("./book")
+const ctrlUser = require("./user")
 
 const bookData = {
     name: "The_Hobbit",
@@ -47,9 +47,9 @@ afterAll(async () => {
 })
 
 /**
- * Book controller
+ * User controller
  */
-describe("Book controller", () => {
+describe("User controller", () => {
 
     //
     // list action
@@ -61,29 +61,28 @@ describe("Book controller", () => {
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.list(mReq, mRes)
+        await ctrlUser.list(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(200)
         expect(mRes.json).toBeCalledWith([])
     })
 
-    it("list sends existing books", async () => {
+    it("list sends existing users", async () => {
         // Given
-        await new Book(bookData).save()
+        await new User(userData).save()
 
         // and
         const mReq = {}
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.list(mReq, mRes)
+        await ctrlUser.list(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(200)
         expect(mRes.json).toBeCalledWith([expect.objectContaining({
-            ... bookData,
-            titles: bookData.titles.map(title => expect.objectContaining(title)),
+            ... userData,
             numReviews: 0,
         })])
     })
@@ -101,13 +100,12 @@ describe("Book controller", () => {
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.list(mReq, mRes)
+        await ctrlUser.list(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(200)
         expect(mRes.json).toBeCalledWith([expect.objectContaining({
-            ... bookData,
-            titles: bookData.titles.map(title => expect.objectContaining(title)),
+            ... userData,
             numReviews: 1,
         })])
     })
@@ -122,7 +120,7 @@ describe("Book controller", () => {
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.create(mReq, mRes)
+        await ctrlUser.create(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(403)
@@ -131,47 +129,46 @@ describe("Book controller", () => {
 
     it("create fails when name is missing", async () => {
         // Given
-        const { name, ... partialBookData } = bookData
-        const mReq = { currentUser: { admin: true }, body: partialBookData }
+        const { name, ... partialUserData } = { ... userData, password: "abcd1234" }
+        const mReq = { currentUser: { admin: true }, body: partialUserData }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.create(mReq, mRes)
+        await ctrlUser.create(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(400)
         expect(mRes.json).toBeCalledWith({ message: "All fields required" })
     })
 
-    it("create fails when name is already taken", async () => {
+    it("create fails when email is already taken", async () => {
         // Given
-        await new Book(bookData).save()
+        await new User(userData).save()
 
         // and
-        const mReq = { currentUser: { admin: true }, body: bookData }
+        const mReq = { currentUser: { admin: true }, body: { ... userData, password: "abcd1234" } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.create(mReq, mRes)
+        await ctrlUser.create(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(409)
-        expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(/already a book named/) })
+        expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(/already a user with/) })
     })
 
-    it("create succeeds to create a new book", async () => {
+    it("create succeeds to create a new user", async () => {
         // Given
-        const mReq = { currentUser: { admin: true }, body: bookData }
+        const mReq = { currentUser: { admin: true }, body: { ... userData, password: "abcd1234" } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.create(mReq, mRes)
+        await ctrlUser.create(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(201)
         expect(mRes.json).toBeCalledWith(expect.objectContaining({
-            ... bookData,
-            titles: bookData.titles.map(title => expect.objectContaining(title)),
+            ... userData,
         }))
     })
 
@@ -186,7 +183,7 @@ describe("Book controller", () => {
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.readOne(mReq, mRes)
+        await ctrlUser.readOne(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(400)
@@ -200,54 +197,52 @@ describe("Book controller", () => {
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.readOne(mReq, mRes)
+        await ctrlUser.readOne(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(404)
-        expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(new RegExp(`No book with ID ${notFoundId}`)) })
+        expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(new RegExp(`No user with ID ${notFoundId}`)) })
     })
 
     it("readOne returns 200 if ID is found", async () => {
         // Given
-        let bookId
-        await new Book(bookData).save().then(savedBook => bookId = savedBook._doc._id)
+        let userId
+        await new User(userData).save().then(savedUser => userId = savedUser._doc._id)
 
         // and
-        const mReq = { params: { id: bookId } }
+        const mReq = { params: { id: userId } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.readOne(mReq, mRes)
+        await ctrlUser.readOne(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(200)
         expect(mRes.json).toBeCalledWith(expect.objectContaining({
-            ... bookData,
-            titles: bookData.titles.map(title => expect.objectContaining(title)),
+            ... userData,
             numReviews: 0,
         }))
     })
 
     it("readOne populates numReviews", async () => {
         // Given
-        let reviewer
-        await new User(userData).save().then(savedUser => reviewer = savedUser._id)
-        let bookId
-        await new Book(bookData).save().then(savedBook => bookId = savedBook._doc._id)
-        await new Review({ reviewer, book: bookId, body: "body" }).save()
+        let userId
+        await new User(userData).save().then(savedUser => userId = savedUser._doc._id)
+        let book
+        await new Book(bookData).save().then(savedBook => book = savedBook._id)
+        await new Review({ reviewer: userId, book, body: "body" }).save()
 
         // and
-        const mReq = { params: { id: bookId } }
+        const mReq = { params: { id: userId } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
-        await ctrlBook.readOne(mReq, mRes)
+        await ctrlUser.readOne(mReq, mRes)
 
         // Then
         expect(mRes.status).toBeCalledWith(200)
         expect(mRes.json).toBeCalledWith(expect.objectContaining({
-            ... bookData,
-            titles: bookData.titles.map(title => expect.objectContaining(title)),
+            ... userData,
             numReviews: 1,
         }))
     })

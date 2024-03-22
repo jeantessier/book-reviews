@@ -9,6 +9,7 @@ module.exports.readMe = (req, res) => {
     User
         .findById(req.currentUser.sub)
         .select("-salt -hash")
+        .populate('numReviews')
         .then(user => {
             if (user) {
                 sendJSONresponse(res, 200, user)
