@@ -218,7 +218,7 @@ http --auth-type jwt :3000/api/user \
 
 If you do not specify `roles`, they get `ROLE_USER` by default.
 
-#### Modify Parts of a User
+#### Modify Parts of a User (Admin-Only)
 
 You can change a user's `roles` with:
 
@@ -234,7 +234,7 @@ http --auth-type jwt PATCH :3000/api/user/<id> \
     password=abcd1234
 ```
 
-#### Modify an Entire User
+#### Modify an Entire User (Admin-Only)
 
 ```bash
 http --auth-type jwt PUT :3000/api/user/<id> \
