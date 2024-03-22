@@ -177,10 +177,10 @@ describe('User', () => {
                     })
                 })
 
-                it('returns 400', () => {
+                it('returns 409', () => {
                     cy.get('@request')
                         .its('status')
-                        .should('equal', 400)
+                        .should('equal', 409)
                 })
             })
         })
