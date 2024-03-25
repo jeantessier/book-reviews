@@ -1,15 +1,14 @@
 const mongoose = require('mongoose')
 const timestamps = require('mongoose-timestamp')
-const ObjectId = mongoose.Schema.Types.ObjectId
 
 const reviewSchema = new mongoose.Schema({
     book: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Book',
         required: true,
     },
     reviewer: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
     },

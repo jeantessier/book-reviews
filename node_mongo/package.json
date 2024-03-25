@@ -36,6 +36,7 @@
     "serve-favicon": "*"
   },
   "devDependencies": {
+    "@faker-js/faker": "*",
     "cypress": "*",
     "jest": "*",
     "mongodb-memory-server": "*"

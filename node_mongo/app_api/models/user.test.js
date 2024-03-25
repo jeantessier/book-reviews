@@ -1,15 +1,14 @@
 require('dotenv').config({ path: '.env.test' })
 
+const { ObjectId } = require("bson")
+const { createUserWithPassword } = require("../../test/fixtures/users")
+
 const mongoose = require("mongoose")
 const db = require("../../test/db")
 require("./user")
 const User = mongoose.model('User')
 
-const userData = {
-    name: "Abc",
-    email: "abc@bookreviews.com",
-    password: "abcd1234",
-}
+const userData = createUserWithPassword()
 
 beforeAll(async () => {
     await db.setUp()

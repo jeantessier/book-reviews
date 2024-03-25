@@ -1,5 +1,9 @@
 require('dotenv').config({ path: '.env.test' })
 
+const { ObjectId } = require("bson")
+const { createBook } = require("../../test/fixtures/books")
+const { createUserWithRole } = require("../../test/fixtures/users")
+
 const mongoose = require("mongoose")
 const db = require("../../test/db")
 require("../models/book")
@@ -11,27 +15,8 @@ const User = mongoose.model('User')
 
 const ctrlBook = require("./book")
 
-const bookData = {
-    name: "The_Hobbit",
-    titles: [
-        {
-            title: "The Hobbit",
-            link: "https://en.wikipedia.org/wiki/The_Hobbit",
-        }, {
-            title: "Bilbo le Hobbit",
-            link: "https://fr.wikipedia.org/wiki/Le_Hobbit",
-        }
-    ],
-    publisher: "Unwin & Allen",
-    authors: ["J.R.R. Tolkien"],
-    years: ["1937"],
-}
-
-const userData = {
-    name: "First Last",
-    email: "first_last@test.com",
-    roles: ["ROLE_TEST_USER"],
-}
+const bookData = createBook()
+const userData = createUserWithRole()
 
 beforeAll(async () => {
     await db.setUp()
@@ -89,11 +74,11 @@ describe("Book controller", () => {
 
     it("list populates numReviews", async () => {
         // Given
-        let reviewer
-        await new User(userData).save().then(savedUser => reviewer = savedUser._id)
-        let book
-        await new Book(bookData).save().then(savedBook => book = savedBook._id)
-        await new Review({ reviewer, book, body: "body" }).save()
+        let userId
+        await new User(userData).save().then(savedUser => userId = savedUser._id)
+        let bookId
+        await new Book(bookData).save().then(savedBook => bookId = savedBook._id)
+        await new Review({ reviewer: userId, book: bookId, body: "body" }).save()
 
         // and
         const mReq = {}
@@ -194,7 +179,7 @@ describe("Book controller", () => {
 
     it("readOne returns 404 if ID is not found", async () => {
         // Given
-        const notFoundId = new mongoose.Schema.Types.ObjectId()
+        const notFoundId = new ObjectId()
         const mReq = { params: { id: notFoundId } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
@@ -209,7 +194,7 @@ describe("Book controller", () => {
     it("readOne returns 200 if ID is found", async () => {
         // Given
         let bookId
-        await new Book(bookData).save().then(savedBook => bookId = savedBook._doc._id)
+        await new Book(bookData).save().then(savedBook => bookId = savedBook._id)
 
         // and
         const mReq = { params: { id: bookId } }
@@ -229,11 +214,11 @@ describe("Book controller", () => {
 
     it("readOne populates numReviews", async () => {
         // Given
-        let reviewer
-        await new User(userData).save().then(savedUser => reviewer = savedUser._id)
+        let userId
+        await new User(userData).save().then(savedUser => userId = savedUser._id)
         let bookId
-        await new Book(bookData).save().then(savedBook => bookId = savedBook._doc._id)
-        await new Review({ reviewer, book: bookId, body: "body" }).save()
+        await new Book(bookData).save().then(savedBook => bookId = savedBook._id)
+        await new Review({ reviewer: userId, book: bookId, body: "body" }).save()
 
         // and
         const mReq = { params: { id: bookId } }

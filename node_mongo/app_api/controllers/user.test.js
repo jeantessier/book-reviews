@@ -1,5 +1,9 @@
 require('dotenv').config({ path: '.env.test' })
 
+const { faker } = require('@faker-js/faker')
+const { createBook } = require('../../test/fixtures/books')
+const { createUserWithRole } = require('../../test/fixtures/users')
+
 const mongoose = require("mongoose")
 const db = require("../../test/db")
 require("../models/book")
@@ -11,27 +15,9 @@ const User = mongoose.model('User')
 
 const ctrlUser = require("./user")
 
-const bookData = {
-    name: "The_Hobbit",
-    titles: [
-        {
-            title: "The Hobbit",
-            link: "https://en.wikipedia.org/wiki/The_Hobbit",
-        }, {
-            title: "Bilbo le Hobbit",
-            link: "https://fr.wikipedia.org/wiki/Le_Hobbit",
-        }
-    ],
-    publisher: "Unwin & Allen",
-    authors: ["J.R.R. Tolkien"],
-    years: ["1937"],
-}
-
-const userData = {
-    name: "First Last",
-    email: "first_last@test.com",
-    roles: ["ROLE_TEST_USER"],
-}
+const bookData = createBook()
+const userData = createUserWithRole()
+const password = faker.internet.password()
 
 beforeAll(async () => {
     await db.setUp()
@@ -88,11 +74,11 @@ describe("User controller", () => {
 
     it("list populates numReviews", async () => {
         // Given
-        let reviewer
-        await new User(userData).save().then(savedUser => reviewer = savedUser._id)
-        let book
-        await new Book(bookData).save().then(savedBook => book = savedBook._id)
-        await new Review({ reviewer, book, body: "body" }).save()
+        let userId
+        await new User(userData).save().then(savedUser => userId = savedUser._id)
+        let bookId
+        await new Book(bookData).save().then(savedBook => bookId = savedBook._id)
+        await new Review({ reviewer: userId, book: bookId, body: "body" }).save()
 
         // and
         const mReq = {}
@@ -128,7 +114,7 @@ describe("User controller", () => {
 
     it("create fails when name is missing", async () => {
         // Given
-        const { name, ... partialUserData } = { ... userData, password: "abcd1234" }
+        const { name, ... partialUserData } = { ... userData, password }
         const mReq = { currentUser: { admin: true }, body: partialUserData }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
@@ -145,7 +131,7 @@ describe("User controller", () => {
         await new User(userData).save()
 
         // and
-        const mReq = { currentUser: { admin: true }, body: { ... userData, password: "abcd1234" } }
+        const mReq = { currentUser: { admin: true }, body: { ... userData, password } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
@@ -158,7 +144,7 @@ describe("User controller", () => {
 
     it("create succeeds to create a new user", async () => {
         // Given
-        const mReq = { currentUser: { admin: true }, body: { ... userData, password: "abcd1234" } }
+        const mReq = { currentUser: { admin: true }, body: { ... userData, password } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
         // When
@@ -191,7 +177,7 @@ describe("User controller", () => {
 
     it("readOne returns 404 if ID is not found", async () => {
         // Given
-        const notFoundId = new mongoose.Schema.Types.ObjectId()
+        const notFoundId = new ObjectId()
         const mReq = { params: { id: notFoundId } }
         const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
@@ -206,7 +192,7 @@ describe("User controller", () => {
     it("readOne returns 200 if ID is found", async () => {
         // Given
         let userId
-        await new User(userData).save().then(savedUser => userId = savedUser._doc._id)
+        await new User(userData).save().then(savedUser => userId = savedUser._id)
 
         // and
         const mReq = { params: { id: userId } }
@@ -226,10 +212,10 @@ describe("User controller", () => {
     it("readOne populates numReviews", async () => {
         // Given
         let userId
-        await new User(userData).save().then(savedUser => userId = savedUser._doc._id)
-        let book
-        await new Book(bookData).save().then(savedBook => book = savedBook._id)
-        await new Review({ reviewer: userId, book, body: "body" }).save()
+        await new User(userData).save().then(savedUser => userId = savedUser._id)
+        let bookId
+        await new Book(bookData).save().then(savedBook => bookId = savedBook._id)
+        await new Review({ reviewer: userId, book: bookId, body: "body" }).save()
 
         // and
         const mReq = { params: { id: userId } }

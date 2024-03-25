@@ -1,25 +1,13 @@
 require('dotenv').config({ path: '.env.test' })
 
+const { createBook } = require("../../test/fixtures/books")
+
 const mongoose = require("mongoose")
 const db = require("../../test/db")
 require("./book")
 const Book = mongoose.model('Book')
 
-const bookData = {
-    name: "The_Hobbit",
-    titles: [
-        {
-            title: "The Hobbit",
-            link: "https://en.wikipedia.org/wiki/The_Hobbit",
-        }, {
-            title: "Bilbo le Hobbit",
-            link: "https://fr.wikipedia.org/wiki/Le_Hobbit",
-        }
-    ],
-    publisher: "Unwin & Allen",
-    authors: ["J.R.R. Tolkien"],
-    years: ["1937"],
-}
+const bookData = createBook()
 
 beforeAll(async () => {
     await db.setUp()
