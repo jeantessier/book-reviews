@@ -1,3 +1,4 @@
+// Faker docs: https://fakerjs.dev/api/
 const { faker } = require('@faker-js/faker')
 
 module.exports.createBook = () => {
