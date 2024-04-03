@@ -82,7 +82,7 @@ const typeDefs = gql`
   }
 `
 
-const signUp = async (_, { user }) => {
+const signUp = async (_, { user }, context) => {
     const userForEmail = fetchUserByEmail(user.email)
     if (userForEmail) {
         throw new GraphQLError(`Email "${user.email}" is already taken.`, {
