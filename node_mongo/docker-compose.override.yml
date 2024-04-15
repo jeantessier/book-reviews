@@ -14,7 +14,7 @@ services:
       ME_CONFIG_BASICAUTH_PASSWORD: abcd1234
 
   book_reviews:
-    environment:
-      JWT_SECRET: thisIsSecretInDocker
     ports:
       - "3000:3000"
+    environment:
+      JWT_SECRET: thisIsSecretInDocker
