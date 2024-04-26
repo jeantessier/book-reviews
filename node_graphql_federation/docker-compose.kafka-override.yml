@@ -1,5 +1,3 @@
-version: '3.7'
-
 #
 # docker compose --file docker-compose.local.yml --file docker-compose.override.yml --file docker-compose.kafka-override.yml up -d kafka
 #
