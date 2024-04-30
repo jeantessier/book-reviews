@@ -98,7 +98,7 @@ GEM
     google-protobuf (3.25.3-arm64-darwin)
     google-protobuf (3.25.3-x86_64-darwin)
     google-protobuf (3.25.3-x86_64-linux)
-    graphql (2.3.1)
+    graphql (2.3.2)
       base64
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
@@ -180,7 +180,7 @@ GEM
     rake (13.2.1)
     rdoc (6.6.3.1)
       psych (>= 4.0.0)
-    reline (0.5.3)
+    reline (0.5.4)
       io-console (~> 0.5)
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
