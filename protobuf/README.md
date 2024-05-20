@@ -1,6 +1,8 @@
 # Protocol Buffers
 
-This folder attempts to model book reviews as protocol buffers.
+This folder attempts to model book reviews as [protocol buffers](https://grpc.io/).
+
+Install `protoc` using the [installation instructions](https://grpc.io/docs/protoc-installation/).
 
 ## Generate Language-Specific Protocol Buffer Code
 
