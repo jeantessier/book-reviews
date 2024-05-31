@@ -188,6 +188,13 @@ If you use the variables:
 It will return both users and all the books, because each one is related to at
 least one of these words.
 
+There is a version of this query in `search_query.txt` that you can invoke using
+[Httpie](https://httpie.io/).
+
+```bash
+http :3000 query=@search_query.txt variables:='{"q": "tolkien"}'
+```
+
 #### Query Plan
 
 If you need to know how the `search` chose and ranked the results to a query,
@@ -230,6 +237,13 @@ were relevant to the query.
 
 The `results` section shows how the `search` service computed the search
 results.
+
+There is a version of this query in `query_plan_query.txt` that you can invoke
+using [Httpie](https://httpie.io/).
+
+```bash
+http :3000 query=@query_plan_query.txt variables:='{"q": "jean tolkien"}'
+```
 
 #### Looking Up a Specific Entity
 

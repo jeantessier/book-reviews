@@ -1,0 +1,49 @@
+query MySearch($q: String!) {
+    search(q: $q) {
+        __typename
+        ... on Book {
+            id
+            titles {
+                title
+            }
+            authors
+            reviews {
+                id
+                reviewer {
+                    id
+                    signature
+                }
+            }
+        }
+        ... on Review {
+            id
+            book {
+                id
+                titles {
+                    title
+                }
+                authors
+            }
+            reviewer {
+                id
+                signature
+            }
+            body
+            start
+            stop
+        }
+        ... on User {
+            id
+            name
+            reviews {
+                id
+                book {
+                    id
+                    titles {
+                        title
+                    }
+                }
+            }
+        }
+    }
+}
