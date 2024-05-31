@@ -201,7 +201,7 @@ If you need to know how the `search` chose and ranked the results to a query,
 you can ask it to show its work with the `queryPlan` top-level GraphQL field.
 
 ```graphql
-query MySearch($q: String!) {
+query MyPlan($q: String!) {
     queryPlan(q: $q) {
         words
         indices {
