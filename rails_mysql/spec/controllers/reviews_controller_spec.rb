@@ -70,7 +70,7 @@ RSpec.describe ReviewsController do
       context "with invalid params" do
         it "renders a JSON response with errors for the new review" do
           post :create, params: {review: invalid_attributes}, session: valid_session
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
       end
@@ -112,7 +112,7 @@ RSpec.describe ReviewsController do
       context "with invalid params" do
         it "renders a JSON response with errors for the review" do
           put :update, params: {id: review.to_param, review: invalid_attributes}, session: valid_session
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
       end

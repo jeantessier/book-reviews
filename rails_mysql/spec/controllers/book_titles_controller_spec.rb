@@ -93,7 +93,7 @@ RSpec.describe BookTitlesController do
       context "with invalid params" do
         it "renders a JSON response with errors for the new book_title" do
           post :create, params: {book_id: book.id, book_title: invalid_attributes}, session: valid_session
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
       end
@@ -135,7 +135,7 @@ RSpec.describe BookTitlesController do
       context "with invalid params" do
         it "renders a JSON response with errors for the book_title" do
           put :update, params: {book_id: book.id, id: book_title.to_param, book_title: invalid_attributes}, session: valid_session
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
       end
