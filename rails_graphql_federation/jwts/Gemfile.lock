@@ -100,22 +100,22 @@ GEM
       dotenv (= 3.1.2)
       railties (>= 6.1)
     drb (2.2.1)
-    erubi (1.12.0)
+    erubi (1.13.0)
     exponential-backoff (0.0.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
     google-protobuf (3.25.3-arm64-darwin)
     google-protobuf (3.25.3-x86_64-darwin)
     google-protobuf (3.25.3-x86_64-linux)
-    graphql (2.3.4)
+    graphql (2.3.7)
       base64
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
-    irb (1.13.1)
+    irb (1.14.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     little-plugger (1.1.4)
     logging (2.4.0)
@@ -131,24 +131,25 @@ GEM
       net-smtp
     marcel (1.0.4)
     mini_mime (1.1.5)
-    minitest (5.23.1)
+    minitest (5.24.1)
     msgpack (1.7.2)
     multi_json (1.15.0)
     mutex_m (0.2.0)
-    net-imap (0.4.12)
+    net-imap (0.4.14)
       date
       net-protocol
     net-pop (0.1.2)
+      net-protocol
     net-protocol (0.2.2)
       timeout
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.5-arm64-darwin)
+    nokogiri (1.16.6-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.5-x86_64-darwin)
+    nokogiri (1.16.6-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.5-x86_64-linux)
+    nokogiri (1.16.6-x86_64-linux)
       racc (~> 1.4)
     phobos (2.1.6)
       activesupport (>= 3.0.0)
@@ -163,7 +164,7 @@ GEM
     puma (6.4.2)
       nio4r (~> 2.0)
     racc (1.8.0)
-    rack (3.1.3)
+    rack (3.1.6)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -207,13 +208,13 @@ GEM
       io-console (~> 0.5)
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
-    rspec-expectations (3.13.0)
+    rspec-expectations (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-mocks (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (6.1.2)
+    rspec-rails (6.1.3)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       railties (>= 6.1)
@@ -236,7 +237,7 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.6.15)
+    zeitwerk (2.6.16)
 
 PLATFORMS
   arm64-darwin-21
@@ -261,4 +262,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   2.5.11
+   2.5.15
