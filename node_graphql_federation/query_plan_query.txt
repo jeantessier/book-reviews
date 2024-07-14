@@ -1,0 +1,19 @@
+query MyPlan($q: String!) {
+    queryPlan(q: $q) {
+        words
+        indices {
+            word
+            entries {
+                score
+                id
+                type
+            }
+        }
+        results {
+            totalWeight
+            weights {word weight}
+            id
+            type
+        }
+    }
+}
