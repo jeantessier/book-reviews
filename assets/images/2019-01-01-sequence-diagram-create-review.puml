@@ -1,0 +1,29 @@
+@startuml
+
+skin rose
+skinparam style strictuml
+skinparam backgroundColor transparent
+
+actor browser
+participant users
+participant reviews
+participant books
+participant search
+participant search_index
+participant ":RabbitMQ" as RabbitMQ
+
+activate browser
+
+browser -> reviews ++ : POST /
+reviews -> reviews ++ : INSERT INTO review
+deactivate reviews
+reviews -> RabbitMQ --++ #yellow : publish(REVIEW_CREATED)
+deactivate browser
+
+RabbitMQ -> search ++ #yellow : notify(REVIEW_CREATED)
+search -> search_index ++ #yellow : add review
+deactivate search_index
+deactivate search
+deactivate RabbitMQ
+
+@enduml

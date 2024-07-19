@@ -1,0 +1,43 @@
+@startuml
+
+skin rose
+skinparam style strictuml
+skinparam backgroundColor transparent
+
+actor browser
+participant users
+participant reviews
+participant books
+participant search
+participant search_index
+participant ":RabbitMQ" as RabbitMQ
+
+activate browser
+
+browser -> users ++ : DELETE /{id}
+users -> users ++ : DELETE FROM user
+deactivate users
+users -> RabbitMQ --++ #yellow : publish(USER_DELETED)
+deactivate browser
+
+RabbitMQ -> reviews ++ #yellow : notify(USER_DELETED)
+loop reviews by deleted user
+    reviews -> reviews ++ #yellow : DELETE FROM review
+    deactivate reviews
+    reviews -> RabbitMQ ++ #pink : publish(REVIEW_DELETED)
+end
+deactivate reviews
+
+RabbitMQ -> search ++ #pink : notify(REVIEW_DELETED)
+search -> search_index ++ #pink : remove review
+deactivate search_index
+deactivate search
+deactivate RabbitMQ
+
+RabbitMQ -> search ++ #yellow : notify(USER_DELETED)
+search -> search_index ++ #yellow : remove user
+deactivate search_index
+deactivate search
+deactivate RabbitMQ
+
+@enduml
