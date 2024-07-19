@@ -37,5 +37,5 @@ And some sequence diagram that show the control flow for simple use cases:
     ![User requests to be forgotten]({{ site.baseurl }}/assets/images/2019-01-01-sequence-diagram-delete-user.png)
 
 I did the architecture overview in Google Docs.  It works, but I am still
-getting used to it.  I'm using [sdedit](http://sdedit.sourceforge.net/) for the
+getting used to it.  I'm using [PlantUML](https://plantuml.com/) for the
 sequence diagrams.
