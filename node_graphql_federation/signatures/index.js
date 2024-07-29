@@ -2,8 +2,10 @@ const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { buildSubgraphSchema } = require('@apollo/subgraph')
 const { gql } = require('graphql-tag')
-const jwt = require("jsonwebtoken");
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require("uuid")
+const jwt = require("jsonwebtoken")
+
+require('dotenv').config()
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
