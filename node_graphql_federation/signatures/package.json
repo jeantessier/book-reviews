@@ -1,6 +1,6 @@
 {
   "name": "@jeantessier/book_reviews.node_graphql_federation.signatures",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A microservice for augmenting users with pretty signatures as part of a book reviews application",
   "main": "index.js",
   "scripts": {
@@ -22,8 +22,10 @@
   "dependencies": {
     "@apollo/server": "*",
     "@apollo/subgraph": "*",
+    "dotenv": "*",
     "graphql": "*",
     "graphql-tag": "*",
+    "jsonwebtoken": "*",
     "uuid": "*"
   },
   "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_graphql_federation"
