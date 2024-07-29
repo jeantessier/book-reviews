@@ -24,6 +24,10 @@ services:
     environment:
       JWT_SECRET: thisIsSecret
 
+  signatures:
+    environment:
+      JWT_SECRET: thisIsSecret
+
   jwts:
     environment:
       JWT_SECRET: thisIsSecret
