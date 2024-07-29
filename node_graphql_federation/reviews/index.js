@@ -4,7 +4,7 @@ const { buildSubgraphSchema } = require('@apollo/subgraph')
 const { GraphQLError } = require('graphql')
 const { gql } = require('graphql-tag')
 const { v4: uuidv4 } = require('uuid')
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 
 require('dotenv').config()
 
