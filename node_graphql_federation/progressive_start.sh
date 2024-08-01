@@ -6,9 +6,9 @@ shift
 readonly COMPOSE_FILE=docker-compose.${IMAGE_MODE}.yml
 if [[ ! -r $COMPOSE_FILE ]]
 then
-  echo Unknown mode: $IMAGE_MODE
-  echo Compose file $COMPOSE_FILE not found
-  exit 1
+    echo Unknown mode: $IMAGE_MODE
+    echo Compose file $COMPOSE_FILE not found
+    exit 1
 fi
 
 readonly SERVICES=(
