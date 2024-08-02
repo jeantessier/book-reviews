@@ -24,11 +24,11 @@ RSpec.describe Review do
       expect { Review.create! reviewer: reviewer, book: book, start: start, stop: stop }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
-    xit "should not save without a book" do
+    it "should not save without a book" do
       expect { Review.create! reviewer: reviewer, body: body, start: start, stop: stop }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
-    xit "should not save without a reviewer" do
+    it "should not save without a reviewer" do
       expect { Review.create! book: book, body: body, start: start, stop: stop }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
