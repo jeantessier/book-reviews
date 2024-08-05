@@ -1,0 +1,106 @@
+[
+    {
+        "statement": "create (reviewer:User $reviewer), (reviewer2:User $reviewer2) return *",
+        "parameters": {
+			"reviewer": {
+                "name": "Jean Tessier",
+                "email": "jean@jeantessier.com",
+                "password": "abcd1234"
+            },
+            "reviewer2": {
+                "name": "Simon Tolkien",
+                "email": "simon@tolkien.com",
+                "password": "abcd1234"
+            }
+        }
+    },
+    {
+        "statement": "match (reviewer1:User {email: $reviewer1}), (reviewer2:User {email: $reviewer2}) create (b:Book $book), (b)-[:TITLE]->(:Title $title1), (b)-[:TITLE]->(:Title $title2), (b)<-[:BOOK]-(:Review $review1)-[:REVIEWER]->(reviewer1), (b)<-[:BOOK]-(:Review $review2)-[:REVIEWER]->(reviewer2) return b",
+        "parameters": {
+            "reviewer1": "jean@jeantessier.com",
+            "reviewer2": "simon@tolkien.com",
+            "book": {
+                "name": "The_Hobbit",
+                "authors": ["J.R.R. Tolkien"],
+                "publisher": "Unwin & Allen",
+                "years": [1937]
+            },
+            "title1": {"title": "The Hobbit", "link": "https://en.wikipedia.org/wiki/The_Hobbit"},
+            "title2": {"title": "Bilbo le Hobbit", "link": "https://fr.wikipedia.org/wiki/Le_Hobbit"},
+            "review1": {"body": "Awesome!", "start": "2020-05-02", "stop": "2020-05-20"},
+            "review2": {"body": "Reminds me of when I was a kid.", "start": "2020-05-01", "stop": "2020-05-01"}
+        }
+    },
+    {
+        "statement": "match (reviewer:User {email: $reviewer}) create (b:Book $book), (b)-[:TITLE]->(:Title $title), (b)<-[:BOOK]-(:Review $review)-[:REVIEWER]->(reviewer) return b",
+        "parameters": {
+            "reviewer": "jean@jeantessier.com",
+            "book": {
+                "name": "The_Lord_of_the_Rings",
+                "authors": ["J.R.R. Tolkien"],
+                "publisher": "Unwin & Allen",
+                "years": [1954, 1955]
+            },
+            "title": {"title": "The Lord of the Rings", "link": "https://en.wikipedia.org/wiki/The_Lord_of_the_Rings"},
+            "review": {"body": "Awesome!", "start": "2020-05-02", "stop": "2020-05-20"}
+        }
+    },
+    {
+        "statement": "match (reviewer:User {email: $reviewer}) create (b:Book $book), (b)-[:TITLE]->(:Title $title), (b)<-[:BOOK]-(:Review $review)-[:REVIEWER]->(reviewer) return b",
+        "parameters": {
+            "reviewer": "jean@jeantessier.com",
+            "book": {
+                "name": "The_Fellowship_of_the_Ring",
+                "authors": ["J.R.R. Tolkien"],
+                "publisher": "Unwin & Allen",
+                "years": [1954]
+            },
+            "title": {"title": "The Fellowship of the Ring", "link": "https://en.wikipedia.org/wiki/The_Fellowship_of_the_Ring"},
+            "review": {"body": "The Council of Elrond is a little long.", "start": "2020-05-02", "stop": "2020-05-05"}
+        }
+    },
+    {
+        "statement": "match (reviewer:User {email: $reviewer}) create (b:Book $book), (b)-[:TITLE]->(:Title $title), (b)<-[:BOOK]-(:Review $review)-[:REVIEWER]->(reviewer) return b",
+        "parameters": {
+            "reviewer": "jean@jeantessier.com",
+            "book": {
+                "name": "The_Two_Towers",
+                "authors": ["J.R.R. Tolkien"],
+                "publisher": "Unwin & Allen",
+                "years": [1955]
+            },
+            "title": {"title": "The Two Towers", "link": "https://en.wikipedia.org/wiki/The_Two_Towers"},
+            "review": {"body": "The Battle of Helm's Deep is a little long.", "start": "2020-05-06", "stop": "2020-05-10"}
+        }
+    },
+    {
+        "statement": "match (reviewer:User {email: $reviewer}) create (b:Book $book), (b)-[:TITLE]->(:Title $title), (b)<-[:BOOK]-(:Review $review)-[:REVIEWER]->(reviewer) return b",
+        "parameters": {
+            "reviewer": "jean@jeantessier.com",
+            "book": {
+                "name": "The_Return_of_the_King",
+                "authors": ["J.R.R. Tolkien"],
+                "publisher": "Unwin & Allen",
+                "years": [1955]
+            },
+            "title": {"title": "The Return of the King", "link": "https://en.wikipedia.org/wiki/The_Return_of_the_King"},
+            "review": {"body": "The ending is a little long.", "start": "2020-05-11", "stop": "2020-05-20"}
+        }
+    },
+    {
+        "statement": "match (reviewer1:User {email: $reviewer1}), (reviewer2:User {email: $reviewer2}) create (b:Book $book), (b)-[:TITLE]->(:Title $title), (b)<-[:BOOK]-(:Review $review1)-[:REVIEWER]->(reviewer1), (b)<-[:BOOK]-(:Review $review2)-[:REVIEWER]->(reviewer2) return b",
+        "parameters": {
+            "reviewer1": "jean@jeantessier.com",
+            "reviewer2": "simon@tolkien.com",
+            "book": {
+                "name": "The_Silmarillion",
+                "authors": ["Christopher Tolkien", "J.R.R. Tolkien"],
+                "publisher": "Unwin & Allen",
+                "years": [1977]
+            },
+            "title": {"title": "The Silmarillion", "link": "https://en.wikipedia.org/wiki/The_Silmarillion"},
+            "review1": {"body": "Epic!", "start": "2020-05-21", "stop": "2020-05-30"},
+            "review2": {"body": "Bacon!", "start": "2019-12-11", "stop": "2019-12-20"}
+        }
+    }
+]
