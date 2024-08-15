@@ -10,16 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_15_061855) do
-
-  create_table "book_authors", id: :integer, charset: "utf8", force: :cascade do |t|
+ActiveRecord::Schema[7.2].define(version: 2019_11_15_061855) do
+  create_table "book_authors", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "book_id"
     t.string "author", null: false
     t.integer "order", default: 0, null: false
     t.index ["book_id"], name: "index_book_authors_on_book_id"
   end
 
-  create_table "book_titles", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "book_titles", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "book_id"
     t.string "title", null: false
     t.string "link", limit: 1023
@@ -27,14 +26,14 @@ ActiveRecord::Schema.define(version: 2019_11_15_061855) do
     t.index ["book_id"], name: "index_book_titles_on_book_id"
   end
 
-  create_table "book_years", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "book_years", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "book_id"
     t.string "year", null: false
     t.integer "order", default: 0, null: false
     t.index ["book_id"], name: "index_book_years_on_book_id"
   end
 
-  create_table "books", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "books", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.string "publisher"
     t.datetime "created_at", null: false
@@ -42,7 +41,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_061855) do
     t.index ["name"], name: "index_books_on_name", unique: true
   end
 
-  create_table "reviews", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "reviews", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "reviewer_id"
     t.integer "book_id"
     t.text "body", null: false
@@ -54,7 +53,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_061855) do
     t.index ["reviewer_id"], name: "index_reviews_on_reviewer_id"
   end
 
-  create_table "users", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "users", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
