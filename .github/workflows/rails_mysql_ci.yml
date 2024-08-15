@@ -7,6 +7,9 @@ on:
     paths: [ rails_mysql/** ]
   workflow_dispatch:
 
+env:
+  rails_app_root: rails_mysql
+
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
@@ -18,13 +21,13 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          working-directory: rails_mysql
+          working-directory: ${{ env.rails_app_root }}
           ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: |
-          cd rails_mysql
+          cd ${{ env.rails_app_root }}
           ./bin/brakeman --no-pager
 
   lint:
@@ -37,11 +40,11 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          working-directory: rails_mysql
+          working-directory: ${{ env.rails_app_root }}
           ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Lint code for consistent style
         run: |
-          cd rails_mysql
+          cd ${{ env.rails_app_root }}
           ./bin/rubocop -f github
