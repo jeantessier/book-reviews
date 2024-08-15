@@ -88,7 +88,7 @@ jobs:
       - name: Run RSpec
         run: |
           cd ${{ env.rails_app_root }}
-          ./bin/rspec --format json --out tmp/rspec_results.json
+          ./bin/rspec --format json --out tmp/rspec_results.json --format progress
 
       - name: Generate RSpec report
         uses: SonicGarden/rspec-report-action@v5
