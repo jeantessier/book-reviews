@@ -9,6 +9,7 @@ on:
 
 env:
   rails_app_root: rails_mysql
+  DB_HOST=mysql
 
 jobs:
   scan_ruby:
@@ -74,12 +75,12 @@ jobs:
       - name: Create database
         run: |
           cd ${{ env.rails_app_root }}
-          DB_HOST=localhost ./bin/rails db:create
+          ./bin/rails db:create
 
       - name: Run RSpec
         run: |
           cd ${{ env.rails_app_root }}
-          DB_HOST=localhost ./bin/rspec --format json --out tmp/rspec_results.json
+          ./bin/rspec --format json --out tmp/rspec_results.json
 
       - name: Generate RSpec report
         uses: SonicGarden/rspec-report-action@v5
