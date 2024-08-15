@@ -1,9 +1,5 @@
 Rails.application.configure do
-  if ENV["CI"].present?
-    Phobos.configure("config/phobos.ci.yml")
-  else
-    Phobos.configure("config/phobos.yml")
-  end
+  Phobos.configure("config/phobos.yml")
 
   group_id = SecureRandom.uuid
 

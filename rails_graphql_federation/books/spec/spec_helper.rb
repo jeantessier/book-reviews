@@ -97,10 +97,6 @@ RSpec.configure do |config|
   # Include Phobos helper
   config.include Phobos::Test::Helper
   config.before(:each) do
-    if ENV["CI"].present?
-      Phobos.configure('config/phobos_spec.ci.yml')
-    else
-      Phobos.configure('config/phobos_spec.yml')
-    end
+    Phobos.configure('config/phobos_spec.yml')
   end
 end
