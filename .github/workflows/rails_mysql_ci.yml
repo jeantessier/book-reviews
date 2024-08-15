@@ -9,7 +9,7 @@ on:
 
 env:
   rails_app_root: rails_mysql
-  DB_HOST=mysql
+  DB_HOST: mysql
 
 jobs:
   scan_ruby:
