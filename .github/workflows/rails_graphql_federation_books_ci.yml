@@ -9,7 +9,6 @@ on:
 
 env:
   rails_app_root: rails_graphql_federation/books
-  CI: true
 
 jobs:
   scan_ruby:
