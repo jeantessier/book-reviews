@@ -12,14 +12,14 @@ RSpec.describe BookTitlesController do
         book_id: book.id,
         title: Faker::Book.title,
         link: Faker::Internet.url,
-        order: 0
+        order: 0,
     }
   end
 
   let(:invalid_attributes) do
     {
         book_id: book.id,
-        order: -1
+        order: -1,
     }
   end
 
@@ -115,7 +115,7 @@ RSpec.describe BookTitlesController do
         let(:new_order) { rand(1_000...10_000) }
         let(:new_attributes) do
           {
-              order: new_order
+              order: new_order,
           }
         end
 

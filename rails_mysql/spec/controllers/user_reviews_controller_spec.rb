@@ -14,14 +14,14 @@ RSpec.describe UserReviewsController do
     it "includes the user's review" do
       get :index, params: { user_id: user.id }
       expect(JSON.parse(response.body)).to match [
-        a_hash_including("id" => review.id, "reviewer_id" => user.id)
+        a_hash_including("id" => review.id, "reviewer_id" => user.id),
       ]
     end
 
     it "does not include another user's review" do
       get :index, params: { user_id: user.id }
       expect(JSON.parse(response.body)).not_to match [
-        a_hash_including("id" => another_review.id)
+        a_hash_including("id" => another_review.id),
       ]
     end
   end

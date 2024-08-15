@@ -11,14 +11,14 @@ RSpec.describe BookYearsController do
     {
         book_id: book.id,
         year: Faker::Date.backward(days: 100 * 365).year.to_s,
-        order: 0
+        order: 0,
     }
   end
 
   let(:invalid_attributes) do
     {
         book_id: book.id,
-        order: -1
+        order: -1,
     }
   end
 
@@ -114,7 +114,7 @@ RSpec.describe BookYearsController do
         let(:new_order) { rand(1_000...10_000) }
         let(:new_attributes) do
           {
-              order: new_order
+              order: new_order,
           }
         end
 

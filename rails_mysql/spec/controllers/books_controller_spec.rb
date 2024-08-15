@@ -10,13 +10,13 @@ RSpec.describe BooksController do
   # adjust the attributes here as well.
   let(:valid_attributes) do
     {
-        name: book_name
+        name: book_name,
     }
   end
 
   let(:invalid_attributes) do
     {
-        foo: "bar"
+        foo: "bar",
     }
   end
 
@@ -93,7 +93,7 @@ RSpec.describe BooksController do
         let(:expected_publisher) { Faker::Book.publisher }
         let(:new_attributes) do
           {
-              publisher: expected_publisher
+              publisher: expected_publisher,
           }
         end
 

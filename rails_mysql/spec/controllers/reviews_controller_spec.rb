@@ -18,7 +18,7 @@ RSpec.describe ReviewsController do
 
   let(:invalid_attributes) do
     {
-        reviewer_id: -1
+        reviewer_id: -1,
     }
   end
 
@@ -92,7 +92,7 @@ RSpec.describe ReviewsController do
         let(:new_start) { Date.today }
         let(:new_attributes) do
           {
-              start: new_start
+              start: new_start,
           }
         end
 

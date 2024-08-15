@@ -44,7 +44,7 @@ module RailsMysql
             "*",
             headers: :any,
             expose: [ "Authorization" ],
-            methods: [ :get, :patch, :put, :delete, :post, :options, :show ]
+            methods: [ :get, :patch, :put, :delete, :post, :options, :show ],
         )
       end
     end

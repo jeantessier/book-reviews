@@ -14,14 +14,14 @@ RSpec.describe BookReviewsController do
     it "includes the book's review" do
       get :index, params: { book_id: book.id }
       expect(JSON.parse(response.body)).to match [
-        a_hash_including("id" => review.id, "book_id" => book.id)
+        a_hash_including("id" => review.id, "book_id" => book.id),
       ]
     end
 
     it "does not include another book's review" do
       get :index, params: { book_id: book.id }
       expect(JSON.parse(response.body)).not_to match [
-        a_hash_including("id" => another_review.id)
+        a_hash_including("id" => another_review.id),
       ]
     end
   end
