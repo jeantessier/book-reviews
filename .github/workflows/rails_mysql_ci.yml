@@ -46,3 +46,43 @@ jobs:
         run: |
           cd ${{ env.rails_app_root }}
           ./bin/rubocop -f github
+
+  rspec:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        ports:
+          - "3306:3306"
+
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: ${{ env.rails_app_root }}
+          bundler-cache: true
+
+      - name: Create database
+        run: |
+          cd ${{ env.rails_app_root }}
+	  ./bin/rails db:create
+
+      - name: Run RSpec
+        run: |
+          cd ${{ env.rails_app_root }}
+          ./bin/rspec --format json --out tmp/rspec_results.json
+
+      - name: Generate RSpec report
+        uses: SonicGarden/rspec-report-action@v5
+        with:
+          json-path: ${{ env.rails_app_root }}/tmp/rspec_results.json
+        if: always()
