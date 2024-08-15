@@ -1,0 +1,47 @@
+name: rails_graphql_federation books CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+    paths: [ rails_graphql_federation/books/** ]
+  workflow_dispatch:
+
+jobs:
+  scan_ruby:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: rails_graphql_federation/books
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Scan for common Rails security vulnerabilities using static analysis
+        run: |
+          cd rails_graphql_federation/books
+          ./bin/brakeman --no-pager
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: rails_graphql_federation/books
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Lint code for consistent style
+        run: |
+          cd rails_graphql_federation/books
+          ./bin/rubocop -f github
