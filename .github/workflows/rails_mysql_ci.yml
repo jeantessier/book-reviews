@@ -22,7 +22,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           working-directory: ${{ env.rails_app_root }}
-          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
@@ -41,7 +40,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           working-directory: ${{ env.rails_app_root }}
-          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Lint code for consistent style
