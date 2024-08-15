@@ -189,7 +189,7 @@ The database is seeded with two users.  Their email addresses are
 `jean@jeantessier.com` and `simon@tolkien.com`.  The password for either one is
 `abcd1234`.
 
-You will need to create a `User` and generate a JWT token for them.
+You can create additional `User`s and generate a JWT token for them.
 
 > For now, you can use the Rails console if you need to create additional users.
 >
