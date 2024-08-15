@@ -88,7 +88,7 @@ jobs:
       - name: Run RSpec
         run: |
           cd ${{ env.rails_app_root }}
-	  sleep 5 # Waiting for Kafka to become available
+          sleep 5 # Waiting for Kafka to become available
           ./bin/rspec --format json --out tmp/rspec_results.json
 
       - name: Generate RSpec report
