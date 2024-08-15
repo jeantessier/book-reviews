@@ -24,7 +24,7 @@ jobs:
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: |
           cd ${{ github.workspace }}/rails_mysql
-          ./bin/brakeman --no-pager
+          ${{ github.workspace }}/rails_mysql/bin/brakeman --no-pager
 
   lint:
     runs-on: ubuntu-latest
@@ -42,4 +42,4 @@ jobs:
       - name: Lint code for consistent style
         run: |
           cd ${{ github.workspace }}/rails_mysql
-          ./bin/rubocop -f github
+          ${{ github.workspace }}/rails_mysql/bin/rubocop -f github
