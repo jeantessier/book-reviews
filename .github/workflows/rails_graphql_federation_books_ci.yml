@@ -56,9 +56,7 @@ jobs:
     services:
       kafka:
         image: bitnami/kafka:latest
-        ports:
-          - "9092:9092"
-        environment:
+        env:
           KAFKA_ENABLE_KRAFT: yes
           KAFKA_CFG_PROCESS_ROLES: broker,controller
           KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
@@ -73,6 +71,8 @@ jobs:
           KAFKA_CFG_TRANSACTION_STATE_LOG_NUM_PARTITIONS: 1
           KAFKA_CFG_LOG_RETENTION_BYTES: -1
           KAFKA_CFG_LOG_RETENTION_HOURS: -1
+        ports:
+          - "9092:9092"
 
     steps:
       - name: Checkout the repo
