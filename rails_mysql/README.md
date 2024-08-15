@@ -283,7 +283,7 @@ http --auth-type jwt :3000/reviews reviewer_id:=1 book_id:=1 body="This book is 
 ### Sample Queries
 
 ```bash
-http :3000/graphql query="{me {name user {name email}}}" | jq '.data'
+http --auth-type jwt :3000/graphql query="{me {name user {name email}}}" | jq '.data'
 ```
 
 You can also issue GraphQL queries with http://localhost:3000/graphiql.
