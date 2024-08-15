@@ -3,10 +3,10 @@ module Types
     extend_type
 
     field :id, ID, null: false, external: true
-    field :reviews, [Types::ReviewType], null: false
-    field :books, [Types::BookType], null: false
+    field :reviews, [ Types::ReviewType ], null: false
+    field :books, [ Types::BookType ], null: false
 
-    key fields: 'id'
+    key fields: "id"
 
     def reviews
       ReviewRepository.find_all_by_reviewer(object[:id])

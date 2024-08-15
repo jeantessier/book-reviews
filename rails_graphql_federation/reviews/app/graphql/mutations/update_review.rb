@@ -11,8 +11,8 @@ module Mutations
       review = ReviewRepository.find_by_id(id)
       raise "No review with ID #{id}" if review.nil?
 
-      raise 'You need to be signed in to use this mutation.' if context[:current_user].nil?
-      raise 'You need to have admin privileges to use this mutation on behalf of another user.' unless context[:current_user][:sub] == review[:reviewer][:id] || context[:current_user][:roles]&.include?('ROLE_ADMIN')
+      raise "You need to be signed in to use this mutation." if context[:current_user].nil?
+      raise "You need to have admin privileges to use this mutation on behalf of another user." unless context[:current_user][:sub] == review[:reviewer][:id] || context[:current_user][:roles]&.include?("ROLE_ADMIN")
 
       true
     end
@@ -25,7 +25,7 @@ module Mutations
       review[:start] = start unless start.nil?
       review[:stop] = stop unless stop.nil?
 
-      payload = { type: 'reviewUpdated' }.merge(review).to_json
+      payload = { type: "reviewUpdated" }.merge(review).to_json
 
       headers = {
         current_user: context[:current_user][:sub],

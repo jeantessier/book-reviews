@@ -4,6 +4,6 @@ module Types
 
     field :id, ID, null: false, external: true
 
-    key fields: 'id'
+    key fields: "id"
   end
 end

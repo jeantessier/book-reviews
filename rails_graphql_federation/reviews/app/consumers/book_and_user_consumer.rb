@@ -2,20 +2,20 @@ class BookAndUserConsumer
   include Phobos::Handler
   include Phobos::Producer
 
-  KAFKA_TOPIC = 'book-reviews.reviews'
+  KAFKA_TOPIC = "book-reviews.reviews"
 
   def consume(payload, metadata)
     Rails.logger.info "#{self.class.name} #{metadata[:topic]}[#{metadata[:partition]}] offset: #{metadata[:offset]}, headers: #{metadata[:headers]}, key: #{metadata[:key]}, value: #{payload}"
 
     json_message = JSON.parse(payload)
-    message_type = json_message.delete('type')
+    message_type = json_message.delete("type")
 
     Rails.logger.info "#{message_type} #{json_message}"
 
     case message_type
-    when 'bookRemoved'
+    when "bookRemoved"
       remove_book json_message, metadata[:headers]
-    when 'userRemoved'
+    when "userRemoved"
       remove_user json_message, metadata[:headers]
     else
       Rails.logger.info "Skipping ..."
@@ -25,17 +25,17 @@ class BookAndUserConsumer
   private
 
   def remove_book(json_message, headers)
-    remove_all ReviewRepository.find_all_by_book(json_message['id']), headers
+    remove_all ReviewRepository.find_all_by_book(json_message["id"]), headers
   end
 
   def remove_user(json_message, headers)
-    remove_all ReviewRepository.find_all_by_reviewer(json_message['id']), headers
+    remove_all ReviewRepository.find_all_by_reviewer(json_message["id"]), headers
   end
 
   def remove_all(reviews, headers)
     reviews.each do |review|
       payload = {
-        type: 'reviewRemoved',
+        type: "reviewRemoved",
         id: review[:id],
       }.to_json
 

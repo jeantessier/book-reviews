@@ -3,13 +3,13 @@ module Mutations
     argument :name, String, required: true
     argument :email, String, required: true
     argument :password, String, required: true
-    argument :roles, [String], required: true
+    argument :roles, [ String ], required: true
 
     field :user, Types::UserType, null: true
 
     def ready?(name:, email:, password:, roles:)
-      raise 'You need to be signed in to use this mutation.' if context[:current_user].nil?
-      raise 'You need to have admin privileges to use this mutation.' unless context[:current_user][:roles]&.include?('ROLE_ADMIN')
+      raise "You need to be signed in to use this mutation." if context[:current_user].nil?
+      raise "You need to have admin privileges to use this mutation." unless context[:current_user][:roles]&.include?("ROLE_ADMIN")
 
       true
     end
@@ -25,7 +25,7 @@ module Mutations
         roles: roles,
       }
 
-      payload = { type: 'userAdded' }.merge(user).to_json
+      payload = { type: "userAdded" }.merge(user).to_json
 
       headers = {
         current_user: context[:current_user][:sub],

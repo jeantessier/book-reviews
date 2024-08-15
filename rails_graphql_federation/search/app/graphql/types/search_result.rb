@@ -4,11 +4,11 @@ module Types
 
     def self.resolve_type(object, _context)
       case object[:__typename]
-      when 'Book'
+      when "Book"
         Types::BookType
-      when 'Review'
+      when "Review"
         Types::ReviewType
-      when 'User'
+      when "User"
         Types::UserType
       else
         raise "Unknown type for SearchResult #{object}"

@@ -8,7 +8,7 @@ module Types
     # They will be entry points for queries on your schema.
 
     field :reviews,
-      [Types::ReviewType],
+      [ Types::ReviewType ],
       null: false,
       description: "Returns all the reviews in the system, possibly filtered for a specific reviewer." do
         argument :for_reviewer, ID, required: false

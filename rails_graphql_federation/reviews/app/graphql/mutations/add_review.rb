@@ -9,14 +9,14 @@ module Mutations
     field :review, Types::ReviewType, null: true
 
     def ready?(reviewer_id: nil, book_id:, body:, start: nil, stop: nil)
-      raise 'You need to be signed in to use this mutation.' if context[:current_user].nil?
+      raise "You need to be signed in to use this mutation." if context[:current_user].nil?
 
       Rails.logger.info "*****   context[:current_user]: #{context[:current_user]}"
       Rails.logger.info "*****   context[:current_user][:sub]: #{context[:current_user][:sub]}"
       Rails.logger.info "*****   reviewer_id: #{reviewer_id}"
       Rails.logger.info "*****   context[:current_user][:sub] == reviewer_id: #{context[:current_user][:sub] == reviewer_id}"
 
-      raise 'You need to have admin privileges to use this mutation on behalf of another user.' unless reviewer_id.nil? || context[:current_user][:sub] == reviewer_id || context[:current_user][:roles]&.include?('ROLE_ADMIN')
+      raise "You need to have admin privileges to use this mutation on behalf of another user." unless reviewer_id.nil? || context[:current_user][:sub] == reviewer_id || context[:current_user][:roles]&.include?("ROLE_ADMIN")
 
       true
     end
@@ -32,11 +32,11 @@ module Mutations
       review = {
         id: SecureRandom.uuid,
         reviewer: {
-          __typename: 'User',
+          __typename: "User",
           id: reviewer_id,
         },
         book: {
-          __typename: 'Book',
+          __typename: "Book",
           id: book_id,
         },
         body: body,
@@ -44,7 +44,7 @@ module Mutations
         stop: stop,
       }
 
-      payload = { type: 'reviewAdded' }.merge(review).to_json
+      payload = { type: "reviewAdded" }.merge(review).to_json
 
       headers = {
         current_user: context[:current_user][:sub],

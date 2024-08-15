@@ -14,10 +14,10 @@ module Mutations
         name: name,
         email: email,
         password: password,
-        roles: [ 'ROLE_USER' ],
+        roles: [ "ROLE_USER" ],
       }
 
-      payload = { type: 'userAdded' }.merge(user).to_json
+      payload = { type: "userAdded" }.merge(user).to_json
 
       headers = {
         current_user: user[:id],

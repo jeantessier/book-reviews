@@ -13,7 +13,7 @@ module Types
       description: "Returns the currently logged in user"
 
     field :users,
-      [Types::UserType],
+      [ Types::UserType ],
       null: false,
       description: "Returns all the users in the system."
 

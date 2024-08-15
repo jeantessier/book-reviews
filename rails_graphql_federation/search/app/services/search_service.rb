@@ -1,65 +1,65 @@
 class SearchService
   include Phobos::Producer
 
-  KAFKA_TOPIC = 'book-reviews.searches'
+  KAFKA_TOPIC = "book-reviews.searches"
 
   class << self
     def index_book(json_message)
       corpus = [
-        json_message['id'],
-        json_message['name'],
-        json_message['titles'].collect { |title| normalize(title['title']) },
-        json_message['authors'].collect { |author| normalize(author) },
-        normalize(json_message['publisher']),
-        json_message['years'],
+        json_message["id"],
+        json_message["name"],
+        json_message["titles"].collect { |title| normalize(title["title"]) },
+        json_message["authors"].collect { |author| normalize(author) },
+        normalize(json_message["publisher"]),
+        json_message["years"],
       ].flatten
       update_index(
         corpus,
         {
-          __typename: 'Book',
-          id: json_message['id'],
-        }
+          __typename: "Book",
+          id: json_message["id"],
+        },
       )
     end
-    
+
     def index_review(json_message)
       corpus = [
-        json_message['id'],
-        normalize(json_message['body']),
+        json_message["id"],
+        normalize(json_message["body"]),
       ]
-      corpus << normalize(json_message['start']) if json_message['start'].present?
-      corpus << normalize(json_message['stop']) if json_message['stop'].present?
+      corpus << normalize(json_message["start"]) if json_message["start"].present?
+      corpus << normalize(json_message["stop"]) if json_message["stop"].present?
       update_index(
         corpus,
         {
-          __typename: 'Review',
-          id: json_message['id'],
-        }
+          __typename: "Review",
+          id: json_message["id"],
+        },
       )
     end
-    
+
     def index_user(json_message)
       corpus = [
-        json_message['id'],
-        normalize(json_message['name']),
-        json_message['email'],
-        json_message['email'].gsub(/@/, ' '),
+        json_message["id"],
+        normalize(json_message["name"]),
+        json_message["email"],
+        json_message["email"].gsub(/@/, " "),
       ]
       update_index(
         corpus,
         {
-          __typename: 'User',
-          id: json_message['id'],
-        }
+          __typename: "User",
+          id: json_message["id"],
+        },
       )
     end
-    
+
     def scrub_indices(json_message)
       update_index(
         [],
         {
-          id: json_message['id'],
-        }
+          id: json_message["id"],
+        },
       )
     end
 
@@ -125,7 +125,7 @@ class SearchService
         if indices.has_key?(word)
           plan[:indices] << {
             word: word,
-            entries: indices[word].values.map { |index_entry| { type: index_entry[:__typename],  }.merge(index_entry) }
+            entries: indices[word].values.map { |index_entry| { type: index_entry[:__typename]  }.merge(index_entry) },
           }
           indices[word].each do |id, index_entry|
             if results_collector.has_key?(id)
@@ -149,7 +149,7 @@ class SearchService
     end
 
     def log_indices
-      Rails.logger.info 'indices:'
+      Rails.logger.info "indices:"
       indices.each do |word, index|
         Rails.logger.info "  #{word}"
         index.each do |id, index_entry|
@@ -204,7 +204,7 @@ class SearchService
     end
 
     def normalize(text)
-      text.gsub(/[!?.&]/, '')
+      text.gsub(/[!?.&]/, "")
     end
 
     # word --> id --> scored index entries

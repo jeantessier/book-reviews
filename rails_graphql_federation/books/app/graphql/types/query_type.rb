@@ -8,7 +8,7 @@ module Types
     # They will be entry points for queries on your schema.
 
     field :books,
-      [Types::BookType],
+      [ Types::BookType ],
       null: false,
       description: "Returns all the books in the system."
 

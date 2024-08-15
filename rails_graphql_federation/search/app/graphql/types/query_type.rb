@@ -11,7 +11,7 @@ module Types
       argument :q, String, required: true
     end
 
-    field :search, [Types::SearchResult], null: false do
+    field :search, [ Types::SearchResult ], null: false do
       argument :q, String, required: true
     end
 

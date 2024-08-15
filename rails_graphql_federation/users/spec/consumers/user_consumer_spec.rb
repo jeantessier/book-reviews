@@ -136,7 +136,7 @@ describe UserConsumer do
           let(:json_message) do
             {
               id: user_id,
-              roles: ['updated role'],
+              roles: [ 'updated role' ],
             }
           end
 

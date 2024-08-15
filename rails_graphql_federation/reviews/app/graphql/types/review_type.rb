@@ -7,7 +7,7 @@ module Types
     field :start, String, null: true
     field :stop, String, null: true
 
-    key fields: 'id'
+    key fields: "id"
 
     def self.resolve_reference(reference, _context)
       ReviewRepository.find_by_id(reference[:id])

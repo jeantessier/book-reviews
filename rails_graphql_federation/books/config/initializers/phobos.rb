@@ -1,5 +1,5 @@
 Rails.application.configure do
-  Phobos.configure('config/phobos.yml')
+  Phobos.configure("config/phobos.yml")
 
   group_id = SecureRandom.uuid
 
@@ -7,7 +7,7 @@ Rails.application.configure do
     book_listener = Phobos::Listener.new(
       handler: BookConsumer,
       group_id: group_id,
-      topic: 'book-reviews.books'
+      topic: "book-reviews.books",
     )
 
     # start method blocks

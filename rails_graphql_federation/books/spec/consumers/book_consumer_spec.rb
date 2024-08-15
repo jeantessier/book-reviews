@@ -35,7 +35,7 @@ describe BookConsumer do
             {
               title: 'some title',
               link: 'some link',
-            }
+            },
           ],
           authors: [ 'some author' ],
           publisher: 'some publisher',
@@ -65,7 +65,7 @@ describe BookConsumer do
             {
               title: 'original title',
               link: 'original link',
-            }
+            },
           ],
           authors: [ 'original author' ],
           publisher: 'original publisher',
@@ -129,7 +129,7 @@ describe BookConsumer do
               titles: [
                 {
                   title: "updated title",
-                }
+                },
               ],
             }
           end
@@ -141,7 +141,7 @@ describe BookConsumer do
           let(:json_message) do
             {
               id: book_id,
-              authors: ["updated author"],
+              authors: [ "updated author" ],
             }
           end
 
@@ -163,7 +163,7 @@ describe BookConsumer do
           let(:json_message) do
             {
               id: book_id,
-              years: ["updated year"],
+              years: [ "updated year" ],
             }
           end
 

@@ -7,6 +7,6 @@ module Mutations
     input_object_class Types::BaseInputObject
     object_class Types::BaseObject
 
-    KAFKA_TOPIC = 'book-reviews.reviews'
+    KAFKA_TOPIC = "book-reviews.reviews"
   end
 end

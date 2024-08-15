@@ -3,7 +3,7 @@ module Mutations
     argument :email, String, required: true
     argument :password, String, required: true
 
-    field :jwt, String, 'a signed JWT for the user with matching email and password', null: true
+    field :jwt, String, "a signed JWT for the user with matching email and password", null: true
 
     def resolve(email:, password:)
       user = UserRepository.find_by_email(email)
@@ -21,12 +21,12 @@ module Mutations
         name: user[:name],
         email: user[:email],
         roles: user[:roles],
-        iss: 'book-reviews',
+        iss: "book-reviews",
         sub: user[:id],
         iat: Time.now.to_i,
         exp: Time.now.to_i + 3 * 24 * 60 *  60, # 3 days in seconds
       }
-      JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
+      JWT.encode payload, ENV["JWT_SECRET"], "HS256"
     end
   end
 end

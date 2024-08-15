@@ -5,28 +5,28 @@ class IndexingConsumer
     Rails.logger.info "#{self.class.name} #{metadata[:topic]}[#{metadata[:partition]}] offset: #{metadata[:offset]}, headers: #{metadata[:headers]}, key: #{metadata[:key]}, value: #{payload}"
 
     json_message = JSON.parse(payload)
-    message_type = json_message.delete('type')
+    message_type = json_message.delete("type")
 
     Rails.logger.info "#{message_type} #{json_message}"
 
     case message_type
-    when 'bookAdded'
+    when "bookAdded"
       SearchService.index_book json_message
-    when 'bookUpdated'
+    when "bookUpdated"
       SearchService.index_book json_message
-    when 'bookRemoved'
+    when "bookRemoved"
       SearchService.scrub_indices json_message
-    when 'reviewAdded'
+    when "reviewAdded"
       SearchService.index_review json_message
-    when 'reviewUpdated'
+    when "reviewUpdated"
       SearchService.index_review json_message
-    when 'reviewRemoved'
+    when "reviewRemoved"
       SearchService.scrub_indices json_message
-    when 'userAdded'
+    when "userAdded"
       SearchService.index_user json_message
-    when 'userUpdated'
+    when "userUpdated"
       SearchService.index_user json_message
-    when 'userRemoved'
+    when "userRemoved"
       SearchService.scrub_indices json_message
     else
       Rails.logger.info "Skipping ..."
