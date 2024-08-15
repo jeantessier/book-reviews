@@ -48,7 +48,7 @@ jobs:
           cd ${{ env.rails_app_root }}
           ./bin/rubocop -f github
 
-  build:
+  rspec:
 
     runs-on: ubuntu-latest
     permissions:
