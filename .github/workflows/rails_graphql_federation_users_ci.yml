@@ -9,6 +9,7 @@ on:
 
 env:
   rails_app_root: rails_graphql_federation/users
+  CI: true
 
 jobs:
   scan_ruby:
