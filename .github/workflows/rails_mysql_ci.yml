@@ -74,12 +74,12 @@ jobs:
       - name: Create database
         run: |
           cd ${{ env.rails_app_root }}
-          ./bin/rails db:create
+          DB_HOST=localhost ./bin/rails db:create
 
       - name: Run RSpec
         run: |
           cd ${{ env.rails_app_root }}
-          ./bin/rspec --format json --out tmp/rspec_results.json
+          DB_HOST=localhost ./bin/rspec --format json --out tmp/rspec_results.json
 
       - name: Generate RSpec report
         uses: SonicGarden/rspec-report-action@v5
