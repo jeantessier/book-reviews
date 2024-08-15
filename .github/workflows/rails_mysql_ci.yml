@@ -74,7 +74,7 @@ jobs:
       - name: Create database
         run: |
           cd ${{ env.rails_app_root }}
-	  ./bin/rails db:create
+          ./bin/rails db:create
 
       - name: Run RSpec
         run: |
