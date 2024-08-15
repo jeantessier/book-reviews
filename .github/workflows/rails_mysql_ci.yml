@@ -75,6 +75,7 @@ jobs:
       - name: Create database
         run: |
           cd ${{ env.rails_app_root }}
+          sleep 3 # Waiting to make sure MySQL is up and running
           ./bin/rails db:reset
 
       - name: Run RSpec
