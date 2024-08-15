@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
-  before_action :set_book, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [ :create, :update, :destroy ]
+  before_action :set_book, only: [ :show, :update, :destroy ]
 
   # GET /books
   def index
@@ -25,7 +25,7 @@ class BooksController < ApplicationController
     end
 
     rescue
-      render json: {error: $!}, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_entity
   end
 
   # PATCH/PUT /books/1
@@ -37,7 +37,7 @@ class BooksController < ApplicationController
     end
 
     rescue
-      render json: {error: $!}, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_entity
   end
 
   # DELETE /books/1

@@ -1,5 +1,5 @@
 class BookTitlesController < BookPartController
-  before_action :set_book_title, only: [:show, :update, :destroy]
+  before_action :set_book_title, only: [ :show, :update, :destroy ]
   attr_reader :book_title
 
   # GET /books/:book_id/titles
@@ -18,7 +18,7 @@ class BookTitlesController < BookPartController
     render json: book, status: :created
 
     rescue
-      render json: {error: $!}, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_entity
   end
 
   # PATCH/PUT /books/:book_id/titles/:id
@@ -30,7 +30,7 @@ class BookTitlesController < BookPartController
     end
 
     rescue
-      render json: {error: $!}, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_entity
   end
 
   # DELETE /books/:book_id/titles/:id

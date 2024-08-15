@@ -1,6 +1,6 @@
 class ReviewsController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
-  before_action :set_review, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [ :create, :update, :destroy ]
+  before_action :set_review, only: [ :show, :update, :destroy ]
 
   # GET /reviews
   def index
@@ -25,7 +25,7 @@ class ReviewsController < ApplicationController
     end
 
     rescue
-      render json: {error: $!}, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_entity
   end
 
   # PATCH/PUT /reviews/1
@@ -37,7 +37,7 @@ class ReviewsController < ApplicationController
     end
 
     rescue
-      render json: {error: $!}, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_entity
   end
 
   # DELETE /reviews/1

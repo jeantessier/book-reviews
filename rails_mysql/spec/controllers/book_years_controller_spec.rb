@@ -31,7 +31,7 @@ RSpec.describe BookYearsController do
 
   describe "GET #index" do
     it "returns a success response" do
-      get :index, params: {book_id: book.id}, session: valid_session
+      get :index, params: { book_id: book.id }, session: valid_session
       expect(response).to be_successful
     end
 
@@ -46,7 +46,7 @@ RSpec.describe BookYearsController do
         FactoryBot.create :book_year, book: book, order: last_order
         FactoryBot.create :book_year, book: book, order: middle_order
         FactoryBot.create :book_year, book: book, order: first_order
-        get :index, params: {book_id: book.id}, session: valid_session
+        get :index, params: { book_id: book.id }, session: valid_session
         expect(JSON.parse(response.body)).to match [
             a_hash_including("order" => 0),
             a_hash_including("order" => first_order),
@@ -59,7 +59,7 @@ RSpec.describe BookYearsController do
 
   describe "GET #show" do
     it "returns a success response" do
-      get :show, params: {book_id: book.id, id: book_year.to_param}, session: valid_session
+      get :show, params: { book_id: book.id, id: book_year.to_param }, session: valid_session
       expect(response).to be_successful
     end
   end
@@ -67,7 +67,7 @@ RSpec.describe BookYearsController do
   describe "POST #create" do
     context "not authenticated"  do
       it "returns an error" do
-        post :create, params: {book_id: book.id, book_year: valid_attributes}, session: valid_session
+        post :create, params: { book_id: book.id, book_year: valid_attributes }, session: valid_session
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -78,12 +78,12 @@ RSpec.describe BookYearsController do
       context "with valid params" do
         it "creates a new BookYear" do
           expect do
-            post :create, params: {book_id: book.id, book_year: valid_attributes}, session: valid_session
+            post :create, params: { book_id: book.id, book_year: valid_attributes }, session: valid_session
           end.to change(BookYear, :count).by(1)
         end
 
         it "renders a JSON response with the new book_year" do
-          post :create, params: {book_id: book.id, book_year: valid_attributes}, session: valid_session
+          post :create, params: { book_id: book.id, book_year: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:created)
           expect(response.media_type).to eq('application/json')
         end
@@ -91,7 +91,7 @@ RSpec.describe BookYearsController do
 
       context "with invalid params" do
         it "renders a JSON response with errors for the new book_year" do
-          post :create, params: {book_id: book.id, book_year: invalid_attributes}, session: valid_session
+          post :create, params: { book_id: book.id, book_year: invalid_attributes }, session: valid_session
           expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
@@ -102,7 +102,7 @@ RSpec.describe BookYearsController do
   describe "PUT #update" do
     context "not authenticated"  do
       it "returns an error" do
-        put :update, params: {book_id: book.id, id: book_year.to_param, book_year: valid_attributes}, session: valid_session
+        put :update, params: { book_id: book.id, id: book_year.to_param, book_year: valid_attributes }, session: valid_session
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -119,13 +119,13 @@ RSpec.describe BookYearsController do
         end
 
         it "updates the requested book_year" do
-          put :update, params: {book_id: book.id, id: book_year.to_param, book_year: new_attributes}, session: valid_session
+          put :update, params: { book_id: book.id, id: book_year.to_param, book_year: new_attributes }, session: valid_session
           book_year.reload
           expect(book_year.order).to eq(new_order)
         end
 
         it "renders a JSON response with the book_year" do
-          put :update, params: {book_id: book.id, id: book_year.to_param, book_year: valid_attributes}, session: valid_session
+          put :update, params: { book_id: book.id, id: book_year.to_param, book_year: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:ok)
           expect(response.media_type).to eq('application/json')
         end
@@ -133,7 +133,7 @@ RSpec.describe BookYearsController do
 
       context "with invalid params" do
         it "renders a JSON response with errors for the book_year" do
-          put :update, params: {book_id: book.id, id: book_year.to_param, book_year: invalid_attributes}, session: valid_session
+          put :update, params: { book_id: book.id, id: book_year.to_param, book_year: invalid_attributes }, session: valid_session
           expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
@@ -144,13 +144,13 @@ RSpec.describe BookYearsController do
   describe "DELETE #destroy" do
     context "not authenticated"  do
       it "returns an error" do
-        delete :destroy, params: {book_id: book.id, id: book_year.to_param}, session: valid_session
+        delete :destroy, params: { book_id: book.id, id: book_year.to_param }, session: valid_session
         expect(response).to have_http_status(:unauthorized)
       end
 
       it "does not destroy the requested book_year" do
         expect do
-          delete :destroy, params: {book_id: book.id, id: book_year.to_param}, session: valid_session
+          delete :destroy, params: { book_id: book.id, id: book_year.to_param }, session: valid_session
         end.not_to change(BookYear, :count)
       end
     end
@@ -160,7 +160,7 @@ RSpec.describe BookYearsController do
 
       it "destroys the requested book_year" do
         expect do
-          delete :destroy, params: {book_id: book.id, id: book_year.to_param}, session: valid_session
+          delete :destroy, params: { book_id: book.id, id: book_year.to_param }, session: valid_session
         end.to change(BookYear, :count).by(-1)
       end
     end

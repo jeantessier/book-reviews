@@ -1,4 +1,4 @@
 module GraphQL::UserErrors
 end
 
-require 'graphql/user_errors/helper'
+require "graphql/user_errors/helper"

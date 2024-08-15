@@ -1,5 +1,5 @@
 class BookReviewsController < BookPartController
-  before_action :set_book_review, only: [:show]
+  before_action :set_book_review, only: [ :show ]
   attr_reader :book_review
 
   # GET /books/:book_id/reviews

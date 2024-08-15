@@ -37,15 +37,15 @@ RSpec.describe BooksController do
   describe "GET #show" do
     it "returns a success response" do
       # binding.pry
-      get :show, params: {id: book.to_param}, session: valid_session
+      get :show, params: { id: book.to_param }, session: valid_session
       expect(response).to be_successful
     end
   end
 
   describe "POST #create" do
-    context  "not authenticated" do
+    context "not authenticated" do
       it "returns an error" do
-        post :create, params: {book: valid_attributes}, session: valid_session
+        post :create, params: { book: valid_attributes }, session: valid_session
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -56,12 +56,12 @@ RSpec.describe BooksController do
       context "with valid params" do
         it "creates a new Book" do
           expect do
-            post :create, params: {book: valid_attributes}, session: valid_session
+            post :create, params: { book: valid_attributes }, session: valid_session
           end.to change(Book, :count).by(1)
         end
 
         it "renders a JSON response with the new book" do
-          post :create, params: {book: valid_attributes}, session: valid_session
+          post :create, params: { book: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:created)
           expect(response.media_type).to eq('application/json')
           expect(response.location).to eq(book_url(Book.last))
@@ -70,7 +70,7 @@ RSpec.describe BooksController do
 
       context "with invalid params" do
         it "renders a JSON response with errors for the new book" do
-          post :create, params: {book: invalid_attributes}, session: valid_session
+          post :create, params: { book: invalid_attributes }, session: valid_session
           expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
@@ -79,9 +79,9 @@ RSpec.describe BooksController do
   end
 
   describe "PUT #update" do
-    context  "not authenticated" do
+    context "not authenticated" do
       it "returns an error" do
-        put :update, params: {id: book.to_param, book: valid_attributes}, session: valid_session
+        put :update, params: { id: book.to_param, book: valid_attributes }, session: valid_session
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -98,13 +98,13 @@ RSpec.describe BooksController do
         end
 
         it "updates the requested book" do
-          put :update, params: {id: book.to_param, book: new_attributes}, session: valid_session
+          put :update, params: { id: book.to_param, book: new_attributes }, session: valid_session
           book.reload
           expect(book.publisher).to eq(expected_publisher)
         end
 
         it "renders a JSON response with the book" do
-          put :update, params: {id: book.to_param, book: new_attributes}, session: valid_session
+          put :update, params: { id: book.to_param, book: new_attributes }, session: valid_session
           expect(response).to have_http_status(:ok)
           expect(response.media_type).to eq('application/json')
         end
@@ -114,7 +114,7 @@ RSpec.describe BooksController do
         let(:other_book) { FactoryBot.create :book }
 
         it "renders a JSON response with errors for the book" do
-          put :update, params: {id: book.to_param, book: {name: other_book.name}}, session: valid_session
+          put :update, params: { id: book.to_param, book: { name: other_book.name } }, session: valid_session
           expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
@@ -125,13 +125,13 @@ RSpec.describe BooksController do
   describe "DELETE #destroy" do
     context "not authenticated" do
       it "returns an error" do
-        delete :destroy, params: {id: book.to_param}, session: valid_session
+        delete :destroy, params: { id: book.to_param }, session: valid_session
         expect(response).to have_http_status(:unauthorized)
       end
 
       it "does not destroy the requested book" do
         expect do
-          delete :destroy, params: {id: book.to_param}, session: valid_session
+          delete :destroy, params: { id: book.to_param }, session: valid_session
         end.not_to change(Book, :count)
       end
     end
@@ -141,10 +141,9 @@ RSpec.describe BooksController do
 
       it "destroys the requested book" do
         expect do
-          delete :destroy, params: {id: book.to_param}, session: valid_session
+          delete :destroy, params: { id: book.to_param }, session: valid_session
         end.to change(Book, :count).by(-1)
       end
     end
   end
-
 end

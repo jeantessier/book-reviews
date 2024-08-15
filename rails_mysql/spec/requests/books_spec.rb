@@ -15,7 +15,7 @@ RSpec.describe "Books" do
     end
 
     it "includes all of the books" do
-      expect(JSON.parse(response.body)).to match(books.collect {|book| a_hash_including('name' => book.name, 'publisher' => book.publisher)})
+      expect(JSON.parse(response.body)).to match(books.collect { |book| a_hash_including('name' => book.name, 'publisher' => book.publisher) })
     end
   end
 end

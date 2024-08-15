@@ -1,5 +1,5 @@
 class BookYearsController < BookPartController
-  before_action :set_book_year, only: [:show, :update, :destroy]
+  before_action :set_book_year, only: [ :show, :update, :destroy ]
   attr_reader :book_year
 
   # GET /books/:book_id/years
@@ -18,7 +18,7 @@ class BookYearsController < BookPartController
     render json: book, status: :created
 
     rescue
-      render json: {error: $!}, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_entity
   end
 
   # PATCH/PUT /books/:book_id/years/:id
@@ -30,7 +30,7 @@ class BookYearsController < BookPartController
     end
 
     rescue
-      render json: {error: $!}, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_entity
   end
 
   # DELETE /books/:book_id/years/:id

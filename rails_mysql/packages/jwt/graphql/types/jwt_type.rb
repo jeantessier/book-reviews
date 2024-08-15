@@ -8,11 +8,11 @@ module Types
     field :user, Types::UserType, null: true, description: 'The current user associated with the current authentication.'
 
     def exp
-      DateTime.strptime(context[:jwt]['exp'].to_s, '%s') if context.dig(:jwt,'exp')
+      DateTime.strptime(context[:jwt]['exp'].to_s, '%s') if context.dig(:jwt, 'exp')
     end
 
     def iat
-      DateTime.strptime(context[:jwt]['iat'].to_s, '%s') if context.dig(:jwt,'iat')
+      DateTime.strptime(context[:jwt]['iat'].to_s, '%s') if context.dig(:jwt, 'iat')
     end
 
     def user

@@ -39,17 +39,17 @@ module RailsMysql
     # For rack-cors
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins '*'
+        origins "*"
         resource(
-            '*',
+            "*",
             headers: :any,
-            expose: ["Authorization"],
-            methods: [:get, :patch, :put, :delete, :post, :options, :show]
+            expose: [ "Authorization" ],
+            methods: [ :get, :patch, :put, :delete, :post, :options, :show ]
         )
       end
     end
 
     # For Packwerk
-    config.paths.add 'packages', glob: '*/{*,*/concerns,app/public}', eager_load: true
+    config.paths.add "packages", glob: "*/{*,*/concerns,app/public}", eager_load: true
   end
 end

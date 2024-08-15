@@ -1,5 +1,5 @@
 class UserReviewsController < UserPartController
-  before_action :set_user_review, only: [:show]
+  before_action :set_user_review, only: [ :show ]
   attr_reader :user_review
 
   # GET /users/:user_id/reviews

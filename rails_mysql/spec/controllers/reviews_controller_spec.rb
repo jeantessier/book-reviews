@@ -36,7 +36,7 @@ RSpec.describe ReviewsController do
 
   describe "GET #show" do
     it "returns a success response" do
-      get :show, params: {id: review.to_param}, session: valid_session
+      get :show, params: { id: review.to_param }, session: valid_session
       expect(response).to be_successful
     end
   end
@@ -44,7 +44,7 @@ RSpec.describe ReviewsController do
   describe "POST #create" do
     context "not authenticated"  do
       it "returns an error" do
-        post :create, params: {review: valid_attributes}, session: valid_session
+        post :create, params: { review: valid_attributes }, session: valid_session
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -55,12 +55,12 @@ RSpec.describe ReviewsController do
       context "with valid params" do
         it "creates a new Review" do
           expect do
-            post :create, params: {review: valid_attributes}, session: valid_session
+            post :create, params: { review: valid_attributes }, session: valid_session
           end.to change(Review, :count).by(1)
         end
 
         it "renders a JSON response with the new review" do
-          post :create, params: {review: valid_attributes}, session: valid_session
+          post :create, params: { review: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:created)
           expect(response.media_type).to eq('application/json')
           expect(response.location).to eq(review_url(Review.last))
@@ -69,7 +69,7 @@ RSpec.describe ReviewsController do
 
       context "with invalid params" do
         it "renders a JSON response with errors for the new review" do
-          post :create, params: {review: invalid_attributes}, session: valid_session
+          post :create, params: { review: invalid_attributes }, session: valid_session
           expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
@@ -80,7 +80,7 @@ RSpec.describe ReviewsController do
   describe "PUT #update" do
     context "not authenticated"  do
       it "returns an error" do
-        put :update, params: {id: review.to_param, review: valid_attributes}, session: valid_session
+        put :update, params: { id: review.to_param, review: valid_attributes }, session: valid_session
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -92,18 +92,18 @@ RSpec.describe ReviewsController do
         let(:new_start) { Date.today }
         let(:new_attributes) do
           {
-              start: new_start,
+              start: new_start
           }
         end
 
         it "updates the requested review" do
-          put :update, params: {id: review.to_param, review: new_attributes}, session: valid_session
+          put :update, params: { id: review.to_param, review: new_attributes }, session: valid_session
           review.reload
           expect(review.start).to eq(new_start)
         end
 
         it "renders a JSON response with the review" do
-          put :update, params: {id: review.to_param, review: valid_attributes}, session: valid_session
+          put :update, params: { id: review.to_param, review: valid_attributes }, session: valid_session
           expect(response).to have_http_status(:ok)
           expect(response.media_type).to eq('application/json')
         end
@@ -111,7 +111,7 @@ RSpec.describe ReviewsController do
 
       context "with invalid params" do
         it "renders a JSON response with errors for the review" do
-          put :update, params: {id: review.to_param, review: invalid_attributes}, session: valid_session
+          put :update, params: { id: review.to_param, review: invalid_attributes }, session: valid_session
           expect(response).to be_unprocessable
           expect(response.media_type).to eq('application/json')
         end
@@ -122,13 +122,13 @@ RSpec.describe ReviewsController do
   describe "DELETE #destroy" do
     context "not authenticated"  do
       it "returns an error" do
-        put :update, params: {id: review.to_param, review: valid_attributes}, session: valid_session
+        put :update, params: { id: review.to_param, review: valid_attributes }, session: valid_session
         expect(response).to have_http_status(:unauthorized)
       end
 
       it "does not destroy the requested review" do
         expect do
-          delete :destroy, params: {id: review.to_param}, session: valid_session
+          delete :destroy, params: { id: review.to_param }, session: valid_session
         end.not_to change(Review, :count)
       end
     end
@@ -138,7 +138,7 @@ RSpec.describe ReviewsController do
 
       it "destroys the requested review" do
         expect do
-          delete :destroy, params: {id: review.to_param}, session: valid_session
+          delete :destroy, params: { id: review.to_param }, session: valid_session
         end.to change(Review, :count).by(-1)
       end
     end
