@@ -42,8 +42,8 @@ jobs:
           echo '### Tests' >> $GITHUB_STEP_SUMMARY
           echo '|   | Total | Passed | Pending | Failed |' >> $GITHUB_STEP_SUMMARY
           echo '|---|:-----:|:------:|:-------:|:------:|' >> $GITHUB_STEP_SUMMARY
-          echo '| suites | ' $(jq '.numTotalTestSuites' jest_results.json) ' | ' $(jq '.numPassedTestSuites' jest_results.json) ' | ' $(jq '.numPendingTestSuites' jest_results.json) ' | ' $(jq '.numFailedTestSuites' jest_results.json) ' |' >> $GITHUB_STEP_SUMMARY
-          echo '| tests | ' $(jq '.numTotalTests' jest_results.json) ' | ' $(jq '.numPassedTests' jest_results.json) ' | ' $(jq '.numPendingTests' jest_results.json) ' | ' $(jq '.numFailedTests' jest_results.json) ' |' >> $GITHUB_STEP_SUMMARY
+          jq --raw-output '["", .numTotalTestSuites, .numPassedTestSuites, .numPendingTestSuites, .numFailedTestSuites]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
+          jq --raw-output '["", .numTotalTests, .numPassedTests, .numPendingTests, .numFailedTests]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
           jq --raw-output '[.testResults[].assertionResults]|flatten|map(select(.status == "failed"))[]|[(.ancestorTitles|join(" >> ")),.title]|join(" | ")' jest_results.json >> failed.md
           if [[ -s failed.md ]]
           then
