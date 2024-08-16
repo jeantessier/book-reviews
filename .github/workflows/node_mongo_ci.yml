@@ -38,8 +38,8 @@ jobs:
           echo '### Tests' >> $GITHUB_STEP_SUMMARY
           echo '|   | Total | Passed | Pending | Failed |' >> $GITHUB_STEP_SUMMARY
           echo '|---|:-----:|:------:|:-------:|:------:|' >> $GITHUB_STEP_SUMMARY
-          jq --raw-output '["", "", .numTotalTestSuites, .numPassedTestSuites, .numPendingTestSuites, .numFailedTestSuites]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
-          jq --raw-output '["", "", .numTotalTests, .numPassedTests, .numPendingTests, .numFailedTests]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
+          jq --raw-output '["suites", .numTotalTestSuites, .numPassedTestSuites, .numPendingTestSuites, .numFailedTestSuites]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
+          jq --raw-output '["tests", .numTotalTests, .numPassedTests, .numPendingTests, .numFailedTests]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
 
           jq --raw-output '[.testResults[].assertionResults]|flatten|map(select(.status == "failed"))[]|[(.ancestorTitles|join(" >> ")),.title]|join(" | ")' jest_results.json >> failed.md
           if [[ -s failed.md ]]
