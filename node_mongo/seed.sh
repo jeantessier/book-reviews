@@ -4,7 +4,13 @@ readonly API_ENDPOINT=:3000/api
 
 # Forged admin credentials: { "admin": true }
 # This value depends on JWT_SECRET for your environment.
-export JWT_AUTH_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.8KFeahppAFH8WUxwGLLkbBAaZHF5ZKciOG5HSQ0gajo
+# Pass it as an environment variable to this script.
+#
+#     JWT_AUTH_TOKEN=abcd...6789 ./seed.sh
+#
+# The script will use the value from the environment, but
+# default to the value below if you don't pass one in.
+export JWT_AUTH_TOKEN=${JWT_AUTH_TOKEN:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.8KFeahppAFH8WUxwGLLkbBAaZHF5ZKciOG5HSQ0gajo}
 
 function addUser() {
   local name=$1; shift
