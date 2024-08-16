@@ -1,0 +1,38 @@
+name: node_mongo CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+    paths: [ node_mongo/** ]
+  workflow_dispatch:
+
+env:
+  node_app_root: node_mongo
+
+jobs:
+  jest:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: Install modules
+        run: |
+          cd ${{ env.node_app_root }}
+          npm install
+
+      - name: Install modules
+        run: |
+          cd ${{ env.node_app_root }}
+          npm install --global jest
+
+      - name: Run Jest
+        run: |
+          cd ${{ env.node_app_root }}
+          jest
+          # jest --json --outputFile=jest_results.json
