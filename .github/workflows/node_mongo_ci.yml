@@ -39,7 +39,8 @@ jobs:
       - name: Test Summary
         run: |
           cd ${{ env.node_app_root }}
-          echo '| Tests | Passed | Pending | Failed |' >> $GITHUB_STEP_SUMMARY
-          echo '|:-----:|:------:|:-------:|:------:|' >> $GITHUB_STEP_SUMMARY
-          echo '| ' $(jq '.numTotalTests' jest_results.json) ' | ' $(jq '.numPassedTests' jest_results.json) ' | ' $(jq '.numPendingTests' jest_results.json) ' | ' $(jq '.numFailedTests' jest_results.json) ' |' >> $GITHUB_STEP_SUMMARY
+          echo '|   | Total | Passed | Pending | Failed |' >> $GITHUB_STEP_SUMMARY
+          echo '|---|:-----:|:------:|:-------:|:------:|' >> $GITHUB_STEP_SUMMARY
+          echo '| suites | ' $(jq '.numTotalTestSuites' jest_results.json) ' | ' $(jq '.numPassedTestSuites' jest_results.json) ' | ' $(jq '.numPendingTestSuites' jest_results.json) ' | ' $(jq '.numFailedTestSuites' jest_results.json) ' |' >> $GITHUB_STEP_SUMMARY
+          echo '| tests | ' $(jq '.numTotalTests' jest_results.json) ' | ' $(jq '.numPassedTests' jest_results.json) ' | ' $(jq '.numPendingTests' jest_results.json) ' | ' $(jq '.numFailedTests' jest_results.json) ' |' >> $GITHUB_STEP_SUMMARY
         if: always()
