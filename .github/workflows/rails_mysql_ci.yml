@@ -26,9 +26,8 @@ jobs:
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: |
-          cd ${{ env.rails_app_root }}
-          ./bin/brakeman --no-pager
+        run: ./bin/brakeman --no-pager
+        working-directory: ${{ env.node_app_root }}
 
   lint:
     runs-on: ubuntu-latest
@@ -44,12 +43,10 @@ jobs:
           bundler-cache: true
 
       - name: Lint code for consistent style
-        run: |
-          cd ${{ env.rails_app_root }}
-          ./bin/rubocop -f github
+        run: ./bin/rubocop -f github
+        working-directory: ${{ env.node_app_root }}
 
   rspec:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -74,14 +71,13 @@ jobs:
 
       - name: Create database
         run: |
-          cd ${{ env.rails_app_root }}
           sleep 3 # Waiting to make sure MySQL is up and running
           ./bin/rails db:reset
+        working-directory: ${{ env.node_app_root }}
 
       - name: Run RSpec
-        run: |
-          cd ${{ env.rails_app_root }}
-          ./bin/rspec --format json --out tmp/rspec_results.json --format progress
+        run: ./bin/rspec --format json --out tmp/rspec_results.json --format progress
+        working-directory: ${{ env.node_app_root }}
 
       - name: Generate RSpec report
         uses: SonicGarden/rspec-report-action@v5
