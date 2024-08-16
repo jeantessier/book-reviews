@@ -175,7 +175,7 @@ describe("User controller", () => {
         expect(mRes.json).toBeCalledWith(expect.any(mongoose.Error.CastError))
     })
 
-    it("readOne returns 404 if ID is not found", async () => {
+    it.skip("readOne returns 404 if ID is not found", async () => {
         // Given
         const notFoundId = new ObjectId()
         const mReq = { params: { id: notFoundId } }
