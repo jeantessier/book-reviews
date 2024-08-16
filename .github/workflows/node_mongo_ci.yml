@@ -11,8 +11,8 @@ env:
   node_app_root: node_mongo
 
 jobs:
-  jest:
 
+  jest:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -22,28 +22,25 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install modules
-        run: |
-          cd ${{ env.node_app_root }}
-          npm install
+        run: npm install
+        working-directory: ${{ env.node_app_root }}
 
       - name: Install Jest
-        run: |
-          cd ${{ env.node_app_root }}
-          npm install --global jest
+        run: npm install --global jest
+        working-directory: ${{ env.node_app_root }}
 
       - name: Run Jest
-        run: |
-          cd ${{ env.node_app_root }}
-          jest --json --outputFile=jest_results.json
+        run: jest --json --outputFile=jest_results.json
+        working-directory: ${{ env.node_app_root }}
 
       - name: Test Summary
         run: |
-          cd ${{ env.node_app_root }}
           echo '### Tests' >> $GITHUB_STEP_SUMMARY
           echo '|   | Total | Passed | Pending | Failed |' >> $GITHUB_STEP_SUMMARY
           echo '|---|:-----:|:------:|:-------:|:------:|' >> $GITHUB_STEP_SUMMARY
-          jq --raw-output '["", .numTotalTestSuites, .numPassedTestSuites, .numPendingTestSuites, .numFailedTestSuites]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
-          jq --raw-output '["", .numTotalTests, .numPassedTests, .numPendingTests, .numFailedTests]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
+          jq --raw-output '["", "", .numTotalTestSuites, .numPassedTestSuites, .numPendingTestSuites, .numFailedTestSuites]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
+          jq --raw-output '["", "", .numTotalTests, .numPassedTests, .numPendingTests, .numFailedTests]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
+
           jq --raw-output '[.testResults[].assertionResults]|flatten|map(select(.status == "failed"))[]|[(.ancestorTitles|join(" >> ")),.title]|join(" | ")' jest_results.json >> failed.md
           if [[ -s failed.md ]]
           then
@@ -53,6 +50,7 @@ jobs:
             echo '|-------|------|' >> $GITHUB_STEP_SUMMARY
             cat failed.md >> $GITHUB_STEP_SUMMARY
           fi
+
           jq --raw-output '[.testResults[].assertionResults]|flatten|map(select(.status == "pending"))[]|[(.ancestorTitles|join(" >> ")),.title]|join(" | ")' jest_results.json >> pending.md
           if [[ -s pending.md ]]
           then
@@ -62,4 +60,5 @@ jobs:
             echo '|-------|------|' >> $GITHUB_STEP_SUMMARY
             cat pending.md >> $GITHUB_STEP_SUMMARY
           fi
+        working-directory: ${{ env.node_app_root }}
         if: always()
