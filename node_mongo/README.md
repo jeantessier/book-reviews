@@ -67,6 +67,13 @@ The end-to-end tests use Cypress.  They need a running app to test against.
 
 ```bash
 docker compose up -d test_server
+npm run cypress:run
+```
+
+Or, run the tests interactively.
+
+```bash
+docker compose up -d test_server
 npm run cypress:open
 ```
 

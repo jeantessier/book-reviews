@@ -7,7 +7,8 @@
     "dev": "nodemon ./bin/www",
     "test": "jest --watchAll",
     "start": "node ./bin/www",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "repository": {
     "type": "git",
