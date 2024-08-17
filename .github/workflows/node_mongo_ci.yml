@@ -73,7 +73,7 @@ jobs:
         working-directory: ${{ env.node_app_root }}
 
       - name: Launch services
-        uses: hoverkraft-tech/compose-action@v2
+        uses: hoverkraft-tech/compose-action@v2.0.1
         with:
           cwd: ${{ env.node_app_root }}
           services: test_server
