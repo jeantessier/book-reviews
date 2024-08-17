@@ -64,20 +64,20 @@ jobs:
   cypress:
     runs-on: ubuntu-latest
 
-    services:
-      mongo:
-        image: mongo
-
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
+      - name: Install modules
+        run: npm install
+        working-directory: ${{ env.node_app_root }}
+
+      - name: Launch services
+        uses: hoverkraft-tech/compose-action@v2
         with:
-          config-file: cypress.config.ci.js
-          start: npm start
-          working-directory: ${{ env.node_app_root }}
-        env:
-          MONGODB_URI: mongodb://mongo/node_mongo_book_reviews_test
-          JWT_SECRET: thisIsANotSoSecretTestSecretinDocker
+          cwd: ${{ env.node_app_root }}
+          services: test_server
+
+      - name: Cypress run
+        run: npm run cypress:run
+        working-directory: ${{ env.node_app_root }}
