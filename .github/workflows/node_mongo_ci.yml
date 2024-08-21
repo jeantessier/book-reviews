@@ -40,24 +40,24 @@ jobs:
           jq --raw-output '["suites", .numTotalTestSuites, .numPassedTestSuites, .numPendingTestSuites, .numFailedTestSuites]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
           jq --raw-output '["tests", .numTotalTests, .numPassedTests, .numPendingTests, .numFailedTests]|join(" | ")' jest_results.json >> $GITHUB_STEP_SUMMARY
 
-          jq --raw-output '[.testResults[].assertionResults]|flatten|map(select(.status == "failed"))[]|[(.ancestorTitles|join(" >> ")),.title]|join(" | ")' jest_results.json >> tmp/failed.md
-          if [[ -s tmp/failed.md ]]
+          jq --raw-output '[.testResults[].assertionResults]|flatten|map(select(.status == "failed"))[]|[(.ancestorTitles|join(" >> ")),.title]|join(" | ")' jest_results.json >> failed.md
+          if [[ -s failed.md ]]
           then
             echo '' >> $GITHUB_STEP_SUMMARY
             echo '### Failed Tests' >> $GITHUB_STEP_SUMMARY
             echo '| Suite | Test |' >> $GITHUB_STEP_SUMMARY
             echo '|-------|------|' >> $GITHUB_STEP_SUMMARY
-            cat tmp/failed.md >> $GITHUB_STEP_SUMMARY
+            cat failed.md >> $GITHUB_STEP_SUMMARY
           fi
 
-          jq --raw-output '[.testResults[].assertionResults]|flatten|map(select(.status == "pending"))[]|[(.ancestorTitles|join(" >> ")),.title]|join(" | ")' jest_results.json >> tmp/pending.md
-          if [[ -s tmp/pending.md ]]
+          jq --raw-output '[.testResults[].assertionResults]|flatten|map(select(.status == "pending"))[]|[(.ancestorTitles|join(" >> ")),.title]|join(" | ")' jest_results.json >> pending.md
+          if [[ -s pending.md ]]
           then
             echo '' >> $GITHUB_STEP_SUMMARY
             echo '### Pending (Skipped) Tests' >> $GITHUB_STEP_SUMMARY
             echo '| Suite | Test |' >> $GITHUB_STEP_SUMMARY
             echo '|-------|------|' >> $GITHUB_STEP_SUMMARY
-            cat tmp/pending.md >> $GITHUB_STEP_SUMMARY
+            cat pending.md >> $GITHUB_STEP_SUMMARY
           fi
         if: always()
 
