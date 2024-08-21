@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 
 env:
+  rails_app_root: rails_graphql_federation/books
   CI: true
 
 defaults:
@@ -25,6 +26,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          working-directory: ${{ env.rails_app_root }}
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
@@ -40,6 +42,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          working-directory: ${{ env.rails_app_root }}
           bundler-cache: true
 
       - name: Lint code for consistent style
@@ -78,6 +81,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          working-directory: ${{ env.rails_app_root }}
           bundler-cache: true
 
       - name: Run RSpec
