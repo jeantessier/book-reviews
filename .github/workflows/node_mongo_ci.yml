@@ -12,7 +12,7 @@ env:
 
 defaults:
   run:
-    working-directory: ${{ env.node_app_root }}
+    working-directory: node_mongo
 
 jobs:
 
