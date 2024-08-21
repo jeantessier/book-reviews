@@ -7,9 +7,6 @@ on:
     paths: [ node_mongo/** ]
   workflow_dispatch:
 
-env:
-  node_app_root: node_mongo
-
 defaults:
   run:
     working-directory: node_mongo
@@ -74,7 +71,6 @@ jobs:
       - name: Launch services
         uses: hoverkraft-tech/compose-action@v2.0.1
         with:
-          cwd: ${{ env.node_app_root }}
           services: test_server
 
       - name: Cypress run
