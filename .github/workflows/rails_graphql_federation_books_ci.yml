@@ -90,5 +90,5 @@ jobs:
       - name: Generate RSpec report
         uses: SonicGarden/rspec-report-action@v5
         with:
-          json-path: tmp/rspec_results.json
+          json-path: ${{ env.rails_app_root }}/tmp/rspec_results.json
         if: always()
