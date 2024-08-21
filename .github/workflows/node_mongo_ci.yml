@@ -10,6 +10,10 @@ on:
 env:
   node_app_root: node_mongo
 
+defaults:
+  run:
+    working-directory: ${{ env.node_app_root }}
+
 jobs:
 
   jest:
@@ -21,15 +25,12 @@ jobs:
 
       - name: Install modules
         run: npm install
-        working-directory: ${{ env.node_app_root }}
 
       - name: Install Jest
         run: npm install --global jest
-        working-directory: ${{ env.node_app_root }}
 
       - name: Run Jest
         run: jest --json --outputFile=jest_results.json
-        working-directory: ${{ env.node_app_root }}
 
       - name: Test Summary
         run: |
@@ -58,7 +59,6 @@ jobs:
             echo '|-------|------|' >> $GITHUB_STEP_SUMMARY
             cat pending.md >> $GITHUB_STEP_SUMMARY
           fi
-        working-directory: ${{ env.node_app_root }}
         if: always()
 
   cypress:
@@ -70,7 +70,6 @@ jobs:
 
       - name: Install modules
         run: npm install
-        working-directory: ${{ env.node_app_root }}
 
       - name: Launch services
         uses: hoverkraft-tech/compose-action@v2.0.1
@@ -80,4 +79,3 @@ jobs:
 
       - name: Cypress run
         run: npm run cypress:run
-        working-directory: ${{ env.node_app_root }}
