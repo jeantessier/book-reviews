@@ -1,5 +1,6 @@
 require('dotenv').config({ path: '.env.test' })
 
+const { ObjectId } = require("bson")
 const { faker } = require('@faker-js/faker')
 const { createBook } = require('../../test/fixtures/books')
 const { createUserWithRole } = require('../../test/fixtures/users')
@@ -175,7 +176,7 @@ describe("User controller", () => {
         expect(mRes.json).toBeCalledWith(expect.any(mongoose.Error.CastError))
     })
 
-    it.skip("readOne returns 404 if ID is not found", async () => {
+    it("readOne returns 404 if ID is not found", async () => {
         // Given
         const notFoundId = new ObjectId()
         const mReq = { params: { id: notFoundId } }
