@@ -8,7 +8,8 @@
     "test": "jest --watchAll",
     "start": "node ./bin/www",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "cypress:ci": "cypress run --reporter junit --reporter-options 'mochaFile=results/test-output-[hash].xml,toConsole=true'"
   },
   "repository": {
     "type": "git",
