@@ -203,7 +203,14 @@ class SearchService
       indices.delete(word) if indices[word].empty?
     end
 
+    HTML_ENTITY_MAPPINGS = Hash.new
+    HTML_ENTITY_MAPPINGS[/&(\w)(acute|uml|circ|grave|macr);/] = "\\1"
+    HTML_ENTITY_MAPPINGS[/&([mn]dash|nbsp);/] = " "
+    HTML_ENTITY_MAPPINGS[/&(ast|hellip|trade);/] = ""
+    HTML_ENTITY_MAPPINGS[/&amp;/] = "&"
+
     def normalize(text)
+      HTML_ENTITY_MAPPINGS.each { |entity, mapping| text.gsub!(entity, mapping) }
       text.gsub(/[!?.&]/, "").gsub(/['"-]/, " ")
     end
 
