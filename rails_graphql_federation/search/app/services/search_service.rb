@@ -204,7 +204,7 @@ class SearchService
     end
 
     def normalize(text)
-      text.gsub(/[!?.&]/, "")
+      text.gsub(/[!?.&]/, "").gsub(/['"-]/, " ")
     end
 
     # word --> id --> scored index entries
