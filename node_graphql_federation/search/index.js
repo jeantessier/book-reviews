@@ -197,7 +197,16 @@ const scrubIndex = (word, id) => {
     }
 }
 
-const normalize = text => text.replace(/[!?.&]/g, '').replace(/['"-]/, ' ')
+const htmlEntityMappings = new Map()
+htmlEntityMappings.set(/&(\w)(acute|uml|circ|grave|macr);/g, "$1")
+htmlEntityMappings.set(/&([mn]dash|nbsp);/g, " ")
+htmlEntityMappings.set(/&(ast|hellip|trade);/g, "")
+htmlEntityMappings.set(/&amp;/g, "&")
+
+const normalize = text => {
+    htmlEntityMappings.forEach((mapping, entity) => text = text.replace(entity, mapping))
+    return text.replace(/[!?.&]/g, '').replace(/['"-]/g, ' ')
+}
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
