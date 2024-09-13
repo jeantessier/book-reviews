@@ -3,9 +3,7 @@ query MySearch($q: String!) {
         __typename
         ... on Book {
             id
-            titles {
-                title
-            }
+            title
             authors
             reviews {
                 id
