@@ -155,7 +155,7 @@ const computeScoresForWords = words => {
     scores = new Map()
 
     const wordScores = new Map()
-    words.toLowerCase().split(/\s+/).forEach(word => {
+    words.toLowerCase().split(/\s+/).filter(word => word).forEach(word => {
         wordScores.set(word, word.length + (wordScores.has(word) ? wordScores.get(word) : 0))
     })
 
@@ -197,15 +197,29 @@ const scrubIndex = (word, id) => {
     }
 }
 
-const htmlEntityMappings = new Map()
-htmlEntityMappings.set(/&(\w)(acute|uml|circ|grave|macr);/g, "$1")
-htmlEntityMappings.set(/&([mn]dash|nbsp);/g, " ")
-htmlEntityMappings.set(/&(ast|hellip|trade);/g, "")
-htmlEntityMappings.set(/&amp;/g, "&")
+const normalizationRules = new Map()
+normalizationRules.set(/[ÁÂÀÄ]/g, "A")
+normalizationRules.set(/[áâàä]/g, "a")
+normalizationRules.set(/[ÉÊÈË]/g, "E")
+normalizationRules.set(/[éêèë]/g, "e")
+normalizationRules.set(/[ÍÎÌÏ]/g, "I")
+normalizationRules.set(/[íîìï]/g, "i")
+normalizationRules.set(/[ÓÔÒÖ]/g, "O")
+normalizationRules.set(/[óôòö]/g, "o")
+normalizationRules.set(/[ÚÛÙÜ]/g, "U")
+normalizationRules.set(/[úûùü]/g, "u")
+normalizationRules.set(/[Ç]/g, "C")
+normalizationRules.set(/[ç]/g, "c")
+normalizationRules.set(/[Ñ]/g, "N")
+normalizationRules.set(/[ñ]/g, "n")
+normalizationRules.set(/&(\w)(acute|uml|circ|grave|macr);/g, "$1")
+normalizationRules.set(/&([mn]dash|nbsp);/g, " ")
+normalizationRules.set(/&(ast|hellip|trade);/g, "")
+normalizationRules.set(/&amp;/g, "&")
 
 const normalize = text => {
-    htmlEntityMappings.forEach((mapping, entity) => text = text.replace(entity, mapping))
-    return text.replace(/[!?.&]/g, '').replace(/['"-]/g, ' ')
+    normalizationRules.forEach((mapping, entity) => text = text.replace(entity, mapping))
+    return text.replace(/[!?.&]/g, '').replace(/['"`\-_*=/]/g, ' ')
 }
 
 // A schema is a collection of type definitions (hence "typeDefs")
@@ -267,7 +281,7 @@ const typeDefs = gql`
 
 const queryPlan = async (_, { q }) => {
     const plan = {
-        words: q.toLowerCase().split(/\s+/),
+        words: normalize(q).toLowerCase().split(/\s+/),
         indices: [],
         results: [],
     }
@@ -301,7 +315,7 @@ const queryPlan = async (_, { q }) => {
 const search = async (_, { q }, context) => {
     const resultsCollector = new Map()
 
-    q.toLowerCase().split(/\s+/).forEach(word => {
+    normalize(q).toLowerCase().split(/\s+/).forEach(word => {
         if (indices.has(word)) {
             indices.get(word).forEach((indexEntry, id) => {
                 if (resultsCollector.has(id)) {

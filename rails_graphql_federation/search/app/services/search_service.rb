@@ -68,7 +68,7 @@ class SearchService
 
       results_collector = {}
 
-      q.downcase.split(/\s+/).each do |word|
+      normalize(q).downcase.split(/\s+/).each do |word|
         if indices.has_key?(word)
           indices[word].each do |id, index_entry|
             if results_collector.has_key?(id)
@@ -114,7 +114,7 @@ class SearchService
 
     def query_plan(q)
       plan = {
-        words: q.downcase.split(/\s+/),
+        words: normalize(q).downcase.split(/\s+/),
         indices: [],
         results: [],
       }
@@ -187,7 +187,7 @@ class SearchService
     def compute_score_for_words(words)
       word_scores = {}
       word_scores.default = 0.0
-      words.downcase.split(/\s+/).each do |word|
+      words.downcase.split(/\s+/).filter { |word| !word.empty? }.each do |word|
         word_scores[word] += word.length
       end
 
@@ -203,15 +203,29 @@ class SearchService
       indices.delete(word) if indices[word].empty?
     end
 
-    HTML_ENTITY_MAPPINGS = Hash.new
-    HTML_ENTITY_MAPPINGS[/&(\w)(acute|uml|circ|grave|macr);/] = "\\1"
-    HTML_ENTITY_MAPPINGS[/&([mn]dash|nbsp);/] = " "
-    HTML_ENTITY_MAPPINGS[/&(ast|hellip|trade);/] = ""
-    HTML_ENTITY_MAPPINGS[/&amp;/] = "&"
+    NORMALIZATION_RULES = Hash.new
+    NORMALIZATION_RULES[/[ÁÂÀÄ]/] = "A"
+    NORMALIZATION_RULES[/[áâàä]/] = "a"
+    NORMALIZATION_RULES[/[ÉÊÈË]/] = "E"
+    NORMALIZATION_RULES[/[éêèë]/] = "e"
+    NORMALIZATION_RULES[/[ÍÎÌÏ]/] = "I"
+    NORMALIZATION_RULES[/[íîìï]/] = "i"
+    NORMALIZATION_RULES[/[ÓÔÒÖ]/] = "O"
+    NORMALIZATION_RULES[/[óôòö]/] = "o"
+    NORMALIZATION_RULES[/[ÚÛÙÜ]/] = "U"
+    NORMALIZATION_RULES[/[úûùü]/] = "u"
+    NORMALIZATION_RULES[/[Ç]/] = "C"
+    NORMALIZATION_RULES[/[ç]/] = "c"
+    NORMALIZATION_RULES[/[Ñ]/] = "N"
+    NORMALIZATION_RULES[/[ñ]/] = "n"
+    NORMALIZATION_RULES[/&(\w)(acute|uml|circ|grave|macr);/] = "\\1"
+    NORMALIZATION_RULES[/&([mn]dash|nbsp);/] = " "
+    NORMALIZATION_RULES[/&(ast|hellip|trade);/] = ""
+    NORMALIZATION_RULES[/&amp;/] = "&"
 
     def normalize(text)
-      HTML_ENTITY_MAPPINGS.each { |entity, mapping| text.gsub!(entity, mapping) }
-      text.gsub(/[!?.&]/, "").gsub(/['"-]/, " ")
+      NORMALIZATION_RULES.each { |entity, mapping| text.gsub!(entity, mapping) }
+      text.gsub(/[!?.&]/, "").gsub(/['"`\-_*=\/]/, " ")
     end
 
     # word --> id --> scored index entries
