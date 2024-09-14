@@ -17,9 +17,7 @@ query MySearch($q: String!) {
             id
             book {
                 id
-                titles {
-                    title
-                }
+                title
                 authors
             }
             reviewer {
@@ -37,9 +35,7 @@ query MySearch($q: String!) {
                 id
                 book {
                     id
-                    titles {
-                        title
-                    }
+                    title
                 }
             }
         }
