@@ -237,7 +237,25 @@ const removeReview = async (_, { id }, context, info) => {
 const resolvers = {
     Query: {
         reviews: async (_, { forReviewer }) => forReviewer ? reviews.filter(r => r.reviewer.id === forReviewer) : reviews.values(),
-        review: async (_, { id }) => fetchReviewById(id),
+        review: async (_, { id }, context) => {
+            const review = fetchReviewById(id)
+
+            let headers = { request_id: context.requestId }
+            if (context.currentUser) {
+                headers["current_user"] = context.currentUser.id
+            }
+
+            await sendMessage(
+                'book-reviews.views',
+                {
+                    __typename: 'Review',
+                    id: id,
+                },
+                headers,
+            )
+
+            return review
+        },
     },
     Mutation: {
         addReview,

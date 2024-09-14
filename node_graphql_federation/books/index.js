@@ -223,7 +223,25 @@ const removeBook = async (_, { id }, context, info) => {
 const resolvers = {
     Query: {
         books: async () => books.values(),
-        book: async (_, { id }) => fetchBookById(id),
+        book: async (_, { id }, context) => {
+            const book = fetchBookById(id)
+
+            let headers = { request_id: context.requestId }
+            if (context.currentUser) {
+                headers["current_user"] = context.currentUser.id
+            }
+
+            await sendMessage(
+                'book-reviews.views',
+                {
+                    __typename: 'Book',
+                    id: id,
+                },
+                headers,
+            )
+
+            return book
+        },
     },
     Mutation: {
         addBook,

@@ -239,9 +239,45 @@ const removeUser = async (_, { id }, context, info) => {
 // schema. This resolver retrieves users from the "users" array above.
 const resolvers = {
     Query: {
-        me: async (_, {}, context) => fetchUserById(context.currentUser?.id),
+        me: async (_, {}, context) => {
+            const user = fetchUserById(context.currentUser?.id)
+
+            let headers = { request_id: context.requestId }
+            if (context.currentUser) {
+                headers["current_user"] = context.currentUser.id
+            }
+
+            await sendMessage(
+                'book-reviews.views',
+                {
+                    __typename: 'User',
+                    id: context.currentUser?.id,
+                },
+                headers,
+            )
+
+            return user
+        },
         users: async () => users.values(),
-        user: async (_, { id }) => fetchUserById(id),
+        user: async (_, { id }, context) => {
+            const user = fetchUserById(id)
+
+            let headers = { request_id: context.requestId }
+            if (context.currentUser) {
+                headers["current_user"] = context.currentUser.id
+            }
+
+            await sendMessage(
+                'book-reviews.views',
+                {
+                    __typename: 'User',
+                    id: id,
+                },
+                headers,
+            )
+
+            return user
+        },
     },
     Mutation: {
         signUp,
