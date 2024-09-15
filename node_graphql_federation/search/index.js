@@ -198,20 +198,6 @@ const scrubIndex = (word, id) => {
 }
 
 const normalizationRules = new Map()
-normalizationRules.set(/[ÁÂÀÄ]/g, "A")
-normalizationRules.set(/[áâàä]/g, "a")
-normalizationRules.set(/[ÉÊÈË]/g, "E")
-normalizationRules.set(/[éêèë]/g, "e")
-normalizationRules.set(/[ÍÎÌÏ]/g, "I")
-normalizationRules.set(/[íîìï]/g, "i")
-normalizationRules.set(/[ÓÔÒÖ]/g, "O")
-normalizationRules.set(/[óôòö]/g, "o")
-normalizationRules.set(/[ÚÛÙÜ]/g, "U")
-normalizationRules.set(/[úûùü]/g, "u")
-normalizationRules.set(/[Ç]/g, "C")
-normalizationRules.set(/[ç]/g, "c")
-normalizationRules.set(/[Ñ]/g, "N")
-normalizationRules.set(/[ñ]/g, "n")
 normalizationRules.set(/&(\w)(acute|uml|circ|grave|macr);/g, "$1")
 normalizationRules.set(/&([mn]dash|nbsp);/g, " ")
 normalizationRules.set(/&(ast|hellip|trade);/g, "")
@@ -219,7 +205,11 @@ normalizationRules.set(/&amp;/g, "&")
 
 const normalize = text => {
     normalizationRules.forEach((mapping, entity) => text = text.replace(entity, mapping))
-    return text.replace(/[!?.&]/g, '').replace(/['"`\-_*=/]/g, ' ')
+    return text
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .replace(/[!?.&]/g, '')
+        .replace(/['"`\-_*=/]/g, ' ')
 }
 
 // A schema is a collection of type definitions (hence "typeDefs")
