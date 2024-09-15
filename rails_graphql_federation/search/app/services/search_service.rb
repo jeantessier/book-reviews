@@ -204,20 +204,6 @@ class SearchService
     end
 
     NORMALIZATION_RULES = Hash.new
-    NORMALIZATION_RULES[/[ÁÂÀÄ]/] = "A"
-    NORMALIZATION_RULES[/[áâàä]/] = "a"
-    NORMALIZATION_RULES[/[ÉÊÈË]/] = "E"
-    NORMALIZATION_RULES[/[éêèë]/] = "e"
-    NORMALIZATION_RULES[/[ÍÎÌÏ]/] = "I"
-    NORMALIZATION_RULES[/[íîìï]/] = "i"
-    NORMALIZATION_RULES[/[ÓÔÒÖ]/] = "O"
-    NORMALIZATION_RULES[/[óôòö]/] = "o"
-    NORMALIZATION_RULES[/[ÚÛÙÜ]/] = "U"
-    NORMALIZATION_RULES[/[úûùü]/] = "u"
-    NORMALIZATION_RULES[/[Ç]/] = "C"
-    NORMALIZATION_RULES[/[ç]/] = "c"
-    NORMALIZATION_RULES[/[Ñ]/] = "N"
-    NORMALIZATION_RULES[/[ñ]/] = "n"
     NORMALIZATION_RULES[/&(\w)(acute|uml|circ|grave|macr);/] = "\\1"
     NORMALIZATION_RULES[/&([mn]dash|nbsp);/] = " "
     NORMALIZATION_RULES[/&(ast|hellip|trade);/] = ""
@@ -225,7 +211,10 @@ class SearchService
 
     def normalize(text)
       NORMALIZATION_RULES.each { |entity, mapping| text.gsub!(entity, mapping) }
-      text.gsub(/[!?.&]/, "").gsub(/['"`\-_*=\/]/, " ")
+      text
+        .gsub(/[!?.&]/, "")
+        .gsub(/['"`\-_*=\/]/, " ")
+        .tr("ÁÂÀÄÉÊÈËÍÎÌÏÓÔÒÖÚÛÙÜÇÑáâàäéêèëíîìïóôòöúûùüçñ", "AAAAEEEEIIIIOOOOUUUUCNaaaaeeeeiiiioooouuuucn")
     end
 
     # word --> id --> scored index entries
