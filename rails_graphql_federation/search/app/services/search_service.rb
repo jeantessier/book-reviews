@@ -148,6 +148,10 @@ class SearchService
       plan
     end
 
+    def words
+      indices.keys
+    end
+
     def log_indices
       Rails.logger.info "indices:"
       indices.each do |word, index|

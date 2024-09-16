@@ -15,12 +15,18 @@ module Types
       argument :q, String, required: true
     end
 
+    field :words, [ String ], "A list of words that can be searched.", null: false
+
     def query_plan(q:)
       SearchService.query_plan q
     end
 
     def search(q:)
       SearchService.search q, context[:current_user], context[:request_id]
+    end
+
+    def words
+      SearchService.words
     end
   end
 end
