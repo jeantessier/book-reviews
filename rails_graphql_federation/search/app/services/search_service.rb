@@ -215,7 +215,7 @@ class SearchService
 
     def normalize(text)
       NORMALIZATION_RULES.each { |entity, mapping| text.gsub!(entity, mapping) }
-      I18n.transliterate(text).gsub(/[!?.&]/, "").gsub(/['"`\-_*=\/]/, " ")
+      I18n.transliterate(text).gsub(/[!?,;:&]/, "").gsub(/[.'"`\-_*=#\/(){}\[\]<>]/, " ")
     end
 
     # word --> id --> scored index entries
