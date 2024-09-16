@@ -208,8 +208,8 @@ const normalize = text => {
     return text
         .normalize('NFD')
         .replace(/\p{Diacritic}/gu, '')
-        .replace(/[!?.&]/g, '')
-        .replace(/['"`\-_*=/]/g, ' ')
+        .replace(/[!?,;:&]/g, '')
+        .replace(/[.'"`\-_*=#\/(){}\[\]<>]/g, ' ')
 }
 
 // A schema is a collection of type definitions (hence "typeDefs")
