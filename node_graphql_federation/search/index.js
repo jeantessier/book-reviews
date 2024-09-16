@@ -266,6 +266,7 @@ const typeDefs = gql`
   type Query {
     queryPlan(q: String!): QueryPlan!
     search(q: String!): [SearchResult!]!
+    words: [String!]!
   }
 `
 
@@ -346,6 +347,7 @@ const resolvers = {
     Query: {
         search,
         queryPlan,
+        words: async () => indices.keys(),
     },
 }
 
