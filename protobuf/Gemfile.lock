@@ -1,8 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    google-protobuf (3.25.3-arm64-darwin)
-    google-protobuf (3.25.3-x86_64-darwin)
+    bigdecimal (3.1.8)
+    google-protobuf (4.28.2-arm64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.28.2-x86_64-darwin)
+      bigdecimal
+      rake (>= 13)
+    rake (13.2.1)
 
 PLATFORMS
   arm64-darwin-21
@@ -10,7 +16,7 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
-  google-protobuf (~> 3.21)
+  google-protobuf
 
 BUNDLED WITH
-   2.5.10
+   2.5.19
