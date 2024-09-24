@@ -3,6 +3,18 @@
 Running Neo4j graph databsase in a Docker container.
 Data is saved in a Docker volume.
 
+```bash
+docker compose up -d
+```
+
+You can reset the database with these commands:
+
+```bash
+docker compose down
+docker volume rm neo4j_neo4j_data
+docker compose up -d
+```
+
 These instructions assume you have Neo4j running _without authentication_ at: 
 http://localhost:7474
 

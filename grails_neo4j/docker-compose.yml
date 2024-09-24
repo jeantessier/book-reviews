@@ -1,0 +1,20 @@
+#
+# docker compose up -d
+#
+
+services:
+
+  neo4j:
+    image: neo4j:latest
+    expose:
+      - 7474
+      - 7687
+    volumes:
+      - "neo4j_data:/data"
+    environment:
+      NEO4J_AUTH: none
+
+volumes:
+
+  neo4j_data:
+    driver: local

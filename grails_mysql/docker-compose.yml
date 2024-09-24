@@ -1,0 +1,19 @@
+#
+# docker compose up -d
+#
+
+services:
+
+  mysql:
+    image: mysql:latest
+    expose:
+      - 3306
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+
+volumes:
+
+  mysql_data:
+    driver: local

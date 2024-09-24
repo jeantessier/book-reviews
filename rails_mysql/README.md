@@ -2,7 +2,18 @@
 
 This is a Ruby on Rails application backed by a MySQL database.
 
+These instructions assume you have installed [HTTPie](https://httpie.org/)
+and MySQL's [command-line client](https://dev.mysql.com/doc/refman/9.0/en/mysql.html).
+You can install `mysql-client` to get the client without installing the entire
+database.
+
 ## MySQL
+
+Run MySQL in a Docker container.
+
+```bash
+docker compose up -d
+```
 
 This command will create a new database named
 `rails_mysql_book_reviews_development` and populate it with seed data.
@@ -16,6 +27,14 @@ This command will replace the seed data with data derived from
 
 ```bash
 ./Books_rails_mysql.pl | mysql -u root
+```
+
+You can reset the database with these commands:
+
+```bash
+docker compose down
+docker volume rm rails_mysql_mysql_data
+docker compose up -d
 ```
 
 ## Running the Tests
