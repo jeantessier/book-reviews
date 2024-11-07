@@ -3,7 +3,7 @@
 for service in books reviews users search signatures jwts
 do
     echo '==========' $service '=========='
-    (cd $service; bundle update --all)
+    (cd $service; bundle update --bundler; bundle update --all)
 done
 
 echo '========== gateway =========='
