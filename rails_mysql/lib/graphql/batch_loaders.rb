@@ -1,6 +1,6 @@
 require "graphql/batch"
 
-module GraphQL::BatchLoader
+module GraphQL::BatchLoaders
 end
 
 require "graphql/batch_loaders/association_loader"

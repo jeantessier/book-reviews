@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7"
+gem "rails", "~> 8"
 
 # Use mysql as the database for Active Record
 gem "mysql2"
@@ -70,3 +70,5 @@ gem "graphiql-rails", group: :development
 gem "graphql-batch"
 
 gem "packwerk"
+
+gem "propshaft", "~> 1.1"
