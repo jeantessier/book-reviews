@@ -76,7 +76,7 @@ module Types
           add_user_error argument: :user_id, message: "No user by that id"
         end
 
-        with_user_errors(user: user)
+        with_user_errors user:
       end
     end
 

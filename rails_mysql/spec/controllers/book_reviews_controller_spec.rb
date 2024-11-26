@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BookReviewsController do
   let(:book) { FactoryBot.create :book }
-  let!(:review) { FactoryBot.create :review, book: book }
+  let!(:review) { FactoryBot.create :review, book: }
   let(:another_review) { FactoryBot.create :review }
 
   describe "GET #index" do

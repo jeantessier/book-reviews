@@ -31,7 +31,7 @@ module GraphQL
       private
 
       def preload_association(records)
-        ::ActiveRecord::Associations::Preloader.new(records: records, associations: @associations).call
+        ::ActiveRecord::Associations::Preloader.new(records:, associations: @associations).call
       end
     end
   end

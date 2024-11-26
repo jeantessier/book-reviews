@@ -6,11 +6,11 @@ module GraphQL
       end
 
       def add_user_error(argument:, message:)
-        user_errors << { argument: argument, message: message }
+        user_errors << { argument:, message: }
       end
 
       def with_user_errors(payload)
-        payload.merge(user_errors: user_errors)
+        payload.merge(user_errors:)
       end
     end
   end

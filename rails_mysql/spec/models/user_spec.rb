@@ -4,7 +4,7 @@ RSpec.describe User do
   let(:email) { Faker::Internet.unique.email }
   let(:password) { Faker::Internet.password }
 
-  subject { User.new email: email, password: password }
+  subject { User.new email:, password: }
 
   it "should have an email address and password" do
     expect(subject.email).to eq(email)

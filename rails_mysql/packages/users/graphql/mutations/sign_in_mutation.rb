@@ -12,7 +12,7 @@ module Mutations
     # The error messages are too verbose for real sign in error message.
     # They are just to illustrate all that can be done with UserError.
     def resolve(email:, password:)
-      user = User.find_by(email: email)
+      user = User.find_by email:
 
       if user.present?
         if user.authenticate(password)

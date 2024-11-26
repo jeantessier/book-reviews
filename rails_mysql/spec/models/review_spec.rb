@@ -9,27 +9,27 @@ RSpec.describe Review do
 
   context "create" do
     it "should save with a reviewer and a book" do
-      expect { Review.create! reviewer: reviewer, book: book, body: body, start: start, stop: stop }.to_not raise_error
+      expect { Review.create! reviewer:, book:, body:, start:, stop: }.to_not raise_error
     end
 
     it "should save without a start date" do
-      expect { Review.create! reviewer: reviewer, book: book, body: body, stop: stop }.to_not raise_error
+      expect { Review.create! reviewer:, book:, body:, stop: }.to_not raise_error
     end
 
     it "should save without a stop date" do
-      expect { Review.create! reviewer: reviewer, book: book, body: body, start: start }.to_not raise_error
+      expect { Review.create! reviewer:, book:, body:, start: }.to_not raise_error
     end
 
     it "should not save without a body" do
-      expect { Review.create! reviewer: reviewer, book: book, start: start, stop: stop }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { Review.create! reviewer:, book:, start:, stop: }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "should not save without a book" do
-      expect { Review.create! reviewer: reviewer, body: body, start: start, stop: stop }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { Review.create! reviewer:, body:, start:, stop: }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "should not save without a reviewer" do
-      expect { Review.create! book: book, body: body, start: start, stop: stop }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { Review.create! book:, body:, start:, stop: }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 end

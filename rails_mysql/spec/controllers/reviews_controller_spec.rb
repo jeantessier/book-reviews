@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ReviewsController do
   let(:book) { FactoryBot.create :book }
   let!(:user) { FactoryBot.create :user }
-  let!(:review) { FactoryBot.create :review, reviewer: user, book: book }
+  let!(:review) { FactoryBot.create :review, reviewer: user, book: }
 
   # This should return the minimal set of attributes required to create a valid
   # Review. As you add validations to Review, be sure to

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BookYearsController do
   let(:book) { FactoryBot.create :book }
-  let!(:book_year) { FactoryBot.create :book_year, book: book }
+  let!(:book_year) { FactoryBot.create :book_year, book: }
 
   # This should return the minimal set of attributes required to create a valid
   # BookYear. As you add validations to BookYear, be sure to
@@ -43,9 +43,9 @@ RSpec.describe BookYearsController do
       let(:book) { FactoryBot.create :book, year_count: 0 }
 
       it "years are in increasing order" do
-        FactoryBot.create :book_year, book: book, order: last_order
-        FactoryBot.create :book_year, book: book, order: middle_order
-        FactoryBot.create :book_year, book: book, order: first_order
+        FactoryBot.create :book_year, book:, order: last_order
+        FactoryBot.create :book_year, book:, order: middle_order
+        FactoryBot.create :book_year, book:, order: first_order
         get :index, params: { book_id: book.id }, session: valid_session
         expect(JSON.parse(response.body)).to match [
             a_hash_including("order" => 0),

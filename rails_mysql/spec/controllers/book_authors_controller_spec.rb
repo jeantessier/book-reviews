@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BookAuthorsController do
   let(:book) { FactoryBot.create :book }
-  let!(:book_author) { FactoryBot.create :book_author, book: book }
+  let!(:book_author) { FactoryBot.create :book_author, book: }
 
   # This should return the minimal set of attributes required to create a valid
   # BookAuthor. As you add validations to BookAuthor, be sure to
@@ -43,9 +43,9 @@ RSpec.describe BookAuthorsController do
       let(:book) { FactoryBot.create :book, author_count: 0 }
 
       it "authors are in increasing order" do
-        FactoryBot.create :book_author, book: book, order: last_order
-        FactoryBot.create :book_author, book: book, order: middle_order
-        FactoryBot.create :book_author, book: book, order: first_order
+        FactoryBot.create :book_author, book:, order: last_order
+        FactoryBot.create :book_author, book:, order: middle_order
+        FactoryBot.create :book_author, book:, order: first_order
         get :index, params: { book_id: book.id }, session: valid_session
         expect(JSON.parse(response.body)).to match [
             a_hash_including("order" => 0),

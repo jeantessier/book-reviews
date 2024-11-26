@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BookTitlesController do
   let(:book) { FactoryBot.create :book_with_title_links }
-  let!(:book_title) { FactoryBot.create :book_title_with_link, book: book }
+  let!(:book_title) { FactoryBot.create :book_title_with_link, book: }
 
   # This should return the minimal set of attributes required to create a valid
   # BookTitle. As you add validations to BookTitle, be sure to
@@ -44,9 +44,9 @@ RSpec.describe BookTitlesController do
       let(:book) { FactoryBot.create :book_with_title_links, title_count: 0 }
 
       it "titles are in increasing order" do
-        FactoryBot.create :book_title, book: book, order: last_order
-        FactoryBot.create :book_title, book: book, order: middle_order
-        FactoryBot.create :book_title, book: book, order: first_order
+        FactoryBot.create :book_title, book:, order: last_order
+        FactoryBot.create :book_title, book:, order: middle_order
+        FactoryBot.create :book_title, book:, order: first_order
         get :index, params: { book_id: book.id }, session: valid_session
         expect(JSON.parse(response.body)).to match [
             a_hash_including("order" => 0),
