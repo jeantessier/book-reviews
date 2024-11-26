@@ -139,7 +139,7 @@ const addReview = async (_, { review }, context, info) => {
     }
 
     reviewAddedMessage.id = uuidv4()
-    reviewAddedMessage.reviewer = { __typename: 'User', id: reviewerId ? reviewerId : context.currentUser.id }
+    reviewAddedMessage.reviewer = { __typename: 'User', id: reviewerId ?? context.currentUser.id }
     reviewAddedMessage.book = { __typename: 'Book', id: bookId }
 
     let headers = { request_id: context.requestId }

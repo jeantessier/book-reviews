@@ -14,7 +14,7 @@ const sasl = username && password ? {
 } : null
 const ssl = !!sasl
 
-const groupId = process.env.KAFKA_CONSUMER_GROUP_ID ? process.env.KAFKA_CONSUMER_GROUP_ID : uuidv4()
+const groupId = process.env.KAFKA_CONSUMER_GROUP_ID || uuidv4()
 
 console.log('Kafka configuration:')
 console.log(`    clientId: ${clientId}`)
