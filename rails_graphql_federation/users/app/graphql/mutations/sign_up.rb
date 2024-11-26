@@ -11,9 +11,9 @@ module Mutations
 
       user = {
         id: SecureRandom.uuid,
-        name: name,
-        email: email,
-        password: password,
+        name:,
+        email:,
+        password:,
         roles: [ "ROLE_USER" ],
       }
 
@@ -34,12 +34,12 @@ module Mutations
 
       producer.publish(
         topic: KAFKA_TOPIC,
-        headers: headers,
+        headers:,
         key: user[:id],
-        payload: payload,
+        payload:,
       )
 
-      { user: user }
+      { user: }
     end
   end
 end

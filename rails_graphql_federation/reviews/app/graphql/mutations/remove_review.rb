@@ -20,7 +20,7 @@ module Mutations
 
       payload = {
         type: "reviewRemoved",
-        id: id,
+        id:,
       }.to_json
 
       headers = {
@@ -38,9 +38,9 @@ module Mutations
 
       producer.publish(
         topic: KAFKA_TOPIC,
-        headers: headers,
+        headers:,
         key: id,
-        payload: payload,
+        payload:,
       )
 
       { success: true }

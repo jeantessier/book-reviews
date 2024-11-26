@@ -23,7 +23,7 @@ describe BookConsumer do
       expect_any_instance_of(described_class).to receive(:around_consume).with(payload, metadata).once.and_call_original
       expect_any_instance_of(described_class).to receive(:consume).with(payload, metadata).once.and_call_original
 
-      process_message(handler: described_class, payload: payload, metadata: metadata)
+      process_message(handler: described_class, payload:, metadata:)
     end
 
     context 'bookAdded message' do
@@ -52,7 +52,7 @@ describe BookConsumer do
       it 'adds book to BookRepository' do
         expect(BookRepository).to receive(:save).with(book).once
 
-        process_message(handler: described_class, payload: payload, metadata: metadata)
+        process_message(handler: described_class, payload:, metadata:)
       end
     end
 
@@ -94,7 +94,7 @@ describe BookConsumer do
           expect(BookRepository).to receive(:find_by_id).with(book_id).and_return(nil)
           expect_any_instance_of(described_class).to receive(:consume).with(payload, metadata).and_raise("No book with ID #{book_id}")
 
-          process_message(handler: described_class, payload: payload, metadata: metadata)
+          process_message(handler: described_class, payload:, metadata:)
 
           expect(original_book).to eq(modified_book)
         end
@@ -105,7 +105,7 @@ describe BookConsumer do
           it 'updates in-memory book' do
             expect(BookRepository).to receive(:find_by_id).with(book_id).and_return(original_book)
 
-            process_message(handler: described_class, payload: payload, metadata: metadata)
+            process_message(handler: described_class, payload:, metadata:)
 
             expect(original_book).to eq(modified_book)
           end
@@ -183,7 +183,7 @@ describe BookConsumer do
       it 'removes book from BookRepository' do
         expect(BookRepository).to receive(:remove).with(book_id).once
 
-        process_message(handler: described_class, payload: payload, metadata: metadata)
+        process_message(handler: described_class, payload:, metadata:)
       end
     end
   end

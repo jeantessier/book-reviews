@@ -10,7 +10,7 @@ Rails.application.configure do
   config.after_initialize do
     review_listener = Phobos::Listener.new(
       handler: ReviewConsumer,
-      group_id: group_id,
+      group_id:,
       topic: "book-reviews.reviews",
     )
 

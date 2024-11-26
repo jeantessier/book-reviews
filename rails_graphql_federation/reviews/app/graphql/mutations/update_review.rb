@@ -42,12 +42,12 @@ module Mutations
 
       producer.publish(
         topic: KAFKA_TOPIC,
-        headers: headers,
+        headers:,
         key: id,
-        payload: payload,
+        payload:,
       )
 
-      { review: review }
+      { review: }
     end
   end
 end

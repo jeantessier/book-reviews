@@ -19,10 +19,10 @@ module Mutations
 
       user = {
         id: SecureRandom.uuid,
-        name: name,
-        email: email,
-        password: password,
-        roles: roles,
+        name:,
+        email:,
+        password:,
+        roles:,
       }
 
       payload = { type: "userAdded" }.merge(user).to_json
@@ -42,12 +42,12 @@ module Mutations
 
       producer.publish(
         topic: KAFKA_TOPIC,
-        headers: headers,
+        headers:,
         key: user[:id],
-        payload: payload,
+        payload:,
       )
 
-      { user: user }
+      { user: }
     end
   end
 end

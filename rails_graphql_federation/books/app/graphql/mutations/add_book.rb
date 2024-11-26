@@ -20,11 +20,11 @@ module Mutations
 
       book = {
         id: SecureRandom.uuid,
-        name: name,
-        titles: titles,
-        authors: authors,
-        publisher: publisher,
-        years: years,
+        name:,
+        titles:,
+        authors:,
+        publisher:,
+        years:,
       }
 
       payload = { type: "bookAdded" }.merge(book).to_json
@@ -44,12 +44,12 @@ module Mutations
 
       producer.publish(
         topic: KAFKA_TOPIC,
-        headers: headers,
+        headers:,
         key: book[:id],
-        payload: payload,
+        payload:,
       )
 
-      { book: book }
+      { book: }
     end
   end
 end

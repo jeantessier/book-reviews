@@ -84,14 +84,14 @@ class SearchService
 
       payload = {
         id: user,
-        user: user,
+        user:,
         query: q,
-        results: results,
+        results:,
       }.to_json
 
       headers = {
-        current_user: user,
-        request_id: request_id,
+        current_user:,
+        request_id:,
       }
 
       Rails.logger.info <<-MSG
@@ -104,9 +104,9 @@ class SearchService
 
       producer.publish(
         topic: KAFKA_TOPIC,
-        headers: headers,
+        headers:,
         key: user,
-        payload: payload,
+        payload:,
       )
 
       results
@@ -124,16 +124,16 @@ class SearchService
       plan[:words].each do |word|
         if indices.has_key?(word)
           plan[:indices] << {
-            word: word,
+            word:,
             entries: indices[word].values.map { |index_entry| { type: index_entry[:__typename]  }.merge(index_entry) },
           }
           indices[word].each do |id, index_entry|
             if results_collector.has_key?(id)
-              results_collector[id][:weights] << { word: word, weight: index_entry[:score] }
+              results_collector[id][:weights] << { word:, weight: index_entry[:score] }
               results_collector[id][:total_weight] += index_entry[:score]
             else
               results_collector[id] = {
-                weights: [ { word: word, weight: index_entry[:score] } ],
+                weights: [ { word:, weight: index_entry[:score] } ],
                 total_weight: index_entry[:score],
                 id: index_entry[:id],
                 type: index_entry[:__typename],
@@ -185,7 +185,7 @@ class SearchService
         end
       end
 
-      word_scores.transform_values { |score| { score: score }.merge(index_entry) }
+      word_scores.transform_values { |score| { score: }.merge(index_entry) }
     end
 
     def compute_score_for_words(words)

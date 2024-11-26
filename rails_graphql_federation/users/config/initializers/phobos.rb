@@ -10,7 +10,7 @@ Rails.application.configure do
   config.after_initialize do
     user_listener = Phobos::Listener.new(
       handler: UserConsumer,
-      group_id: group_id,
+      group_id:,
       topic: "book-reviews.users",
     )
 

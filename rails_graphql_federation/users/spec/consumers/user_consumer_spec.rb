@@ -23,7 +23,7 @@ describe UserConsumer do
       expect_any_instance_of(described_class).to receive(:around_consume).with(payload, metadata).once.and_call_original
       expect_any_instance_of(described_class).to receive(:consume).with(payload, metadata).once.and_call_original
 
-      process_message(handler: described_class, payload: payload, metadata: metadata)
+      process_message(handler: described_class, payload:, metadata:)
     end
 
     context 'userAdded message' do
@@ -46,7 +46,7 @@ describe UserConsumer do
       it 'adds user to UserRepository' do
         expect(UserRepository).to receive(:save).with(user).once
 
-        process_message(handler: described_class, payload: payload, metadata: metadata)
+        process_message(handler: described_class, payload:, metadata:)
       end
     end
 
@@ -82,7 +82,7 @@ describe UserConsumer do
           expect(UserRepository).to receive(:find_by_id).with(user_id).and_return(nil)
           expect_any_instance_of(described_class).to receive(:consume).with(payload, metadata).and_raise("No user with ID #{user_id}")
 
-          process_message(handler: described_class, payload: payload, metadata: metadata)
+          process_message(handler: described_class, payload:, metadata:)
 
           expect(original_user).to eq(modified_user)
         end
@@ -93,7 +93,7 @@ describe UserConsumer do
           it 'updates in-memory user' do
             expect(UserRepository).to receive(:find_by_id).with(user_id).and_return(original_user)
 
-            process_message(handler: described_class, payload: payload, metadata: metadata)
+            process_message(handler: described_class, payload:, metadata:)
 
             expect(original_user).to eq(modified_user)
           end
@@ -156,7 +156,7 @@ describe UserConsumer do
       it 'removes user from UserRepository' do
         expect(UserRepository).to receive(:remove).with(user_id).once
 
-        process_message(handler: described_class, payload: payload, metadata: metadata)
+        process_message(handler: described_class, payload:, metadata:)
       end
     end
   end

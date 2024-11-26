@@ -39,9 +39,9 @@ module Mutations
           __typename: "Book",
           id: book_id,
         },
-        body: body,
-        start: start,
-        stop: stop,
+        body:,
+        start:,
+        stop:,
       }
 
       payload = { type: "reviewAdded" }.merge(review).to_json
@@ -61,12 +61,12 @@ module Mutations
 
       producer.publish(
         topic: KAFKA_TOPIC,
-        headers: headers,
+        headers:,
         key: review[:id],
-        payload: payload,
+        payload:,
       )
 
-      { review: review }
+      { review: }
     end
   end
 end

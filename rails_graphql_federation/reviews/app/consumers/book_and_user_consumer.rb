@@ -49,9 +49,9 @@ class BookAndUserConsumer
 
       producer.publish(
         topic: KAFKA_TOPIC,
-        headers: headers,
+        headers:,
         key: review[:id],
-        payload: payload,
+        payload:,
       )
     end
   end

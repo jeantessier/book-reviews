@@ -10,7 +10,7 @@ Rails.application.configure do
   config.after_initialize do
     indexing_listener = Phobos::Listener.new(
       handler: IndexingConsumer,
-      group_id: group_id,
+      group_id:,
       topic: /book-reviews.(books|reviews|users)/,
     )
 
