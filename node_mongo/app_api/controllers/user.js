@@ -35,7 +35,7 @@ module.exports.create = async (req, res) => {
     const user = new User({
         name,
         email,
-        roles: roles ? roles : ["ROLE_USER"],
+        roles: roles ?? ["ROLE_USER"],
     })
 
     user.setPassword(password)
@@ -120,7 +120,7 @@ module.exports.replaceOne = async (req, res) => {
 
         user.name = name
         user.email = email
-        user.roles = roles ? roles : ["ROLE_USER"]
+        user.roles = roles ?? ["ROLE_USER"]
 
         user.setPassword(password)
 

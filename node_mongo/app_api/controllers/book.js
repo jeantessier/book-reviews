@@ -34,10 +34,10 @@ module.exports.create = async (req, res) => {
 
         const book = new Book({
             name,
-            titles: titles ? titles : [],
-            authors: authors ? authors : [],
+            titles: titles ?? [],
+            authors: authors ?? [],
             publisher,
-            years: years ? years : [],
+            years: years ?? [],
         })
 
         await book.save()
@@ -132,10 +132,10 @@ module.exports.replaceOne = async (req, res) => {
         }
 
         book.name = name
-        book.titles = titles ? titles : []
-        book.authors = authors ? authors : []
+        book.titles = titles ?? []
+        book.authors = authors ?? []
         book.publisher = publisher
-        book.years = years ? years : []
+        book.years = years ?? []
 
         await book.save()
         sendJSONresponse(res, 200, book)
