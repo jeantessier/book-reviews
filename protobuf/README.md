@@ -351,7 +351,7 @@ import python.book_reviews_pb2 as book_reviews
 
 # Write the user to a text protobuf in a file
 with open("user.txt", "w") as f:
-f.write(text_format.MessageToString(user))
+    f.write(text_format.MessageToString(user))
 
 # Read a user from a text protobuf
 read_user = book_reviews.User()
