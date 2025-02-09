@@ -11,12 +11,14 @@ services:
       - .:/home/node/app
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
       PORT: 80
     command: npm start --workspace books
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   reviews:
     image: node:alpine
@@ -25,12 +27,14 @@ services:
       - .:/home/node/app
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
       PORT: 80
     command: npm start --workspace reviews
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   users:
     image: node:alpine
@@ -39,12 +43,14 @@ services:
       - .:/home/node/app
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
       PORT: 80
     command: npm start --workspace users
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   search:
     image: node:alpine
@@ -53,12 +59,14 @@ services:
       - .:/home/node/app
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
       PORT: 80
     command: npm start --workspace search
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   signatures:
     image: node:alpine
@@ -66,10 +74,13 @@ services:
     volumes:
       - .:/home/node/app
     environment:
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
       PORT: 80
     command: npm start --workspace signatures
     deploy:
       replicas: 4
+    depends_on:
+      - zipkin
 
   jwts:
     image: node:alpine
@@ -78,12 +89,14 @@ services:
       - .:/home/node/app
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
       PORT: 80
     command: npm start --workspace jwts
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   gateway:
     image: node:alpine
@@ -91,6 +104,7 @@ services:
     volumes:
       - .:/home/node/app
     environment:
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
       PORT: 80
       BOOKS_SERVICE: http://books
       REVIEWS_SERVICE: http://reviews
@@ -100,6 +114,7 @@ services:
       JWTS_SERVICE: http://jwts
     command: npm start --workspace gateway
     depends_on:
+      - zipkin
       - books
       - reviews
       - users
@@ -128,6 +143,11 @@ services:
       KAFKA_CFG_TRANSACTION_STATE_LOG_NUM_PARTITIONS: 1
       KAFKA_CFG_LOG_RETENTION_BYTES: -1
       KAFKA_CFG_LOG_RETENTION_HOURS: -1
+
+  zipkin:
+    image: openzipkin/zipkin
+    expose:
+      - 9411
 
 volumes:
 

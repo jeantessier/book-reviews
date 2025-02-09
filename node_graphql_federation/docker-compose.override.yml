@@ -35,3 +35,7 @@ services:
   gateway:
     ports:
       - 4000:80
+
+  zipkin:
+    ports:
+      - 9411:9411

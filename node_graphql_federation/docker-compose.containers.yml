@@ -11,61 +11,78 @@ services:
       - ./kafka:/home/node/kafka:ro
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   reviews:
     image: jeantessier/book_reviews-node_graphql_federation-reviews
     build: ./reviews
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   users:
     image: jeantessier/book_reviews-node_graphql_federation-users
     build: ./users
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   search:
     image: jeantessier/book_reviews-node_graphql_federation-search
     build: ./search
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   signatures:
     image: jeantessier/book_reviews-node_graphql_federation-signatures
     build: ./signatures
+    environment:
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
     deploy:
       replicas: 4
+    depends_on:
+      - zipkin
 
   jwts:
     image: jeantessier/book_reviews-node_graphql_federation-jwts
     build: ./jwts
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
     deploy:
       replicas: 4
     depends_on:
       - kafka
+      - zipkin
 
   gateway:
     image: jeantessier/book_reviews-node_graphql_federation-gateway
     build: ./gateway
+    environment:
+      ZIPKIN_EXPORTER_URL: http://zipkin:9411/api/v2/spans
     depends_on:
+      - zipkin
       - books
       - reviews
       - users
@@ -94,6 +111,11 @@ services:
       KAFKA_CFG_TRANSACTION_STATE_LOG_NUM_PARTITIONS: 1
       KAFKA_CFG_LOG_RETENTION_BYTES: -1
       KAFKA_CFG_LOG_RETENTION_HOURS: -1
+
+  zipkin:
+    image: openzipkin/zipkin
+    expose:
+      - 9411
 
 volumes:
 

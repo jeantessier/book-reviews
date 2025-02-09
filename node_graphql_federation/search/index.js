@@ -1,11 +1,13 @@
+require('dotenv').config()
+
+require ('./open-telemetry')
+
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { buildSubgraphSchema } = require('@apollo/subgraph')
 const { gql } = require('graphql-tag')
 const { v4: uuidv4 } = require("uuid")
 const jwt = require('jsonwebtoken')
-
-require('dotenv').config()
 
 const { groupId, sendMessage, startConsumer } = require('@jeantessier/book_reviews.node_graphql_federation.kafka')
 

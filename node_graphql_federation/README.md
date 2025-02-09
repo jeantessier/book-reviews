@@ -103,15 +103,15 @@ machine.  Since they will share the IP address, we use different port numbers to
 communicate with each one.  For example, the books service lives at
 `http://localhost:4001`.
 
-#### Starting Kafka
+#### Starting Kafka And Zipkin
 
-It is much easier to run Kafka using Docker Compose.
+It is much easier to run Kafka and Zipkin using Docker Compose.
 
 ```bash
-docker compose --file docker-compose.local.yml --file docker-compose.kafka-override.yml up -d kafka
+docker compose --file docker-compose.local.yml --file docker-compose.kafka-override.yml up -d kafka zipkin
 ```
 
-> NOTE: Switching Docker Compose files will reset the Kafka broker and you will
+> NOTE: Switching Docker Compose files will reset the Kafka broker, and you will
 > lose all data recorded so far.
 
 #### Starting the Federated Services

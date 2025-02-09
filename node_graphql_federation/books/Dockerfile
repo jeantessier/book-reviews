@@ -9,7 +9,7 @@
 
 FROM node:alpine
 
-ARG kafkaClientId=books
+ARG serviceName=books
 
 # Create app directory
 WORKDIR /home/node/app
@@ -27,7 +27,9 @@ RUN npm install
 COPY *.js .
 
 ENV KAFKA_BOOTSTRAP_SERVER=host.docker.internal:9092
-ENV KAFKA_CLIENT_ID=$kafkaClientId
+ENV KAFKA_CLIENT_ID=$serviceName
+ENV OPEN_TELEMETRY_SERVICE_NAME=$serviceName
+ENV ZIPKIN_EXPORTER_URL=http://host.docker.internal:9411/api/v2/spans
 
 ENV PORT=80
 

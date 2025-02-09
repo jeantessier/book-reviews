@@ -9,6 +9,8 @@
 
 FROM node:alpine
 
+ARG serviceName=signatures
+
 # Create app directory
 WORKDIR /home/node/app
 
@@ -23,6 +25,9 @@ RUN npm install
 
 # Bundle app source
 COPY *.js .
+
+ENV OPEN_TELEMETRY_SERVICE_NAME=$serviceName
+ENV ZIPKIN_EXPORTER_URL=http://host.docker.internal:9411/api/v2/spans
 
 ENV PORT=80
 
