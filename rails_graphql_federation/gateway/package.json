@@ -22,6 +22,14 @@
   "dependencies": {
     "@apollo/gateway": "*",
     "@apollo/server": "*",
+    "@opentelemetry/api": "*",
+    "@opentelemetry/core": "*",
+    "@opentelemetry/exporter-zipkin": "*",
+    "@opentelemetry/instrumentation-express": "*",
+    "@opentelemetry/instrumentation-http": "*",
+    "@opentelemetry/resources": "*",
+    "@opentelemetry/sdk-trace-base": "*",
+    "@opentelemetry/sdk-trace-node": "*",
     "dotenv": "*",
     "graphql": "*",
     "uuid": "*"

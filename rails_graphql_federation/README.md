@@ -51,9 +51,9 @@ machine.  Since they will share the IP address, we use different port numbers to
 communicate with each one.  For example, the books service lives at
 `http://localhost:3001`.
 
-#### Starting Kafka
+#### Starting Kafka adn Zipkin
 
-It is much easier to run Kafka using Docker Compose.
+It is much easier to run Kafka and Zipkin using Docker Compose.
 
 ```bash
 docker compose up -d

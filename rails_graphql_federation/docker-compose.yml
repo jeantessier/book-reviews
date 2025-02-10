@@ -26,6 +26,11 @@ services:
       KAFKA_CFG_LOG_RETENTION_BYTES: -1
       KAFKA_CFG_LOG_RETENTION_HOURS: -1
 
+  zipkin:
+    image: openzipkin/zipkin
+    expose:
+      - 9411
+
 volumes:
 
   kafka_data:
