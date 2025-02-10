@@ -8,6 +8,7 @@ const { buildSubgraphSchema } = require('@apollo/subgraph')
 const { gql } = require('graphql-tag')
 const { v4: uuidv4 } = require("uuid")
 const jwt = require('jsonwebtoken')
+const opentelemetry = require('@opentelemetry/api')
 
 const { groupId, sendMessage, startConsumer } = require('@jeantessier/book_reviews.node_graphql_federation.kafka')
 
@@ -273,6 +274,11 @@ const typeDefs = gql`
 `
 
 const queryPlan = async (_, { q }) => {
+    const activeSpan = opentelemetry.trace.getActiveSpan()
+    activeSpan.setAttribute('graphql.variables.q', q)
+
+    activeSpan.addEvent('Normalize query')
+
     const plan = {
         words: normalize(q).toLowerCase().split(/\s+/),
         indices: [],
@@ -280,6 +286,8 @@ const queryPlan = async (_, { q }) => {
     }
 
     const resultsCollector = new Map()
+
+    activeSpan.addEvent('Build query plan')
 
     plan.words.forEach(word => {
         if (indices.has(word)) {
@@ -300,13 +308,22 @@ const queryPlan = async (_, { q }) => {
         }
     })
 
+    activeSpan.addEvent('Format results')
+
     plan.results = [ ...resultsCollector.values() ].sort((match1, match2) => match2.totalWeight - match1.totalWeight)
+
+    activeSpan.addEvent('Done')
 
     return plan
 }
 
 const search = async (_, { q }, context) => {
     const resultsCollector = new Map()
+
+    const activeSpan = opentelemetry.trace.getActiveSpan()
+    activeSpan.setAttribute('graphql.variables.q', q)
+
+    activeSpan.addEvent('Run query')
 
     normalize(q).toLowerCase().split(/\s+/).forEach(word => {
         if (indices.has(word)) {
@@ -321,12 +338,16 @@ const search = async (_, { q }, context) => {
         }
     })
 
+    activeSpan.addEvent('Build results')
+
     const results = [ ...resultsCollector.values() ].sort((match1, match2) => match2.weight - match1.weight)
 
     let headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
+
+    activeSpan.addEvent('Log query and results')
 
     await sendMessage(
         'book-reviews.searches',
@@ -338,6 +359,8 @@ const search = async (_, { q }, context) => {
         },
         headers,
     )
+
+    activeSpan.addEvent('Done')
 
     return results
 }
