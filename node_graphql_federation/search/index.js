@@ -421,9 +421,16 @@ const port = process.env.PORT || 4004
 // The `listen` method launches a web server.
 startStandaloneServer(server, {
     context: ({ req }) => {
+        const currentUser = getCurrentUser(req)
+        const requestId = req.headers["x-request-id"] || uuidv4()
+
+        const activeSpan = opentelemetry.trace.getActiveSpan()
+        activeSpan.setAttribute('context.currentUser.id', currentUser?.id)
+        activeSpan.setAttribute('context.requestId', requestId)
+
         return {
-            currentUser: getCurrentUser(req),
-            requestId: req.headers["x-request-id"] || uuidv4(),
+            currentUser,
+            requestId,
         }
     },
     listen: { port },

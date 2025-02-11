@@ -6,6 +6,7 @@ const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource } = require("@apollo/gateway")
 const { v4: uuidv4 } = require('uuid')
+const opentelemetry = require("@opentelemetry/api");
 
 const books_service = process.env.BOOKS_SERVICE || 'http://localhost:4001'
 const reviews_service = process.env.REVIEWS_SERVICE || 'http://localhost:4002'
@@ -82,9 +83,14 @@ const port = process.env.PORT || 4000
 
 startStandaloneServer(server, {
     context: async ({ req }) => {
+        const requestId = req.headers["x-request-id"] || uuidv4()
+
+        const activeSpan = opentelemetry.trace.getActiveSpan()
+        activeSpan.setAttribute('context.requestId', requestId)
+
         return {
             authHeader: req.headers.authorization || '',
-            requestId: req.headers["x-request-id"] || uuidv4()
+            requestId,
         }
     },
     listen: { port },
