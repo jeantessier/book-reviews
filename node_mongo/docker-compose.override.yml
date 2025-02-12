@@ -16,3 +16,7 @@ services:
       - "3000:3000"
     environment:
       JWT_SECRET: thisIsSecretInDocker
+
+  zipkin:
+    ports:
+      - "9411:9411"
