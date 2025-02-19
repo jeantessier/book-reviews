@@ -2,13 +2,11 @@ module Types
   class SearchResultUnion < Types::BaseUnion
     possible_types BookType, ReviewType, UserType
 
-    def self.resolve_type(object, context)
-      if object.is_a? Book
-        BookType
-      elsif object.is_a? Review
-        ReviewType
-      elsif object.is_a? User
-        UserType
+    def self.resolve_type(object, _)
+      case object
+      when Book then BookType
+      when Review then ReviewType
+      when User then UserType
       else
         raise "Unexpected Claim: #{object.inspect}"
       end
