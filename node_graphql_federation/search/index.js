@@ -21,10 +21,10 @@ const dump = map => map.forEach((index, word) => {
 })
 
 const topicName = /book-reviews.(books|reviews|users)/
-startConsumer(
+startConsumer({
     groupId,
-    topicName,
-    {
+    topic: topicName,
+    messageHandlers: {
         bookAdded: (_, book) => indexBook(book),
         bookUpdated: (_, book) => indexBook(book),
         bookRemoved: key => scrubIndices(key),
@@ -35,13 +35,13 @@ startConsumer(
         userUpdated: (_, user) => indexUser(user),
         userRemoved: key => scrubIndices(key),
     },
-    () => {
+    postCallback: () => {
         if (process.env.DEBUG) {
             console.log("    indices:")
             dump(indices)
         }
-    }
-).then(() => {
+    },
+}).then(() => {
     console.log(`Listening for "${topicName}" messages as consumer group "${groupId}".`)
 })
 

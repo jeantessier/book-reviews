@@ -52,7 +52,10 @@ const sendMessage = async (topic, message, headers) => {
     await producer.disconnect()
 }
 
-const startConsumer = async (groupId, topic, messageHandlers, postCallback = () => {}) => {
+const startConsumer = async ({ groupId, topic, messageHandlers, defaultHandler, postCallback }) => {
+    defaultHandler = defaultHandler ? defaultHandler : (type, key, body, headers) => console.log(`Skipping...`)
+    postCallback = postCallback ? postCallback : () => {}
+
     const consumer = kafka.consumer({ groupId })
     await consumer.connect()
     await consumer.subscribe({ topic, fromBeginning: true })
@@ -80,7 +83,7 @@ const startConsumer = async (groupId, topic, messageHandlers, postCallback = () 
             if (type in messageHandlers) {
                 messageHandlers[type](key, body, headers)
             } else {
-                console.log("Skipping...")
+                defaultHandler(type, key, body, headers)
             }
             postCallback()
         }

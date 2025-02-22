@@ -16,29 +16,29 @@ const reviews = new Map()
 const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`))
 
 const reviewsTopicName = 'book-reviews.reviews'
-startConsumer(
+startConsumer({
     groupId,
-    reviewsTopicName,
-    {
+    topic: reviewsTopicName,
+    messageHandlers: {
         reviewAdded: (key, review) => reviews.set(key, review),
         reviewUpdated: (key, review) => reviews.set(key, review),
         reviewRemoved: key => reviews.delete(key),
     },
-    () => {
+    postCallback: () => {
         if (process.env.DEBUG) {
             console.log("    reviews:")
             dump(reviews)
         }
-    }
-).then(() => {
+    },
+}).then(() => {
     console.log(`Listening for "${reviewsTopicName}" messages as consumer group "${groupId}".`)
 })
 
 const booksAndUsersTopicName = /book-reviews.(books|users)/;
-startConsumer(
-    'reviews',
-    booksAndUsersTopicName,
-    {
+startConsumer({
+    groupId: 'reviews',
+    topic: booksAndUsersTopicName,
+    messageHandlers: {
         bookRemoved: (key, _, headers) => {
             [ ...reviews ].filter(([ _, review ]) => key === review.book.id).forEach(([ id, _ ]) => {
                 sendMessage(
@@ -64,13 +64,13 @@ startConsumer(
             })
         }
     },
-    () => {
+    postCallback: () => {
         if (process.env.DEBUG) {
             console.log("    reviews:")
             dump(reviews)
         }
-    }
-).then(() => {
+    },
+}).then(() => {
     console.log(`Listening for "${booksAndUsersTopicName}" messages as consumer group "reviews".`)
 })
 

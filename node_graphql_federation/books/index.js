@@ -16,21 +16,21 @@ const books = new Map()
 const dump = map => map.forEach((v, k) => console.log(`        ${k}: ${JSON.stringify(v)}`))
 
 const topicName = 'book-reviews.books'
-startConsumer(
+startConsumer({
     groupId,
-    topicName,
-    {
+    topic: topicName,
+    messageHandlers: {
         bookAdded: (key, book) => books.set(key, book),
         bookUpdated: (key, book) => books.set(key, book),
         bookRemoved: key => books.delete(key),
     },
-    () => {
+    postCallback: () => {
         if (process.env.DEBUG) {
             console.log("    books:")
             dump(books)
         }
-    }
-).then(() => {
+    },
+}).then(() => {
     console.log(`Listening for "${topicName}" messages as consumer group "${groupId}".`)
 })
 
