@@ -754,7 +754,10 @@ docker compose \
           --bootstrap-server kafka:9092 \
           --describe \
           --all-groups \
-        2>&1 | \
-        ruby -n -e 'puts "--group #{$1}" if /Consumer group .(([[:xdigit:]]|-)+). has no active members/' \
+        2>&1 \
+        | ruby -n -e 'puts "--group #{$1}" if /Consumer group .(([[:xdigit:]]|-)+). has no active members/' \
     )
 ```
+
+These commands use the regex `([[:xdigit:]]|-)+` to only capture UUIDs and skip
+the consumer group `reviews`.
