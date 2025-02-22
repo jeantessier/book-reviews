@@ -727,9 +727,9 @@ docker compose \
   --file docker-compose.local.yml \
   exec kafka \
   /opt/bitnami/kafka/bin/kafka-consumer-groups.sh \
-  --bootstrap-server kafka:9092 \
-  --describe \
-  --all-groups \
+    --bootstrap-server kafka:9092 \
+    --describe \
+    --all-groups \
   2>&1 \
   | ruby -n -e 'puts $1 if /Consumer group .(([[:xdigit:]]|-)+). has no active members/'
 ```
@@ -737,9 +737,24 @@ docker compose \
 And you can remove them with:
 
 ```bash
-for consumer_group in $(docker compose --file docker-compose.local.yml exec kafka /opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server kafka:9092 --describe --all-groups 2>&1 | ruby -n -e 'puts $1 if /Consumer group .(([[:xdigit:]]|-)+). has no active members/')
-do
-  echo '==========' $consumer_group '=========='
-  docker compose --file docker-compose.local.yml exec kafka /opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server kafka:9092 --delete --group $consumer_group
-done
+docker compose \
+  --file docker-compose.local.yml \
+  --file docker-compose.kafka-override.yml \
+  exec \
+  kafka \
+  /opt/bitnami/kafka/bin/kafka-consumer-groups.sh \
+    --bootstrap-server kafka:9092 \
+    --delete \
+    $( \
+      docker compose \
+        --file docker-compose.local.yml \
+        exec \
+        kafka \
+        /opt/bitnami/kafka/bin/kafka-consumer-groups.sh \
+          --bootstrap-server kafka:9092 \
+          --describe \
+          --all-groups \
+        2>&1 | \
+        ruby -n -e 'puts "--group #{$1}" if /Consumer group .(([[:xdigit:]]|-)+). has no active members/' \
+    )
 ```
