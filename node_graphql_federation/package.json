@@ -10,6 +10,8 @@
     "search",
     "signatures",
     "jwts",
+    "vector_indexer",
+    "vector_search",
     "gateway"
   ],
   "dependencies": {

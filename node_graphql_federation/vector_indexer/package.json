@@ -1,0 +1,40 @@
+{
+  "name": "@jeantessier/book_reviews.node_graphql_federation.vector_indexer",
+  "version": "1.0.8",
+  "description": "A microservice for sync'ing entities in a vector database",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeantessier/book-reviews.git"
+  },
+  "keywords": [
+    "book reviews",
+    "kafka"
+  ],
+  "author": "Jean Tessier <jean@jeantessier.com> (https://jeantessier.com/)",
+  "license": "ISC",
+  "dependencies": {
+    "@jeantessier/book_reviews.node_graphql_federation.kafka": "*",
+    "@langchain/core": "*",
+    "@langchain/mongodb": "*",
+    "@langchain/openai": "*",
+    "@opentelemetry/api": "*",
+    "@opentelemetry/core": "*",
+    "@opentelemetry/exporter-zipkin": "*",
+    "@opentelemetry/instrumentation": "*",
+    "@opentelemetry/instrumentation-express": "*",
+    "@opentelemetry/instrumentation-graphql": "*",
+    "@opentelemetry/instrumentation-http": "*",
+    "@opentelemetry/resources": "*",
+    "@opentelemetry/sdk-trace-base": "*",
+    "@opentelemetry/sdk-trace-node": "*",
+    "dotenv": "*",
+    "jsonwebtoken": "*",
+    "mongodb": "*"
+  },
+  "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_graphql_federation"
+}
