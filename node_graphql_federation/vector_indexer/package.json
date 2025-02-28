@@ -20,6 +20,7 @@
   "dependencies": {
     "@jeantessier/book_reviews.node_graphql_federation.kafka": "*",
     "@langchain/core": "*",
+    "@langchain/google-genai": "*",
     "@langchain/mongodb": "*",
     "@langchain/openai": "*",
     "@opentelemetry/api": "*",

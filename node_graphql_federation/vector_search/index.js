@@ -4,6 +4,7 @@ require ('./open-telemetry')
 
 const { MongoDBAtlasVectorSearch } = require('@langchain/mongodb')
 const { OpenAIEmbeddings } = require('@langchain/openai')
+const { GoogleGenerativeAIEmbeddings } = require('@langchain/google-genai')
 const { MongoClient } = require('mongodb')
 
 const { startConsumer } = require('@jeantessier/book_reviews.node_graphql_federation.kafka')
@@ -27,8 +28,13 @@ const collection = client
     .db(process.env.MONGODB_ATLAS_DB_NAME)
     .collection(process.env.MONGODB_ATLAS_COLLECTION_NAME)
 
-const embeddings = new OpenAIEmbeddings({
-    model: "text-embedding-3-small",
+// const embeddings = new OpenAIEmbeddings({
+//     model: "text-embedding-3-small",
+// })
+
+const embeddings = new GoogleGenerativeAIEmbeddings({
+    apiKey: process.env.GOOGLE_API_KEY,
+    model: "text-embedding-004",
 })
 
 const vectorStore = new MongoDBAtlasVectorSearch(embeddings, {
@@ -42,13 +48,15 @@ const replaySearch = async (query, expectedResults) => {
     // Number of nearest neighbors to return.
     const k = 2
 
-    const similaritySearchResults = await vectorStore.similaritySearch(query, k)
+    const similaritySearchResults = await vectorStore.similaritySearchWithScore(query, k)
 
+    console.log(`Query: "${query}"`)
+    console.log('')
     console.log(`Expected ${expectedResults.length} result(s)`)
     console.log('--------')
     expectedResults.forEach(result => console.log(`* ${JSON.stringify(result)}`))
     console.log('')
     console.log(`Actually got ${similaritySearchResults.length} result(s)`)
     console.log('--------')
-    similaritySearchResults.forEach(doc => console.log(`* ${doc.pageContent} [${JSON.stringify(doc.metadata)}]`))
+    similaritySearchResults.forEach(([doc, score]) => console.log(`* ${JSON.stringify({score, type: doc.metadata.type, id: doc.metadata.id})}`))
 }

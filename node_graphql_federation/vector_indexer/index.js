@@ -4,6 +4,7 @@ require ('./open-telemetry')
 
 const { MongoDBAtlasVectorSearch } = require('@langchain/mongodb')
 const { OpenAIEmbeddings } = require('@langchain/openai')
+const { GoogleGenerativeAIEmbeddings } = require('@langchain/google-genai')
 const { MongoClient } = require('mongodb')
 
 const { startConsumer } = require('@jeantessier/book_reviews.node_graphql_federation.kafka')
@@ -33,8 +34,13 @@ const collection = client
     .db(process.env.MONGODB_ATLAS_DB_NAME)
     .collection(process.env.MONGODB_ATLAS_COLLECTION_NAME)
 
-const embeddings = new OpenAIEmbeddings({
-    model: "text-embedding-3-small",
+// const embeddings = new OpenAIEmbeddings({
+//     model: "text-embedding-3-small",
+// })
+
+const embeddings = new GoogleGenerativeAIEmbeddings({
+    apiKey: process.env.GOOGLE_API_KEY,
+    model: "text-embedding-004",
 })
 
 const vectorStore = new MongoDBAtlasVectorSearch(embeddings, {
