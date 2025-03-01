@@ -105,6 +105,8 @@ const scrubIndices = async id => {
     }
 
     await vectorStore.delete({ ids: [id] })
+        .then(() => console.log(`Deleted entity ${id}`))
+        .catch(err => console.error(`Could not delete entity ${id}: ${err}`))
 }
 
 const updateIndex = async (entity, pageContent, metadata) => {
@@ -118,5 +120,7 @@ const updateIndex = async (entity, pageContent, metadata) => {
         console.log(`Adding ${metadata.type} entity ${metadata.id}`)
     }
 
-    await vectorStore.addDocuments([ document ], { ids: [ metadata.id ] });
+    await vectorStore.addDocuments([ document ], { ids: [ metadata.id ] })
+        .then(() => console.log(`Added ${metadata.type} entity ${metadata.id}`))
+        .catch(err => console.error(`Could not add ${metadata.type} entity ${metadata.id}: ${err}`))
 }

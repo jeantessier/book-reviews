@@ -59,4 +59,7 @@ const replaySearch = async (query, expectedResults) => {
     console.log(`Actually got ${similaritySearchResults.length} result(s)`)
     console.log('--------')
     similaritySearchResults.forEach(([doc, score]) => console.log(`* ${JSON.stringify({score, type: doc.metadata.type, id: doc.metadata.id})}`))
+    console.log('')
+    console.log('========')
+    console.log('')
 }
