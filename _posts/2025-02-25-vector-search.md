@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Comparing with Vector Search"
-date: 2025-02-25 22:00:00 -0700
+date: 2025-02-25 22:00:00 -0800
 categories: node mongodb ai
 ---
 I was reading up on RAG and the article used a vector search in MongoDB to
