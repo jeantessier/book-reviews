@@ -1,10 +1,10 @@
 {
   "name": "@jeantessier/book_reviews.rails_graphql_federation.gateway",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A microservice for combining microservices using GraphQL federation as part of a book reviews application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node --require ./open-telemetry.js index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,12 +23,9 @@
     "@apollo/gateway": "*",
     "@apollo/server": "*",
     "@opentelemetry/api": "*",
-    "@opentelemetry/core": "*",
+    "@opentelemetry/auto-instrumentations-node": "*",
     "@opentelemetry/exporter-zipkin": "*",
-    "@opentelemetry/instrumentation-express": "*",
-    "@opentelemetry/instrumentation-http": "*",
-    "@opentelemetry/resources": "*",
-    "@opentelemetry/sdk-trace-base": "*",
+    "@opentelemetry/sdk-node": "*",
     "@opentelemetry/sdk-trace-node": "*",
     "dotenv": "*",
     "graphql": "*",

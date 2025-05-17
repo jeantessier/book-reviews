@@ -3,8 +3,6 @@ const { startStandaloneServer } = require('@apollo/server/standalone')
 const { ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource } = require("@apollo/gateway")
 const { v4: uuidv4 } = require('uuid')
 
-require('dotenv').config()
-
 const books_service = process.env.BOOKS_SERVICE || 'http://localhost:3001/graphql'
 const reviews_service = process.env.REVIEWS_SERVICE || 'http://localhost:3002/graphql'
 const users_service = process.env.USERS_SERVICE || 'http://localhost:3003/graphql'
