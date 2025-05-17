@@ -4,9 +4,9 @@
   "description": "A book reviews application backed by a MongoDB database.",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./bin/www",
+    "dev": "nodemon --require ./open-telemetry.js ./bin/www",
     "test": "jest --watchAll",
-    "start": "node ./bin/www",
+    "start": "node --require ./open-telemetry.js ./bin/www",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "cypress:ci": "cypress run --reporter junit --reporter-options 'mochaFile=results/test-output-[hash].xml,toConsole=true'"
@@ -22,14 +22,10 @@
   "author": "Jean Tessier <jean@jeantessier.com> (https://jeantessier.com/)",
   "license": "ISC",
   "dependencies": {
+    "@opentelemetry/sdk-node": "*",
     "@opentelemetry/api": "*",
-    "@opentelemetry/core": "*",
+    "@opentelemetry/auto-instrumentations-node": "*",
     "@opentelemetry/exporter-zipkin": "*",
-    "@opentelemetry/instrumentation": "*",
-    "@opentelemetry/instrumentation-express": "*",
-    "@opentelemetry/instrumentation-http": "*",
-    "@opentelemetry/resources": "*",
-    "@opentelemetry/sdk-trace-base": "*",
     "@opentelemetry/sdk-trace-node": "*",
     "body-parser": "*",
     "cookie-parser": "*",
