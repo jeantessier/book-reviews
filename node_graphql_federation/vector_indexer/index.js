@@ -1,7 +1,5 @@
 require('dotenv').config()
 
-require ('./open-telemetry')
-
 const { MongoDBAtlasVectorSearch } = require('@langchain/mongodb')
 const { OpenAIEmbeddings } = require('@langchain/openai')
 const { GoogleGenerativeAIEmbeddings } = require('@langchain/google-genai')

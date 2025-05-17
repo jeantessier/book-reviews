@@ -1,10 +1,10 @@
 {
   "name": "@jeantessier/book_reviews.node_graphql_federation.jwts",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A microservice for managing JWTs as part of a book reviews application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node --require ./open-telemetry.js index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,14 +24,10 @@
     "@apollo/subgraph": "*",
     "@jeantessier/book_reviews.node_graphql_federation.kafka": "*",
     "@opentelemetry/api": "*",
-    "@opentelemetry/core": "*",
+    "@opentelemetry/auto-instrumentations-node": "*",
     "@opentelemetry/exporter-zipkin": "*",
-    "@opentelemetry/instrumentation": "*",
-    "@opentelemetry/instrumentation-express": "*",
     "@opentelemetry/instrumentation-graphql": "*",
-    "@opentelemetry/instrumentation-http": "*",
-    "@opentelemetry/resources": "*",
-    "@opentelemetry/sdk-trace-base": "*",
+    "@opentelemetry/sdk-node": "*",
     "@opentelemetry/sdk-trace-node": "*",
     "dotenv": "*",
     "graphql": "*",

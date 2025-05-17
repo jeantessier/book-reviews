@@ -22,10 +22,10 @@
   "author": "Jean Tessier <jean@jeantessier.com> (https://jeantessier.com/)",
   "license": "ISC",
   "dependencies": {
-    "@opentelemetry/sdk-node": "*",
     "@opentelemetry/api": "*",
     "@opentelemetry/auto-instrumentations-node": "*",
     "@opentelemetry/exporter-zipkin": "*",
+    "@opentelemetry/sdk-node": "*",
     "@opentelemetry/sdk-trace-node": "*",
     "body-parser": "*",
     "cookie-parser": "*",

@@ -1,7 +1,5 @@
 require('dotenv').config()
 
-require ('./open-telemetry')
-
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource } = require("@apollo/gateway")
