@@ -1,6 +1,6 @@
 {
   "name": "@jeantessier/book_reviews.node_graphql_federation.gateway",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A microservice for combining microservices using GraphQL federation as part of a book reviews application",
   "main": "index.js",
   "scripts": {
