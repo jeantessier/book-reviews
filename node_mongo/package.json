@@ -35,7 +35,6 @@
     "express-jwt": "*",
     "jsonwebtoken": "*",
     "mongoose": "*",
-    "mongoose-timestamp": "*",
     "morgan": "*",
     "passport": "*",
     "passport-local": "*",

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const timestamps = require('mongoose-timestamp')
 
 const titleSchema = new mongoose.Schema({
     title: {
@@ -20,10 +19,10 @@ const bookSchema = new mongoose.Schema({
     publisher: String,
     years: [String],
 }, {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
 })
-bookSchema.plugin(timestamps)
 
 bookSchema.virtual('numReviews', {
     ref: 'Review',

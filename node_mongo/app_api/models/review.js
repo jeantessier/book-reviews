@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const timestamps = require('mongoose-timestamp')
 
 const reviewSchema = new mongoose.Schema({
     book: {
@@ -18,7 +17,8 @@ const reviewSchema = new mongoose.Schema({
     },
     start: Date,
     stop: Date,
+}, {
+    timestamps: true,
 })
-reviewSchema.plugin(timestamps)
 
 mongoose.model('Review', reviewSchema)

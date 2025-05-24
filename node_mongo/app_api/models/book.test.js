@@ -25,75 +25,112 @@ afterAll(async () => {
  * Book model
  */
 describe("Book model", () => {
-    it("creates & saves book successfully", async () => {
-        // Given
-        const validBook = new Book(bookData)
+    describe('create', () => {
+        it("creates & saves book successfully", async () => {
+            // Given
+            const validBook = new Book(bookData)
 
-        // When
-        const savedBook = await validBook.save()
+            // When
+            const savedBook = await validBook.save()
 
-        // Then
-        // Object Id should be defined when successfully saved to MongoDB.
-        expect(savedBook._id).toBeDefined()
-        expect(savedBook.name).toBe(bookData.name)
-        expect(savedBook.titles).toEqual(
-            bookData.titles.map(title => expect.objectContaining(title))
-        )
-        expect(savedBook.publisher).toBe(bookData.publisher)
-        expect(savedBook.authors).toEqual(bookData.authors)
-        expect(savedBook.years).toEqual(bookData.years)
-    })
-
-    // You shouldn't be able to add in any field that isn't defined in the schema
-    it("creates book successfully, but the field not defined in schema should be undefined", async () => {
-        // Given
-        const bookWithInvalidField = new Book({
-            ...bookData,
-            nickname: "Def",
+            // Then
+            // Object Id should be defined when successfully saved to MongoDB.
+            expect(savedBook._id).toBeDefined()
+            expect(savedBook.name).toBe(bookData.name)
+            expect(savedBook.titles).toEqual(
+                bookData.titles.map(title => expect.objectContaining(title))
+            )
+            expect(savedBook.publisher).toBe(bookData.publisher)
+            expect(savedBook.authors).toEqual(bookData.authors)
+            expect(savedBook.years).toEqual(bookData.years)
         })
 
-        // When
-        const savedBookWithInvalidField = await bookWithInvalidField.save()
+        // You shouldn't be able to add in any field that isn't defined in the schema
+        it("creates book successfully, but the field not defined in schema should be undefined", async () => {
+            // Given
+            const bookWithInvalidField = new Book({
+                ...bookData,
+                nickname: "Def",
+            })
 
-        // Then
-        expect(savedBookWithInvalidField._id).toBeDefined()
-        expect(savedBookWithInvalidField.nickname).toBeUndefined()
+            // When
+            const savedBookWithInvalidField = await bookWithInvalidField.save()
+
+            // Then
+            expect(savedBookWithInvalidField._id).toBeDefined()
+            expect(savedBookWithInvalidField.nickname).toBeUndefined()
+        })
+
+        it("does not create book without required field", async () => {
+            // Given
+            const { name, ... partialBookData } = bookData
+            const bookWithoutRequiredField = new Book(partialBookData)
+
+            // When
+            let err
+            try {
+                await bookWithoutRequiredField.save()
+            } catch (error) {
+                err = error
+            }
+
+            // Then
+            expect(err).toBeInstanceOf(mongoose.Error.ValidationError)
+            expect(err.errors.name).toBeDefined()
+        })
+
+        it("does not create book if name is already taken", async () => {
+            // Given
+            const validBook = new Book(bookData)
+            await validBook.save()
+            const duplicateBook = new Book(bookData)
+
+            // When
+            let err
+            try {
+                await duplicateBook.save()
+            } catch (error) {
+                err = error
+            }
+
+            // Then
+            expect(err).toBeDefined()
+            expect(err.message).toMatch(/duplicate key error/)
+        })
     })
 
-    it("does not create book without required field", async () => {
-        // Given
-        const { name, ... partialBookData } = bookData
-        const bookWithoutRequiredField = new Book(partialBookData)
+    describe('update', () => {
+        it("adjusts timestamps", async () => {
+            // Given
+            const book = new Book(bookData)
 
-        // When
-        let err
-        try {
-            await bookWithoutRequiredField.save()
-        } catch (error) {
-            err = error
-        }
+            // And
+            const savedBook = await book.save()
+            const oldCreatedAt = savedBook.createdAt
 
-        // Then
-        expect(err).toBeInstanceOf(mongoose.Error.ValidationError)
-        expect(err.errors.name).toBeDefined()
-    })
+            // When
+            book.publisher = "New Publisher"
+            const updatedBook = await book.save()
 
-    it("does not create book if name is already taken", async () => {
-        // Given
-        const validBook = new Book(bookData)
-        await validBook.save()
-        const duplicateBook = new Book(bookData)
+            // Then
+            expect(updatedBook.createdAt).toBe(oldCreatedAt)
+            expect(updatedBook.updatedAt.getTime()).toBeGreaterThan(oldCreatedAt.getTime())
+        })
 
-        // When
-        let err
-        try {
-            await duplicateBook.save()
-        } catch (error) {
-            err = error
-        }
+        it("no change does not change timestamps", async () => {
+            // Given
+            const book = new Book(bookData)
 
-        // Then
-        expect(err).toBeDefined()
-        expect(err.message).toMatch(/duplicate key error/)
+            // And
+            const savedBook = await book.save()
+            const oldCreatedAt = savedBook.createdAt
+
+            // When
+            const updatedBook = await book.save()
+
+            // Then
+            expect(updatedBook.createdAt).toBe(oldCreatedAt)
+            expect(updatedBook.updatedAt).toBe(oldCreatedAt)
+        })
     })
 })

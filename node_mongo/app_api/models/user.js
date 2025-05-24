@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const timestamps = require('mongoose-timestamp')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 
@@ -17,10 +16,10 @@ const userSchema = new mongoose.Schema({
     salt: String,
     roles: [String],
 }, {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
 })
-userSchema.plugin(timestamps)
 
 userSchema.virtual('numReviews', {
     ref: 'Review',
