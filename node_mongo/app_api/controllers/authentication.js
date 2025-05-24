@@ -1,5 +1,5 @@
 const passport = require('passport')
-const User = require('mongoose')
+const User = require("../models/user")
 
 const sendJSONresponse = (res, status, content) => res.status(status).json(content)
 
