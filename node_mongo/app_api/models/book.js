@@ -36,4 +36,4 @@ bookSchema.virtual('reviews', {
     foreignField: 'book',
 })
 
-mongoose.model('Book', bookSchema)
+module.exports = mongoose.model('Book', bookSchema)

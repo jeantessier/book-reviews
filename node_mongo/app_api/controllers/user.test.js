@@ -7,12 +7,9 @@ const { createUserWithRole } = require('../../test/fixtures/users')
 
 const mongoose = require("mongoose")
 const db = require("../../test/db")
-require("../models/book")
-require("../models/review")
-require("../models/user")
-const Book = mongoose.model('Book')
-const Review = mongoose.model('Review')
-const User = mongoose.model('User')
+const Book = require("../models/book")
+const Review = require("../models/review")
+const User = require("../models/user")
 
 const ctrlUser = require("./user")
 

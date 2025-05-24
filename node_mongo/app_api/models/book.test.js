@@ -4,8 +4,7 @@ const { createBook } = require("../../test/fixtures/books")
 
 const mongoose = require("mongoose")
 const db = require("../../test/db")
-require("./book")
-const Book = mongoose.model('Book')
+const Book = require("./book")
 
 const bookData = createBook()
 

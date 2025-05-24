@@ -5,8 +5,7 @@ const { createUserWithPassword } = require("../../test/fixtures/users")
 
 const mongoose = require("mongoose")
 const db = require("../../test/db")
-require("./user")
-const User = mongoose.model('User')
+const User = require("./user")
 
 const userData = createUserWithPassword()
 

@@ -68,4 +68,4 @@ userSchema.methods.hashPassword = function (password) {
     return crypto.pbkdf2Sync(password, this.salt, 4096, 512, "sha256").toString("base64")
 }
 
-mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema)

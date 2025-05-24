@@ -1,7 +1,6 @@
-const mongoose = require('mongoose')
-const Book = mongoose.model('Book')
-const Review = mongoose.model('Review')
-const User = mongoose.model('User')
+const Book = require("../models/book")
+const Review = require("../models/review")
+const User = require("../models/user")
 
 const sendJSONresponse = (res, status, content) => res.status(status).json(content)
 
