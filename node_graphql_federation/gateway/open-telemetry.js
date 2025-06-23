@@ -5,8 +5,6 @@ const { resourceFromAttributes } = require('@opentelemetry/resources')
 const { ATTR_SERVICE_NAME } = require('@opentelemetry/semantic-conventions')
 const { ZipkinExporter } = require('@opentelemetry/exporter-zipkin')
 
-require('dotenv').config()
-
 const sdk = new NodeSDK({
     resource: resourceFromAttributes({
         [ATTR_SERVICE_NAME]: process.env.OPEN_TELEMETRY_SERVICE_NAME,

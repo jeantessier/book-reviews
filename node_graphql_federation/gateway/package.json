@@ -4,7 +4,7 @@
   "description": "A microservice for combining microservices using GraphQL federation as part of a book reviews application",
   "main": "index.js",
   "scripts": {
-    "start": "node --require ./open-telemetry.js index.js",
+    "start": "node --require dotenv/config --require ./open-telemetry.js index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

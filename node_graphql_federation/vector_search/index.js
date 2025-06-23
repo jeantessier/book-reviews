@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const { MongoDBAtlasVectorSearch } = require('@langchain/mongodb')
 const { OpenAIEmbeddings } = require('@langchain/openai')
 const { GoogleGenerativeAIEmbeddings } = require('@langchain/google-genai')
