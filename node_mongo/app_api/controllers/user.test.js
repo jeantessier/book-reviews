@@ -42,8 +42,8 @@ describe("User controller", () => {
             await ctrlUser.list(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith([])
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith([])
         })
 
         it("sends existing users", async () => {
@@ -58,8 +58,8 @@ describe("User controller", () => {
             await ctrlUser.list(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith([expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith([expect.objectContaining({
                 ... userData,
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
@@ -83,8 +83,8 @@ describe("User controller", () => {
             await ctrlUser.list(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith([expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith([expect.objectContaining({
                 ... userData,
                 numReviews: 1,
             })])
@@ -101,8 +101,8 @@ describe("User controller", () => {
             await ctrlUser.create(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(403)
-            expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(/admin privileges/) })
+            expect(mRes.status).toHaveBeenCalledWith(403)
+            expect(mRes.json).toHaveBeenCalledWith({ message: expect.stringMatching(/admin privileges/) })
         })
 
         it("fails when name is missing", async () => {
@@ -115,8 +115,8 @@ describe("User controller", () => {
             await ctrlUser.create(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(400)
-            expect(mRes.json).toBeCalledWith({ message: "All fields required" })
+            expect(mRes.status).toHaveBeenCalledWith(400)
+            expect(mRes.json).toHaveBeenCalledWith({ message: "All fields required" })
         })
 
         it("fails when email is already taken", async () => {
@@ -131,8 +131,8 @@ describe("User controller", () => {
             await ctrlUser.create(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(409)
-            expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(/already a user with/) })
+            expect(mRes.status).toHaveBeenCalledWith(409)
+            expect(mRes.json).toHaveBeenCalledWith({ message: expect.stringMatching(/already a user with/) })
         })
 
         it("succeeds to create a new user", async () => {
@@ -144,8 +144,8 @@ describe("User controller", () => {
             await ctrlUser.create(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(201)
-            expect(mRes.json).toBeCalledWith(expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(201)
+            expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
                 ... userData,
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
@@ -164,8 +164,8 @@ describe("User controller", () => {
             await ctrlUser.readOne(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(400)
-            expect(mRes.json).toBeCalledWith(expect.any(mongoose.Error.CastError))
+            expect(mRes.status).toHaveBeenCalledWith(400)
+            expect(mRes.json).toHaveBeenCalledWith(expect.any(mongoose.Error.CastError))
         })
 
         it("returns 404 if ID is not found", async () => {
@@ -178,8 +178,8 @@ describe("User controller", () => {
             await ctrlUser.readOne(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(404)
-            expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(new RegExp(`No user with ID ${notFoundId}`)) })
+            expect(mRes.status).toHaveBeenCalledWith(404)
+            expect(mRes.json).toHaveBeenCalledWith({ message: expect.stringMatching(new RegExp(`No user with ID ${notFoundId}`)) })
         })
 
         it("returns 200 if ID is found", async () => {
@@ -195,8 +195,8 @@ describe("User controller", () => {
             await ctrlUser.readOne(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith(expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
                 ... userData,
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
@@ -220,8 +220,8 @@ describe("User controller", () => {
             await ctrlUser.readOne(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith(expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
                 ... userData,
                 numReviews: 1,
             }))

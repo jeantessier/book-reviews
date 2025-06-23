@@ -40,8 +40,8 @@ describe("Book controller", () => {
             await ctrlBook.list(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith([])
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith([])
         })
 
         it("sends existing books", async () => {
@@ -56,8 +56,8 @@ describe("Book controller", () => {
             await ctrlBook.list(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith([expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith([expect.objectContaining({
                 ... bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 createdAt: expect.any(Date),
@@ -82,8 +82,8 @@ describe("Book controller", () => {
             await ctrlBook.list(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith([expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith([expect.objectContaining({
                 ... bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 numReviews: 1,
@@ -101,8 +101,8 @@ describe("Book controller", () => {
             await ctrlBook.create(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(403)
-            expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(/admin privileges/) })
+            expect(mRes.status).toHaveBeenCalledWith(403)
+            expect(mRes.json).toHaveBeenCalledWith({ message: expect.stringMatching(/admin privileges/) })
         })
 
         it("fails when name is missing", async () => {
@@ -115,8 +115,8 @@ describe("Book controller", () => {
             await ctrlBook.create(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(400)
-            expect(mRes.json).toBeCalledWith({ message: "All fields required" })
+            expect(mRes.status).toHaveBeenCalledWith(400)
+            expect(mRes.json).toHaveBeenCalledWith({ message: "All fields required" })
         })
 
         it("fails when name is already taken", async () => {
@@ -131,8 +131,8 @@ describe("Book controller", () => {
             await ctrlBook.create(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(409)
-            expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(/already a book named/) })
+            expect(mRes.status).toHaveBeenCalledWith(409)
+            expect(mRes.json).toHaveBeenCalledWith({ message: expect.stringMatching(/already a book named/) })
         })
 
         it("succeeds to create a new book", async () => {
@@ -144,8 +144,8 @@ describe("Book controller", () => {
             await ctrlBook.create(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(201)
-            expect(mRes.json).toBeCalledWith(expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(201)
+            expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
                 ... bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 createdAt: expect.any(Date),
@@ -165,8 +165,8 @@ describe("Book controller", () => {
             await ctrlBook.readOne(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(400)
-            expect(mRes.json).toBeCalledWith(expect.any(mongoose.Error.CastError))
+            expect(mRes.status).toHaveBeenCalledWith(400)
+            expect(mRes.json).toHaveBeenCalledWith(expect.any(mongoose.Error.CastError))
         })
 
         it("returns 404 if ID is not found", async () => {
@@ -179,8 +179,8 @@ describe("Book controller", () => {
             await ctrlBook.readOne(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(404)
-            expect(mRes.json).toBeCalledWith({ message: expect.stringMatching(new RegExp(`No book with ID ${notFoundId}`)) })
+            expect(mRes.status).toHaveBeenCalledWith(404)
+            expect(mRes.json).toHaveBeenCalledWith({ message: expect.stringMatching(new RegExp(`No book with ID ${notFoundId}`)) })
         })
 
         it("returns 200 if ID is found", async () => {
@@ -196,8 +196,8 @@ describe("Book controller", () => {
             await ctrlBook.readOne(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith(expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
                 ... bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 createdAt: expect.any(Date),
@@ -222,8 +222,8 @@ describe("Book controller", () => {
             await ctrlBook.readOne(mReq, mRes)
 
             // Then
-            expect(mRes.status).toBeCalledWith(200)
-            expect(mRes.json).toBeCalledWith(expect.objectContaining({
+            expect(mRes.status).toHaveBeenCalledWith(200)
+            expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
                 ... bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 numReviews: 1,

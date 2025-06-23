@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon --require dotenv/config --require ./open-telemetry.js ./bin/www",
     "test": "jest --watchAll",
+    "jest:ci": "jest --json --outputFile=jest_results.json",
     "start": "node --require dotenv/config --require ./open-telemetry.js ./bin/www",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
