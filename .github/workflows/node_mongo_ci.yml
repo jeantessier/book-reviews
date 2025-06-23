@@ -26,11 +26,8 @@ jobs:
       - name: Install modules
         run: npm install
 
-      - name: Install Jest
-        run: npm install --global jest
-
-      - name: Run Jest
-        run: jest --json --outputFile=jest_results.json
+      - name: Run Unit Tests
+        run: npm run jest:ci
 
       - name: Test Summary
         run: |
