@@ -1,11 +1,10 @@
-require('dotenv').config({ path: '.env.test' })
-
-const { ObjectId } = require("bson")
 const { createUserWithPassword } = require("../../test/fixtures/users")
 
 const mongoose = require("mongoose")
 const db = require("../../test/db")
 const User = require("./user")
+
+process.env.JWT_SECRET = "testsecret"
 
 const userData = createUserWithPassword()
 

@@ -1,5 +1,3 @@
-require('dotenv').config({ path: '.env.test' })
-
 const { ObjectId } = require("bson")
 const { createBook } = require("../../test/fixtures/books")
 const { createUserWithRole } = require("../../test/fixtures/users")

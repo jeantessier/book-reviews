@@ -1,5 +1,3 @@
-require('dotenv').config({ path: '.env.test' })
-
 const { createBook } = require("../../test/fixtures/books")
 
 const mongoose = require("mongoose")
