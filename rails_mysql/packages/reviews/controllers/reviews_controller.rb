@@ -21,11 +21,11 @@ class ReviewsController < ApplicationController
     if @review.save
       render json: @review, status: :created, location: @review
     else
-      render json: @review.errors, status: :unprocessable_entity
+      render json: @review.errors, status: :unprocessable_content
     end
 
     rescue
-      render json: { error: $! }, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_content
   end
 
   # PATCH/PUT /reviews/1
@@ -33,11 +33,11 @@ class ReviewsController < ApplicationController
     if @review.update(review_params)
       render json: @review
     else
-      render json: @review.errors, status: :unprocessable_entity
+      render json: @review.errors, status: :unprocessable_content
     end
 
     rescue
-      render json: { error: $! }, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_content
   end
 
   # DELETE /reviews/1

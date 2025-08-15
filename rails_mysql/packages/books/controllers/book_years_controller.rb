@@ -18,7 +18,7 @@ class BookYearsController < BookPartController
     render json: book, status: :created
 
     rescue
-      render json: { error: $! }, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_content
   end
 
   # PATCH/PUT /books/:book_id/years/:id
@@ -26,11 +26,11 @@ class BookYearsController < BookPartController
     if book_year.update(book_year_params)
       render json: book_year
     else
-      render json: book_year.errors, status: :unprocessable_entity
+      render json: book_year.errors, status: :unprocessable_content
     end
 
     rescue
-      render json: { error: $! }, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_content
   end
 
   # DELETE /books/:book_id/years/:id

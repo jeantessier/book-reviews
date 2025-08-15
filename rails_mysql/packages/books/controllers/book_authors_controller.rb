@@ -18,7 +18,7 @@ class BookAuthorsController < BookPartController
     render json: book, status: :created
 
     rescue
-      render json: { error: $! }, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_content
   end
 
   # PATCH/PUT /books/:book_id/authors/:id
@@ -26,11 +26,11 @@ class BookAuthorsController < BookPartController
     if book_author.update(book_author_params)
       render json: book_author
     else
-      render json: book_author.errors, status: :unprocessable_entity
+      render json: book_author.errors, status: :unprocessable_content
     end
 
     rescue
-      render json: { error: $! }, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_content
   end
 
   # DELETE /books/:book_id/authors/:id

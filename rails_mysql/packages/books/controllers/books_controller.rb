@@ -21,11 +21,11 @@ class BooksController < ApplicationController
     if @book.save
       render json: @book, status: :created, location: @book
     else
-      render json: @book.errors, status: :unprocessable_entity
+      render json: @book.errors, status: :unprocessable_content
     end
 
     rescue
-      render json: { error: $! }, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_content
   end
 
   # PATCH/PUT /books/1
@@ -33,11 +33,11 @@ class BooksController < ApplicationController
     if @book.update(book_params)
       render json: @book
     else
-      render json: @book.errors, status: :unprocessable_entity
+      render json: @book.errors, status: :unprocessable_content
     end
 
     rescue
-      render json: { error: $! }, status: :unprocessable_entity
+      render json: { error: $! }, status: :unprocessable_content
   end
 
   # DELETE /books/1
