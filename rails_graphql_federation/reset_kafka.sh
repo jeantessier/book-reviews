@@ -1,7 +1,7 @@
 #!/bin/sh
 
 readonly KAFKA_SERVICE=kafka
-readonly KAFKA_PATH=/opt/bitnami/kafka/bin
+readonly KAFKA_PATH=/opt/kafka/bin
 
 # Erase all topics and messages currently in Kafka
 

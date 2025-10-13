@@ -726,7 +726,7 @@ inactivity.  You can view unused consumer groups with:
 docker compose \
   --file docker-compose.local.yml \
   exec kafka \
-  /opt/bitnami/kafka/bin/kafka-consumer-groups.sh \
+  /opt/kafka/bin/kafka-consumer-groups.sh \
     --bootstrap-server kafka:9092 \
     --describe \
     --all-groups \
@@ -742,7 +742,7 @@ docker compose \
   --file docker-compose.kafka-override.yml \
   exec \
   kafka \
-  /opt/bitnami/kafka/bin/kafka-consumer-groups.sh \
+  /opt/kafka/bin/kafka-consumer-groups.sh \
     --bootstrap-server kafka:9092 \
     --delete \
     $( \
@@ -750,7 +750,7 @@ docker compose \
         --file docker-compose.local.yml \
         exec \
         kafka \
-        /opt/bitnami/kafka/bin/kafka-consumer-groups.sh \
+        /opt/kafka/bin/kafka-consumer-groups.sh \
           --bootstrap-server kafka:9092 \
           --describe \
           --all-groups \

@@ -18,7 +18,7 @@ fi
 
 docker compose --file $COMPOSE_FILE --file docker-compose.override.yml exec \
     kafka \
-    /opt/bitnami/kafka/bin/kafka-console-consumer.sh \
+    /opt/kafka/bin/kafka-console-consumer.sh \
     --bootstrap-server kafka:9092 \
     --topic book-reviews.searches \
     $*
