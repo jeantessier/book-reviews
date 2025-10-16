@@ -115,7 +115,7 @@ const addBook = async (_, { book }, context, info) => {
 
     book.id = uuidv4()
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -165,7 +165,7 @@ const updateBook = async (_, { update }, context, info) => {
         ...update,
     }
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -199,7 +199,7 @@ const removeBook = async (_, { id }, context, info) => {
         })
     }
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -224,7 +224,7 @@ const resolvers = {
         book: async (_, { id }, context) => {
             const book = fetchBookById(id)
 
-            let headers = { request_id: context.requestId }
+            const headers = { request_id: context.requestId }
             if (context.currentUser) {
                 headers["current_user"] = context.currentUser.id
             }

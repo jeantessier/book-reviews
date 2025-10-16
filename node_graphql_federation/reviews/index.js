@@ -140,7 +140,7 @@ const addReview = async (_, { review }, context, info) => {
     reviewAddedMessage.reviewer = { __typename: 'User', id: reviewerId ?? context.currentUser.id }
     reviewAddedMessage.book = { __typename: 'Book', id: bookId }
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -179,7 +179,7 @@ const updateReview = async (_, { update }, context, info) => {
         ...update,
     }
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -213,7 +213,7 @@ const removeReview = async (_, { id }, context, info) => {
         throw new ForbiddenError(`You need to have admin privileges to use the ${info.fieldName} mutation on behalf of another user.`)
     }
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -238,7 +238,7 @@ const resolvers = {
         review: async (_, { id }, context) => {
             const review = fetchReviewById(id)
 
-            let headers = { request_id: context.requestId }
+            const headers = { request_id: context.requestId }
             if (context.currentUser) {
                 headers["current_user"] = context.currentUser.id
             }

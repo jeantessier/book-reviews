@@ -93,7 +93,7 @@ const signUp = async (_, { user }, context) => {
     user.id = uuidv4()
     user.roles = [ "ROLE_USER" ]
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -129,7 +129,7 @@ const addUser = async (_, { user }, context, info) => {
 
     user.id = uuidv4()
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -182,7 +182,7 @@ const updateUser = async (_, { update }, context, info) => {
         ...update,
     }
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -216,7 +216,7 @@ const removeUser = async (_, { id }, context, info) => {
         })
     }
 
-    let headers = { request_id: context.requestId }
+    const headers = { request_id: context.requestId }
     if (context.currentUser) {
         headers["current_user"] = context.currentUser.id
     }
@@ -240,7 +240,7 @@ const resolvers = {
         me: async (_, {}, context) => {
             const user = fetchUserById(context.currentUser?.id)
 
-            let headers = { request_id: context.requestId }
+            const headers = { request_id: context.requestId }
             if (context.currentUser) {
                 headers["current_user"] = context.currentUser.id
             }
@@ -260,7 +260,7 @@ const resolvers = {
         user: async (_, { id }, context) => {
             const user = fetchUserById(id)
 
-            let headers = { request_id: context.requestId }
+            const headers = { request_id: context.requestId }
             if (context.currentUser) {
                 headers["current_user"] = context.currentUser.id
             }
