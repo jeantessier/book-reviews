@@ -1,6 +1,6 @@
 {
   "name": "@jeantessier/book_reviews.node_graphql_federation.books",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A microservice for managing books as part of a book reviews application.",
   "main": "index.js",
   "scripts": {

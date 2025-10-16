@@ -1,6 +1,6 @@
 {
   "name": "@jeantessier/book_reviews.node_graphql_federation.vector_search",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A microservice for replicating searches against a vector database",
   "main": "index.js",
   "scripts": {
