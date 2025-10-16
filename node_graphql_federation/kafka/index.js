@@ -35,6 +35,9 @@ const sendMessage = async (topic, message, headers) => {
     const key = message.id
     const value = JSON.stringify(message)
 
+    // Something in headers is not a string, so we need to clone it.
+    headers = JSON.parse(JSON.stringify(headers))
+
     console.log('Sending message ...')
     console.log(`    topic: ${topic}`)
     console.log(`    headers: ${JSON.stringify(headers)}`)
