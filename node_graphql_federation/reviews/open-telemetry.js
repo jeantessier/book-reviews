@@ -3,7 +3,7 @@ const { NodeSDK } = require('@opentelemetry/sdk-node')
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node')
 const { resourceFromAttributes } = require('@opentelemetry/resources')
 const { ATTR_SERVICE_NAME } = require('@opentelemetry/semantic-conventions')
-const { GraphQLInstrumentation } = require ('@opentelemetry/instrumentation-graphql')
+const { GraphQLInstrumentation } = require('@opentelemetry/instrumentation-graphql')
 const { ZipkinExporter } = require('@opentelemetry/exporter-zipkin')
 
 const sdk = new NodeSDK({
