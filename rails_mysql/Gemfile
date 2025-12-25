@@ -72,3 +72,6 @@ gem "graphql-batch"
 gem "packwerk"
 
 gem "propshaft", "~> 1.1"
+
+# For compatibility with Ruby 4.0.0, which removed `readline` in favor of `reline`.
+gem "readline-ext", "~> 0.2.0"
