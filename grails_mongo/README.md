@@ -25,7 +25,7 @@ You can reset the database with these commands:
 
 ```bash
 docker compose down
-docker volume rm grails_neo4j_neo4j_data
+docker volume rm grails_mongo_mongo_data
 docker compose up -d
 ```
 
