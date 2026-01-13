@@ -2,13 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     bigdecimal (4.0.1)
-    google-protobuf (4.33.2)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.2-arm64-darwin)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.33.2-x86_64-darwin)
+    google-protobuf (4.33.4)
       bigdecimal
       rake (>= 13)
     rake (13.3.1)
