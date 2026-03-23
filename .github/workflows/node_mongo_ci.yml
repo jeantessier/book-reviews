@@ -3,8 +3,11 @@ name: node_mongo CI
 on:
   pull_request:
   push:
-    branches: [ main ]
-    paths: [ node_mongo/** ]
+    branches:
+      - main
+    paths:
+      - node_mongo/**
+      - .github/workflows/node_mongo_ci.yml
   workflow_dispatch:
 
 env:
