@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install modules
         run: npm install
@@ -63,13 +63,13 @@ jobs:
 
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install modules
         run: npm install
 
       - name: Launch services
-        uses: hoverkraft-tech/compose-action@v2.0.1
+        uses: hoverkraft-tech/compose-action@v2
         with:
           cwd: ${{ env.node_app_root }}
           services: test_server
