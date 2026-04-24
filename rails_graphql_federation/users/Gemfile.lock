@@ -103,7 +103,7 @@ GEM
       dotenv (= 3.2.0)
       railties (>= 6.1)
     drb (2.2.3)
-    erb (6.0.2)
+    erb (6.0.4)
     erubi (1.13.1)
     exponential-backoff (0.0.4)
     fiber-storage (1.0.1)
