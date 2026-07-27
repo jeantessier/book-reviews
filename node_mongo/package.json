@@ -49,5 +49,12 @@
     "mongodb-memory-server": "*",
     "nodemon": "*"
   },
-  "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_mongo"
+  "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_mongo",
+  "allowScripts": {
+    "cypress@15.19.0": true,
+    "mongodb-memory-server@11.2.0": true,
+    "fsevents@2.3.3": true,
+    "unrs-resolver@1.12.2": true,
+    "protobufjs@7.6.5": true
+  }
 }
