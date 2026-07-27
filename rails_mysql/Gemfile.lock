@@ -272,7 +272,6 @@ GEM
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
-    readline-ext (0.2.0)
     regexp_parser (2.12.0)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -371,7 +370,6 @@ DEPENDENCIES
   puma
   rack-cors
   rails (~> 8)
-  readline-ext (~> 0.2.0)
   rspec-rails
   rubocop-rails-omakase
   tzinfo-data
