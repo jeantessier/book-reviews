@@ -31,5 +31,9 @@
     "graphql": "*",
     "uuid": "*"
   },
-  "homepage": "https://github.com/jeantessier/book-reviews/tree/master/rails_graphql_federation"
+  "homepage": "https://github.com/jeantessier/book-reviews/tree/master/rails_graphql_federation",
+  "allowScripts": {
+    "@apollo/protobufjs@1.2.8": true,
+    "protobufjs@7.6.5": true
+  }
 }
