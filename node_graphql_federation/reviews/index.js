@@ -283,7 +283,7 @@ const fetchReviewsByBookId = id => Array.from(reviews.values()).filter(review =>
 const fetchReviewsByReviewerId = id => Array.from(reviews.values()).filter(review => id === review.reviewer.id)
 
 const server = new ApolloServer({
-    schema: buildSubgraphSchema({ typeDefs, resolvers }),
+    schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
     plugins: [
         {
             requestDidStart(requestContext) {

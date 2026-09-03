@@ -34,7 +34,7 @@ const resolvers = {
 }
 
 const server = new ApolloServer({
-    schema: buildSubgraphSchema({ typeDefs, resolvers }),
+    schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
     plugins: [
         {
             requestDidStart(requestContext) {

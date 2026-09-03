@@ -297,7 +297,7 @@ const fetchUserById = id => users.get(id)
 const fetchUserByEmail = email => Array.from(users.values()).find(user => user.email === email)
 
 const server = new ApolloServer({
-    schema: buildSubgraphSchema({ typeDefs, resolvers }),
+    schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
     plugins: [
         {
             requestDidStart(requestContext) {

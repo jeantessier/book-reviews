@@ -261,7 +261,7 @@ const fetchBookById = id => books.get(id)
 const fetchBookByName = name => Array.from(books.values()).find(book => book.name === name)
 
 const server = new ApolloServer({
-    schema: buildSubgraphSchema({ typeDefs, resolvers }),
+    schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
     plugins: [
         {
             requestDidStart(requestContext) {
