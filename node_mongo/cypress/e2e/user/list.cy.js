@@ -42,7 +42,7 @@ describe('User', () => {
 
             it('includes the populated user', () => {
                 cy.fixture('users/abc')
-                    .then(({ password, ... expectedUser }) => {
+                    .then(({ password, ...expectedUser }) => {
                         cy.get('@request').should(response => {
                             const actualUser = response.body[0]
                             expect(actualUser).to.have.property('name', expectedUser.name)

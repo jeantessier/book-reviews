@@ -106,7 +106,7 @@ describe('User', () => {
 
             context('missing name', () => {
                 beforeEach(() => {
-                    cy.fixture('users/abc').then(({name, ... userData}) => {
+                    cy.fixture('users/abc').then(({name, ...userData}) => {
                         cy.request({
                             auth: { bearer: bearerToken },
                             method: 'POST',
@@ -126,7 +126,7 @@ describe('User', () => {
 
             context('missing email', () => {
                 beforeEach(() => {
-                    cy.fixture('users/abc').then(({email, ... userData}) => {
+                    cy.fixture('users/abc').then(({email, ...userData}) => {
                         cy.request({
                             auth: { bearer: bearerToken },
                             method: 'POST',
@@ -146,7 +146,7 @@ describe('User', () => {
 
             context('missing password', () => {
                 beforeEach(() => {
-                    cy.fixture('users/abc').then(({password, ... userData}) => {
+                    cy.fixture('users/abc').then(({password, ...userData}) => {
                         cy.request({
                             auth: { bearer: bearerToken },
                             method: 'POST',

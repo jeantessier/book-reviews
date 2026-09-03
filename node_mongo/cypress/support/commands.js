@@ -50,7 +50,7 @@ Cypress.Commands.add('populateAllBooks', () => {
 })
 
 Cypress.Commands.add('populateUser', user => {
-    const { password, ... userData } = { salt: user.password, hash: user.password, ... user }
+    const { password, ...userData } = { salt: user.password, hash: user.password, ...user }
     cy.exec(`echo 'db.users.insertOne(${JSON.stringify(userData)})' | docker compose exec -T mongo mongosh node_mongo_book_reviews_test`)
 })
 

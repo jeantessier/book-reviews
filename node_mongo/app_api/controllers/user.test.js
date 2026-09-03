@@ -60,7 +60,7 @@ describe("User controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(200)
             expect(mRes.json).toHaveBeenCalledWith([expect.objectContaining({
-                ... userData,
+                ...userData,
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
                 numReviews: 0,
@@ -85,7 +85,7 @@ describe("User controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(200)
             expect(mRes.json).toHaveBeenCalledWith([expect.objectContaining({
-                ... userData,
+                ...userData,
                 numReviews: 1,
             })])
         })
@@ -107,7 +107,7 @@ describe("User controller", () => {
 
         it("fails when name is missing", async () => {
             // Given
-            const { name, ... partialUserData } = { ... userData, password }
+            const { name, ...partialUserData } = { ...userData, password }
             const mReq = { currentUser: { admin: true }, body: partialUserData }
             const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
@@ -124,7 +124,7 @@ describe("User controller", () => {
             await new User(userData).save()
 
             // and
-            const mReq = { currentUser: { admin: true }, body: { ... userData, password } }
+            const mReq = { currentUser: { admin: true }, body: { ...userData, password } }
             const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
             // When
@@ -137,7 +137,7 @@ describe("User controller", () => {
 
         it("succeeds to create a new user", async () => {
             // Given
-            const mReq = { currentUser: { admin: true }, body: { ... userData, password } }
+            const mReq = { currentUser: { admin: true }, body: { ...userData, password } }
             const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
             // When
@@ -146,7 +146,7 @@ describe("User controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(201)
             expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
-                ... userData,
+                ...userData,
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
             }))
@@ -197,7 +197,7 @@ describe("User controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(200)
             expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
-                ... userData,
+                ...userData,
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
                 numReviews: 0,
@@ -222,7 +222,7 @@ describe("User controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(200)
             expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
-                ... userData,
+                ...userData,
                 numReviews: 1,
             }))
         })

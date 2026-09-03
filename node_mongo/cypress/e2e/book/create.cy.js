@@ -106,7 +106,7 @@ describe('Book', () => {
 
             context('missing name', () => {
                 beforeEach(() => {
-                    cy.fixture('books/the_fellowship_of_the_ring').then(({name, ... bookData}) => {
+                    cy.fixture('books/the_fellowship_of_the_ring').then(({name, ...bookData}) => {
                         cy.request({
                             auth: { bearer: bearerToken },
                             method: 'POST',

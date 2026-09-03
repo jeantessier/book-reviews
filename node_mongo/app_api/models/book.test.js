@@ -60,7 +60,7 @@ describe("Book model", () => {
 
         it("does not create book without required field", async () => {
             // Given
-            const { name, ... partialBookData } = bookData
+            const { name, ...partialBookData } = bookData
             const bookWithoutRequiredField = new Book(partialBookData)
 
             // When

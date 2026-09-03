@@ -58,7 +58,7 @@ describe("Book controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(200)
             expect(mRes.json).toHaveBeenCalledWith([expect.objectContaining({
-                ... bookData,
+                ...bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
@@ -84,7 +84,7 @@ describe("Book controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(200)
             expect(mRes.json).toHaveBeenCalledWith([expect.objectContaining({
-                ... bookData,
+                ...bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 numReviews: 1,
             })])
@@ -107,7 +107,7 @@ describe("Book controller", () => {
 
         it("fails when name is missing", async () => {
             // Given
-            const { name, ... partialBookData } = bookData
+            const { name, ...partialBookData } = bookData
             const mReq = { currentUser: { admin: true }, body: partialBookData }
             const mRes = { status: jest.fn().mockReturnThis(), json: jest.fn() }
 
@@ -146,7 +146,7 @@ describe("Book controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(201)
             expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
-                ... bookData,
+                ...bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
@@ -198,7 +198,7 @@ describe("Book controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(200)
             expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
-                ... bookData,
+                ...bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date),
@@ -224,7 +224,7 @@ describe("Book controller", () => {
             // Then
             expect(mRes.status).toHaveBeenCalledWith(200)
             expect(mRes.json).toHaveBeenCalledWith(expect.objectContaining({
-                ... bookData,
+                ...bookData,
                 titles: bookData.titles.map(title => expect.objectContaining(title)),
                 numReviews: 1,
             }))
