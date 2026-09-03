@@ -107,7 +107,7 @@ const scrubIndices = async id => {
 
 const updateIndex = async (entity, pageContent, metadata) => {
     const document = {
-        ... entity,
+        ...entity,
         pageContent,
         metadata,
     }
