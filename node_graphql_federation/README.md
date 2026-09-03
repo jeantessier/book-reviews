@@ -114,6 +114,9 @@ docker compose --file docker-compose.local.yml --file docker-compose.kafka-overr
 > NOTE: Switching Docker Compose files will reset the Kafka broker, and you will
 > lose all data recorded so far.
 
+> NOTE: Run `init_kafka.sh` to create the topics in a new (or refreshed) Kafka
+> broker.
+
 #### Starting the Federated Services
 
 ```bash
