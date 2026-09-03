@@ -4,7 +4,7 @@
   "description": "A microservice for replicating searches against a vector database",
   "main": "index.js",
   "scripts": {
-    "start": "node --require dotenv/config --require ./open-telemetry.js index.js",
+    "start": "dotenvx run -- node --require ./open-telemetry.js index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,9 +29,11 @@
     "@opentelemetry/instrumentation-graphql": "*",
     "@opentelemetry/sdk-node": "*",
     "@opentelemetry/sdk-trace-node": "*",
-    "dotenv": "*",
     "jsonwebtoken": "*",
     "mongodb": "*"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "*"
   },
   "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_graphql_federation"
 }

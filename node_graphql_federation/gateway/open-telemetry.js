@@ -1,18 +1,22 @@
 // Import required symbols
 const { NodeSDK } = require('@opentelemetry/sdk-node')
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node')
-const { resourceFromAttributes } = require('@opentelemetry/resources')
+const { Resource } = require('@opentelemetry/resources')
 const { ATTR_SERVICE_NAME } = require('@opentelemetry/semantic-conventions')
+const { GraphQLInstrumentation } = require('@opentelemetry/instrumentation-graphql')
 const { ZipkinExporter } = require('@opentelemetry/exporter-zipkin')
 
 const sdk = new NodeSDK({
-    resource: resourceFromAttributes({
+    resource: new Resource({
         [ATTR_SERVICE_NAME]: process.env.OPEN_TELEMETRY_SERVICE_NAME,
     }),
     traceExporter: new ZipkinExporter({
         url: process.env.ZIPKIN_EXPORTER_URL,
     }),
-    instrumentations: [getNodeAutoInstrumentations()],
+    instrumentations: [
+        getNodeAutoInstrumentations(),
+        new GraphQLInstrumentation(),
+    ],
 })
 
 sdk.start()

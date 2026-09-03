@@ -4,7 +4,7 @@
   "description": "A microservice for performing searches as part of a book reviews application",
   "main": "index.js",
   "scripts": {
-    "start": "node --require dotenv/config --require ./open-telemetry.js index.js",
+    "start": "dotenvx run -- node --require ./open-telemetry.js index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,11 +29,13 @@
     "@opentelemetry/instrumentation-graphql": "*",
     "@opentelemetry/sdk-node": "*",
     "@opentelemetry/sdk-trace-node": "*",
-    "dotenv": "*",
     "graphql": "*",
     "graphql-tag": "*",
     "jsonwebtoken": "*",
     "uuid": "*"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "*"
   },
   "homepage": "https://github.com/jeantessier/book-reviews/tree/master/node_graphql_federation"
 }
